@@ -21,6 +21,13 @@
             color: var(--text); overflow: hidden; height: 100vh;
             display: flex; justify-content: center; align-items: center;
         }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 211, 238, 0.6); }
+
         .glass {
             background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border); border-radius: 12px;
@@ -36,8 +43,9 @@
             border: 1px solid var(--glass-border); color: var(--text);
             border-radius: 8px; box-sizing: border-box; outline: none; font-family: inherit;
         }
+        input:disabled { background: rgba(0,0,0,0.5); color: #666; cursor: not-allowed; border-color: rgba(255,255,255,0.05); }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-        input:focus, select:focus, textarea:focus { border-color: var(--secondary); }
+        input:focus:not(:disabled), select:focus, textarea:focus { border-color: var(--secondary); }
         button {
             width: 100%; padding: 12px; background: var(--accent); color: var(--text);
             border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s;
@@ -101,6 +109,7 @@
         .card { padding: 20px; margin-bottom: 20px; transition: transform 0.3s; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; } 
+        .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; } 
         
         .kanban-board { display: flex; gap: 20px; min-height: 400px; overflow-x: auto; padding-bottom: 20px;}
         .kanban-col { flex: 1; min-width: 280px; display: flex; flex-direction: column; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; border: 1px solid var(--glass-border); }
@@ -110,12 +119,12 @@
         .delete-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ef4444; cursor: pointer; padding: 0; width: auto; font-size: 12px; }
         
         .admin-panel { padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
-        .admin-panel .flex-row { display: flex; gap: 10px; align-items: center; }
+        .admin-panel .flex-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
         .gantt-row { display: flex; align-items: center; margin-bottom: 15px; }
-        .gantt-label { width: 180px; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 15px;}
-        .gantt-track { flex: 1; background: rgba(0,0,0,0.3); height: 24px; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); min-width: 200px; }
-        .gantt-bar { position: absolute; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 12px; box-shadow: 0 0 10px rgba(34,211,238,0.4); display: flex; align-items: center; padding: 0 10px; font-size: 11px; font-weight: bold; color: #fff; box-sizing: border-box; overflow: hidden;}
+        .gantt-label { width: 220px; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 15px;}
+        .gantt-track { flex: 1; background: rgba(0,0,0,0.3); height: 28px; border-radius: 14px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); min-width: 200px; }
+        .gantt-bar { position: absolute; height: 100%; border-radius: 14px; display: flex; align-items: center; font-size: 11px; font-weight: bold; color: #fff; box-sizing: border-box; overflow: hidden; transition: 0.3s;}
         
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .gallery-item { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); aspect-ratio: 1 / 1; transition: 0.3s; }
@@ -142,9 +151,10 @@
         button.icon-btn { width: auto; padding: 8px 15px; background: rgba(255,255,255,0.1); margin: 0; }
         button.icon-btn:hover { background: var(--secondary); color: #000; }
 
-        @media (max-width: 992px) { #main { padding: 20px; } .grid-3 { grid-template-columns: 1fr; } }
+        @media (max-width: 992px) { #main { padding: 20px; } .grid-3 { grid-template-columns: 1fr; } .grid-5 { grid-template-columns: repeat(3, 1fr); } }
         @media (max-width: 768px) {
-            #sidebar { width: 200px; } #sidebar.collapsed { width: 65px; } #main { padding: 15px; } .grid-2 { grid-template-columns: 1fr; }
+            #sidebar { width: 200px; } #sidebar.collapsed { width: 65px; } #main { padding: 15px; } 
+            .grid-2 { grid-template-columns: 1fr; } .grid-5 { grid-template-columns: repeat(2, 1fr); }
             .admin-panel .flex-row { flex-direction: column; align-items: stretch; } .admin-panel .flex-row > * { width: 100%; margin-bottom: 5px; }
             .gantt-row { flex-direction: column; align-items: flex-start; } .gantt-label { width: 100%; margin-bottom: 5px; } .gantt-track { width: 100%; margin-bottom: 10px; }
             .resource-item { flex-direction: column; align-items: flex-start; gap: 15px; } .resource-item > div:last-child { width: 100%; justify-content: space-between; }
@@ -266,15 +276,24 @@
         "Gallery": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`
     };
 
+    const targetMembers = ["Chua", "Vince", "Tanya", "Bren", "Ruth"];
+
     let currentUser = null; 
     let currentModule = "Dashboard"; 
     let viewDate = new Date();
-    let currentGalleryFolder = null; // Tracks active folder view
+    
+    let currentGalleryFolder = null; 
+    let editingTimelineId = null;
 
-    const DB_KEY = 'dadevs_db_v5';
+    // Database Key updated to clear out incompatible timeline objects from previous versions
+    const DB_KEY = 'dadevs_db_v7';
     let appDB = { tasks: [], funds: [], calendar: [], timeline: [], resources: [], gallery: [] };
 
     async function initDB() {
+        if (localStorage.getItem('dd_version') !== 'v7') {
+            localStorage.removeItem('dadevs_db_v6');
+            localStorage.setItem('dd_version', 'v7');
+        }
         if (ENABLE_CLOUD_SYNC && JSONBIN_BIN_ID && JSONBIN_MASTER_KEY) {
             document.getElementById('syncStatus').innerText = "☁️ Syncing...";
             try {
@@ -378,7 +397,6 @@
         }
     }
 
-    // --- NAVIGATION ---
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
     function renderNav() {
         const n = document.getElementById("navLinks");
@@ -399,8 +417,8 @@
     function loadModule(m, silent = false) {
         currentModule = m; document.getElementById("viewTitle").innerText = m;
         
-        // Reset gallery folder view if switching modules
         if (m !== 'Gallery') currentGalleryFolder = null;
+        if (m !== 'Timeline') editingTimelineId = null;
 
         if(!silent) renderNav();
         if(!silent && window.innerWidth <= 992) document.getElementById('sidebar').classList.add('collapsed');
@@ -518,8 +536,22 @@
 
     // --- MODULE: FUNDS ---
     function renderFunds(container) {
-        const funds = getDB('funds'); let total = 0, income = 0, expenses = 0;
-        funds.forEach(f => { if(f.type === 'in') { total += f.amount; income += f.amount; } else { total -= f.amount; expenses += f.amount; } });
+        const funds = getDB('funds'); 
+        let total = 0, income = 0, expenses = 0;
+        let memberTotals = { Chua: 0, Vince: 0, Bren: 0, Ruth: 0, Tanya: 0 };
+        
+        let incomeList = []; let expenseList = [];
+
+        funds.forEach(f => { 
+            if(f.type === 'in') { 
+                total += f.amount; income += f.amount; 
+                incomeList.push(f);
+                if (targetMembers.includes(f.contributor)) memberTotals[f.contributor] += f.amount;
+            } else { 
+                total -= f.amount; expenses += f.amount; 
+                expenseList.push(f);
+            } 
+        });
 
         let html = `
             <div class="grid-2" style="margin-bottom: 20px;">
@@ -529,101 +561,321 @@
                 </div>
                 <div class="grid-2">
                     <div class="glass card" style="text-align: center; padding: 15px;">
-                        <h4 style="margin:0; color:#10b981; font-size:12px;">INCOME</h4><p style="margin:5px 0 0 0;">₱${income.toLocaleString()}</p>
+                        <h4 style="margin:0; color:#10b981; font-size:12px;">TOTAL INCOME</h4><p style="margin:5px 0 0 0;">₱${income.toLocaleString()}</p>
                     </div>
                     <div class="glass card" style="text-align: center; padding: 15px;">
-                        <h4 style="margin:0; color:#ef4444; font-size:12px;">EXPENSES</h4><p style="margin:5px 0 0 0;">₱${expenses.toLocaleString()}</p>
+                        <h4 style="margin:0; color:#ef4444; font-size:12px;">TOTAL EXPENSES</h4><p style="margin:5px 0 0 0;">₱${expenses.toLocaleString()}</p>
                     </div>
                 </div>
             </div>`;
+            
+        html += `<h3 style="margin-bottom: 10px;">Member Contributions (₱50 / Week)</h3><div class="grid-5" style="margin-bottom: 20px;">`;
+        targetMembers.forEach(m => {
+            const mTotal = memberTotals[m]; const weeks = Math.floor(mTotal / 50);
+            html += `
+                <div class="glass card" style="padding: 15px; text-align: center;">
+                    <div style="font-weight: bold; color: var(--secondary);">${m}</div>
+                    <div style="font-size: 20px; font-weight: bold; margin: 5px 0;">₱${mTotal}</div>
+                    <div style="font-size: 11px; color: #aaa;">${weeks} Weeks Paid</div>
+                </div>
+            `;
+        });
+        html += `</div>`;
 
         if (isAdmin()) {
             const todayStr = new Date().toISOString().split('T')[0];
+            const memberOpts = targetMembers.map(m => `<option value="${m}">${m}</option>`).join('');
+            
             html += `
             <div class="glass admin-panel">
                 <h4 style="margin-top:0; color:var(--accent)">Admin: Record Transaction</h4>
                 <div class="flex-row">
-                    <input id="fundDate" type="date" value="${todayStr}" style="flex:1;">
-                    <input id="fundDesc" placeholder="Description" style="flex:2;">
-                    <input id="fundAmt" type="number" placeholder="Amount (₱)" style="flex:1;">
-                    <select id="fundType" style="flex:1;">
-                        <option value="in">Income (+)</option><option value="out">Expense (-)</option>
+                    <select id="fundType" style="flex:1;" onchange="
+                        if(this.value === 'in') { document.getElementById('fundContributor').style.display='block'; document.getElementById('fundDesc').style.display='none'; }
+                        else { document.getElementById('fundContributor').style.display='none'; document.getElementById('fundDesc').style.display='block'; }
+                    ">
+                        <option value="in">Contribution (Income)</option><option value="out">Expense (-)</option>
                     </select>
+                    <input id="fundDate" type="date" value="${todayStr}" style="flex:1;">
+                    <select id="fundContributor" style="flex:2; display:block;">
+                        <option value="" disabled selected>Select Contributor...</option>
+                        ${memberOpts}
+                        <option value="Other">Other / Misc Income</option>
+                    </select>
+                    <input id="fundDesc" placeholder="Expense Description" style="flex:2; display:none;">
+                    <input id="fundAmt" type="number" placeholder="Amount (₱)" style="flex:1;">
                     <button onclick="addFund()" style="flex:1; margin:0;">Record</button>
                 </div>
             </div>`;
         }
 
-        html += `<div class="glass card"><h3 style="margin-top:0;">Ledger History</h3><div style="display:flex; flex-direction:column; gap:10px;">`;
-        if (funds.length === 0) {
-            html += `<p style="text-align:center; color:#aaa;">No transactions recorded.</p>`;
-        } else {
-            funds.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(f => {
+        html += `<div class="grid-2">`;
+        html += `<div class="glass card"><h3 style="margin-top:0; color:#10b981;">Contributions History</h3><div style="display:flex; flex-direction:column; gap:10px;">`;
+        if (incomeList.length === 0) html += `<p style="text-align:center; color:#aaa; font-size:12px;">No contributions.</p>`;
+        else {
+            incomeList.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(f => {
                 html += `
-                    <div style="display:flex; justify-content:space-between; padding:15px; background:rgba(0,0,0,0.2); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
-                        <div style="display:flex; align-items:center; gap:15px;">
-                            <div style="width:40px; height:40px; border-radius:8px; background:rgba(255,255,255,0.05); display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:18px; color:${f.type==='in'?'#10b981':'#ef4444'}">${f.type === 'in' ? '+' : '-'}</div>
-                            <div><div style="font-weight:500;">${f.desc}</div><div style="font-size:11px; color:#aaa; margin-top:3px;">Recorded: ${f.date}</div></div>
-                        </div>
-                        <div style="display:flex; align-items:center; gap: 20px;">
-                            <div style="font-weight:bold; font-size:18px; color:${f.type==='in'?'#10b981':'#ef4444'}">₱${f.amount.toLocaleString()}</div>
-                            ${isAdmin() ? `<button class="delete-btn" style="position:relative; right:0; top:0;" onclick="deleteFund(${f.id})">✖</button>` : ''}
+                    <div style="display:flex; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.2); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
+                        <div><div style="font-weight:bold; color:var(--secondary); font-size:14px;">${f.contributor || 'Unknown'}</div><div style="font-size:10px; color:#aaa;">${f.date}</div></div>
+                        <div style="display:flex; align-items:center; gap: 10px;">
+                            <div style="font-weight:bold; color:#10b981;">+₱${f.amount}</div>
+                            ${isAdmin() ? `<button class="delete-btn" style="position:static; padding:2px 5px;" onclick="deleteFund(${f.id})">✖</button>` : ''}
                         </div>
                     </div>`;
             });
         }
-        html += `</div></div>`; container.innerHTML = html;
+        html += `</div></div>`;
+
+        html += `<div class="glass card"><h3 style="margin-top:0; color:#ef4444;">Expenses History</h3><div style="display:flex; flex-direction:column; gap:10px;">`;
+        if (expenseList.length === 0) html += `<p style="text-align:center; color:#aaa; font-size:12px;">No expenses.</p>`;
+        else {
+            expenseList.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(f => {
+                html += `
+                    <div style="display:flex; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.2); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
+                        <div><div style="font-weight:bold; font-size:14px;">${f.desc}</div><div style="font-size:10px; color:#aaa;">${f.date}</div></div>
+                        <div style="display:flex; align-items:center; gap: 10px;">
+                            <div style="font-weight:bold; color:#ef4444;">-₱${f.amount}</div>
+                            ${isAdmin() ? `<button class="delete-btn" style="position:static; padding:2px 5px;" onclick="deleteFund(${f.id})">✖</button>` : ''}
+                        </div>
+                    </div>`;
+            });
+        }
+        html += `</div></div></div>`; 
+
+        container.innerHTML = html;
     }
+    
     function addFund() {
-        const date = document.getElementById('fundDate').value; const desc = document.getElementById('fundDesc').value; const amt = parseFloat(document.getElementById('fundAmt').value); const type = document.getElementById('fundType').value;
-        if (!desc || isNaN(amt) || amt <= 0 || !date) return alert("Enter valid data.");
-        const funds = getDB('funds'); funds.push({ id: generateId(), date, desc, amount: amt, type }); setDB('funds', funds); loadModule('Funds');
+        const type = document.getElementById('fundType').value;
+        const date = document.getElementById('fundDate').value; 
+        const amt = parseFloat(document.getElementById('fundAmt').value); 
+        let desc = ""; let contributor = "";
+        
+        if (type === 'in') {
+            contributor = document.getElementById('fundContributor').value;
+            if(!contributor) return alert("Select a contributor.");
+            desc = "Contribution";
+        } else {
+            desc = document.getElementById('fundDesc').value;
+            if(!desc) return alert("Enter expense description.");
+        }
+
+        if (isNaN(amt) || amt <= 0 || !date) return alert("Enter valid date and amount.");
+        
+        const funds = getDB('funds'); 
+        funds.push({ id: generateId(), date, desc, amount: amt, type, contributor }); 
+        setDB('funds', funds); loadModule('Funds');
     }
     function deleteFund(id) { setDB('funds', getDB('funds').filter(f => f.id !== id)); loadModule('Funds'); }
 
-    // --- TIMELINE ---
+    // --- TIMELINE (WITH EDIT, DYNAMIC END DATES & MEMBER RECORDS) ---
     function renderTimeline(container) {
         const timeline = getDB('timeline'); let html = '';
+        
         if (isAdmin()) {
+            const memberOpts = targetMembers.map(m => `<option value="${m}">${m}</option>`).join('');
             html += `
-            <div class="glass admin-panel">
-                <h4 style="margin-top:0; color:var(--accent)">Admin: Add Gantt Task</h4>
-                <div class="flex-row">
+            <div class="glass admin-panel" id="timelineAdminPanel">
+                <h4 style="margin-top:0; color:var(--accent)" id="tlFormTitle">Admin: Add Gantt Task</h4>
+                <div class="flex-row" style="margin-bottom: 10px;">
                     <input id="tlTitle" placeholder="Task Name" style="flex:2;">
-                    <input id="tlStart" type="date" style="flex:1;" title="Start Date">
-                    <input id="tlEnd" type="date" style="flex:1;" title="End Date">
-                    <button onclick="addTimeline()" style="flex:1; margin:0;">Add</button>
+                    <select id="tlOwner" style="flex:1; margin:0;">
+                        <option value="" disabled selected>Assign Owner...</option>
+                        ${memberOpts}
+                        <option value="Team">Team</option>
+                    </select>
+                    <input id="tlProgress" type="number" min="0" max="100" placeholder="Progress %" style="flex:1;" oninput="
+                        const endInput = document.getElementById('tlEnd');
+                        if(this.value == 100) {
+                            endInput.disabled = false;
+                            if(!endInput.value) endInput.value = new Date().toISOString().split('T')[0];
+                        } else {
+                            endInput.disabled = true;
+                            endInput.value = '';
+                        }
+                    ">
+                </div>
+                <div class="flex-row">
+                    <div style="flex:1; display:flex; flex-direction:column;">
+                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Start Date</label>
+                        <input id="tlStart" type="date" style="margin:0;">
+                    </div>
+                    <div style="flex:1; display:flex; flex-direction:column;">
+                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Scheduled Deadline</label>
+                        <input id="tlSched" type="date" style="margin:0;">
+                    </div>
+                    <div style="flex:1; display:flex; flex-direction:column;">
+                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">End Date (Actual)</label>
+                        <input id="tlEnd" type="date" style="margin:0;" disabled title="Only editable when progress is 100%">
+                    </div>
+                    <button id="tlSubmitBtn" onclick="submitTimeline()" style="flex:1; margin-top: 14px;">Add Task</button>
+                    <button id="tlCancelBtn" onclick="cancelEditTimeline()" style="flex:0.5; margin-top: 14px; display:none; background:rgba(255,255,255,0.1);">Cancel</button>
                 </div>
             </div>`;
         }
-        html += `<div class="glass card"><h3 style="margin-top:0; margin-bottom: 20px;">Project Timeline</h3>`;
-        if (timeline.length === 0) { html += `<p style="color:#aaa;">No timeline data generated by Admin yet.</p></div>`; container.innerHTML = html; return; }
         
-        const dates = timeline.flatMap(t => [new Date(t.start).getTime(), new Date(t.end).getTime()]);
-        const minDate = Math.min(...dates); let maxDate = Math.max(...dates); let totalSpan = maxDate - minDate;
-        if (totalSpan === 0) totalSpan = 86400000; totalSpan = totalSpan * 1.05;
+        // 1. GANTT CHART
+        html += `<div class="glass card"><h3 style="margin-top:0; margin-bottom: 20px;">Project Schedule & Timeline</h3>`;
+        if (timeline.length === 0) { 
+            html += `<p style="color:#aaa;">No timeline data generated by Admin yet.</p></div>`; 
+        } else {
+            // Get boundaries based on start, scheduled, and actual end dates
+            const dates = timeline.flatMap(t => [new Date(t.start).getTime(), new Date(t.scheduled).getTime(), t.end ? new Date(t.end).getTime() : null]).filter(d => d);
+            const minDate = Math.min(...dates); let maxDate = Math.max(...dates); let totalSpan = maxDate - minDate;
+            if (totalSpan === 0) totalSpan = 86400000; totalSpan = totalSpan * 1.05;
 
-        html += `<div style="display:flex; flex-direction:column; gap: 10px; overflow-x: auto; padding-bottom: 10px;">`;
-        timeline.forEach(t => {
-            const startT = new Date(t.start).getTime(); const endT = new Date(t.end).getTime();
-            const leftPerc = ((startT - minDate) / totalSpan) * 100; let widthPerc = ((endT - startT) / totalSpan) * 100;
-            if (widthPerc < 2) widthPerc = 2; 
+            html += `<div style="display:flex; flex-direction:column; gap: 15px; overflow-x: auto; padding-bottom: 10px;">`;
+            timeline.forEach(t => {
+                const startT = new Date(t.start).getTime(); 
+                const schedT = new Date(t.scheduled).getTime();
+                const endT = t.end ? new Date(t.end).getTime() : schedT; // Visual end of the bar defaults to scheduled if not done
+                
+                const leftPerc = ((startT - minDate) / totalSpan) * 100; 
+                let widthPerc = ((endT - startT) / totalSpan) * 100;
+                const schedPerc = ((schedT - minDate) / totalSpan) * 100;
+                
+                if (widthPerc < 2) widthPerc = 2; 
+                
+                const prog = t.progress || 0;
+                const isDone = prog == 100;
+                const isLate = isDone && endT > schedT;
+                const owner = t.owner || 'Unassigned';
+
+                // Color coding based on performance
+                let barColor = "linear-gradient(90deg, var(--primary), var(--secondary))"; // Default Blue/Cyan
+                if (isDone) {
+                    barColor = isLate ? "linear-gradient(90deg, #ef4444, #b91c1c)" : "linear-gradient(90deg, #10b981, #059669)";
+                }
+
+                html += `
+                    <div class="gantt-row">
+                        <div class="gantt-label" title="${t.title}">
+                            <div style="font-weight:bold;">${t.title}</div>
+                            <div style="font-size:10px; color:var(--secondary); margin-top:2px;">👤 ${owner}</div>
+                        </div>
+                        <div class="gantt-track">
+                            <div class="gantt-bar" style="left: ${leftPerc}%; width: ${widthPerc}%; background: ${barColor};">
+                                <div style="position:absolute; left:0; top:0; height:100%; width:${prog}%; background:rgba(0,0,0,0.4);"></div>
+                                <span style="position:relative; z-index:1; padding-left:10px; white-space:nowrap;">
+                                    ${t.start} to ${t.end || t.scheduled} (${prog}%)
+                                    ${isDone ? (isLate ? ' - 🔴 LATE' : ' - 🟢 ON TIME') : ''}
+                                </span>
+                            </div>
+                            <div style="position:absolute; left:${schedPerc}%; top:0; height:100%; width:3px; background:var(--accent); z-index:2; box-shadow:0 0 8px var(--accent);" title="Scheduled Deadline: ${t.scheduled}"></div>
+                        </div>
+                        ${isAdmin() ? `
+                            <div style="display:flex; flex-shrink: 0;">
+                                <button class="icon-btn" style="background:rgba(34,211,238,0.2); color:var(--secondary); padding: 5px 10px; border-radius:5px; margin-left:15px; font-size:11px;" onclick="editTimeline(${t.id})">Edit</button>
+                                <button class="delete-btn" style="position:relative; margin-left:5px; background:rgba(239, 68, 68, 0.2); padding: 5px 10px; border-radius:5px;" onclick="deleteTimeline(${t.id})">Drop</button>
+                            </div>
+                        ` : ''}
+                    </div>`;
+            });
+            html += `</div></div>`; 
+        }
+
+        // 2. INDIVIDUAL MEMBER TASK RECORDS
+        html += `<h3 style="margin-top: 30px; margin-bottom: 15px; color: var(--secondary);">Member Task Records</h3>`;
+        html += `<div class="grid-5" style="margin-bottom: 20px;">`;
+        
+        targetMembers.forEach(m => {
+            const mTasks = timeline.filter(t => t.owner === m);
             html += `
-                <div class="gantt-row">
-                    <div class="gantt-label" title="${t.title}">${t.title}</div>
-                    <div class="gantt-track">
-                        <div class="gantt-bar" style="left: ${leftPerc}%; width: ${widthPerc}%;">${t.start}</div>
-                    </div>
-                    ${isAdmin() ? `<button class="delete-btn" style="position:relative; margin-left:15px; background:rgba(239, 68, 68, 0.2); padding: 5px 10px; border-radius:5px; flex-shrink: 0;" onclick="deleteTimeline(${t.id})">Drop</button>` : ''}
-                </div>`;
+                <div class="glass card" style="padding: 15px;">
+                    <div style="font-weight: bold; color: var(--secondary); margin-bottom: 10px; border-bottom: 1px solid var(--glass-border); padding-bottom: 5px;">${m}</div>
+                    <div style="display:flex; flex-direction:column; gap:8px; max-height: 250px; overflow-y: auto; padding-right: 5px;">
+            `;
+            if (mTasks.length === 0) {
+                html += `<div style="font-size: 11px; color: #aaa; text-align: center;">No assigned tasks</div>`;
+            } else {
+                mTasks.sort((a,b) => new Date(a.scheduled) - new Date(b.scheduled)).forEach(t => {
+                    const isDone = t.progress == 100;
+                    const isLate = isDone && new Date(t.end) > new Date(t.scheduled);
+                    
+                    html += `
+                        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; border: 1px solid ${isDone ? (isLate ? '#ef4444' : '#10b981') : 'var(--glass-border)'};">
+                            <div style="font-weight:bold; font-size:12px; color:${isDone ? '#fff' : '#fff'}; margin-bottom: 4px;">${t.title}</div>
+                            <div style="font-size:10px; color:#aaa;">Target: ${t.scheduled}</div>
+                            ${isDone ? `<div style="font-size:10px; color:${isLate ? '#ef4444' : '#10b981'};">Completed: ${t.end}</div>` : ''}
+                            
+                            <div style="margin-top: 5px; background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; overflow: hidden;">
+                                <div style="width: ${t.progress || 0}%; background: ${isDone ? (isLate ? '#ef4444' : '#10b981') : 'var(--secondary)'}; height: 100%;"></div>
+                            </div>
+                            <div style="font-size:10px; color:var(--secondary); text-align:right; margin-top:2px;">${t.progress || 0}%</div>
+                        </div>
+                    `;
+                });
+            }
+            html += `</div></div>`;
         });
-        html += `</div></div>`; container.innerHTML = html;
+        html += `</div>`;
+
+        container.innerHTML = html;
     }
-    function addTimeline() {
-        const title = document.getElementById('tlTitle').value; const start = document.getElementById('tlStart').value; const end = document.getElementById('tlEnd').value;
-        if(!title || !start || !end) return alert("Fill all fields."); if(new Date(start) > new Date(end)) return alert("Start date must be before end date.");
-        const tl = getDB('timeline'); tl.push({ id: generateId(), title, start, end }); setDB('timeline', tl); loadModule('Timeline');
+    
+    function submitTimeline() {
+        const title = document.getElementById('tlTitle').value; 
+        const owner = document.getElementById('tlOwner').value; 
+        const start = document.getElementById('tlStart').value; 
+        const sched = document.getElementById('tlSched').value;
+        const progress = document.getElementById('tlProgress').value || 0;
+        const end = document.getElementById('tlEnd').disabled ? "" : document.getElementById('tlEnd').value;
+        
+        if(!title || !owner || !start || !sched) return alert("Fill Task Name, Owner, Start, and Scheduled Dates."); 
+        if(progress == 100 && !end) return alert("Please provide the Actual End Date for completed tasks.");
+        if(end && new Date(start) > new Date(end)) return alert("Start date must be before actual end date.");
+        
+        let tl = getDB('timeline'); 
+        
+        if (editingTimelineId) {
+            const idx = tl.findIndex(t => t.id === editingTimelineId);
+            if (idx > -1) {
+                tl[idx] = { ...tl[idx], title, owner, start, end: end || null, scheduled: sched, progress: parseInt(progress) };
+            }
+            editingTimelineId = null;
+        } else {
+            tl.push({ id: generateId(), title, owner, start, end: end || null, scheduled: sched, progress: parseInt(progress) }); 
+        }
+        
+        setDB('timeline', tl); loadModule('Timeline');
     }
+    
+    function editTimeline(id) {
+        const tl = getDB('timeline').find(t => t.id === id);
+        if(!tl) return;
+        
+        editingTimelineId = id;
+        document.getElementById('tlTitle').value = tl.title;
+        
+        const ownerSelect = document.getElementById('tlOwner');
+        if([...ownerSelect.options].some(o => o.value === tl.owner)) ownerSelect.value = tl.owner;
+        else ownerSelect.value = "Team";
+        
+        document.getElementById('tlStart').value = tl.start;
+        document.getElementById('tlSched').value = tl.scheduled || tl.end || ''; 
+        document.getElementById('tlProgress').value = tl.progress || 0;
+        
+        const endInput = document.getElementById('tlEnd');
+        if (tl.progress == 100) {
+            endInput.disabled = false;
+            endInput.value = tl.end || '';
+        } else {
+            endInput.disabled = true;
+            endInput.value = '';
+        }
+        
+        document.getElementById('tlFormTitle').innerText = "Admin: Edit Task Progress & Dates";
+        document.getElementById('tlSubmitBtn').innerText = "Update Task";
+        document.getElementById('tlCancelBtn').style.display = "block";
+        
+        document.getElementById('timelineAdminPanel').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function cancelEditTimeline() {
+        editingTimelineId = null;
+        loadModule('Timeline'); 
+    }
+    
     function deleteTimeline(id) { setDB('timeline', getDB('timeline').filter(t => t.id !== id)); loadModule('Timeline'); }
 
     // --- SPRINT BOARD ---
@@ -755,14 +1007,12 @@
     }
     function deleteResource(id) { setDB('resources', getDB('resources').filter(r => r.id !== id)); loadModule('Resources'); }
 
-
-    // --- GALLERY (WITH MULTIPLE UPLOAD & FOLDERS) ---
+    // --- GALLERY ---
     function renderGallery(container) {
         const gal = getDB('gallery'); 
         let html = '';
         
         if (isAdmin()) {
-            // Extract unique folder names for datalist autocomplete
             const uniqueFolders = [...new Set(gal.map(g => g.folder || 'Uncategorized'))];
             const dataListHtml = uniqueFolders.map(f => `<option value="${f}">`).join('');
 
@@ -775,14 +1025,13 @@
                         <input id="galFile" type="file" multiple accept="image/*" style="margin:0; padding:9px;">
                         <div style="font-size: 10px; color: #ffaa00; margin-top: 5px;">* Select multiple images. Auto-compressed for cloud sync.</div>
                     </div>
-                    <input id="galFolder" placeholder="Folder Name (e.g. Defense Prep)" list="folderOptions" style="flex:1; margin:0;" value="${currentGalleryFolder || ''}">
+                    <input id="galFolder" placeholder="Folder Name" list="folderOptions" style="flex:1; margin:0;" value="${currentGalleryFolder || ''}">
                     <input id="galCap" placeholder="Caption (Optional)" style="flex:1; margin:0;">
                     <button onclick="addPhoto()" style="flex:1; margin:0;">Upload</button>
                 </div>
             </div>`;
         }
 
-        // VIEW 1: FOLDER LIST
         if (currentGalleryFolder === null) {
             const folders = {};
             gal.forEach(g => {
@@ -809,9 +1058,7 @@
                 });
                 html += `</div>`;
             }
-        } 
-        // VIEW 2: INSIDE A FOLDER
-        else {
+        } else {
             html += `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--glass-border);">
                 <h3 style="margin:0; display:flex; align-items:center; gap: 10px;">
@@ -842,14 +1089,11 @@
         container.innerHTML = html;
     }
 
-    // Global hooks for gallery folder navigation
     window.openGalleryFolder = function(fName) {
-        currentGalleryFolder = fName;
-        loadModule('Gallery', true); 
+        currentGalleryFolder = fName; loadModule('Gallery', true); 
     }
     window.closeGalleryFolder = function() {
-        currentGalleryFolder = null;
-        loadModule('Gallery', true);
+        currentGalleryFolder = null; loadModule('Gallery', true);
     }
     
     async function addPhoto() {
@@ -863,16 +1107,13 @@
         
         const gal = getDB('gallery');
         
-        // Loop through multiple files
         for(let i=0; i < files.length; i++) {
             const base64 = await compressImage(files[i]);
             let finalCaption = files.length > 1 ? `${caption} (${i+1})` : caption;
             gal.push({ id: generateId(), url: base64, caption: finalCaption, folder: folder });
         }
         
-        // Automatically open the folder we just uploaded to
         currentGalleryFolder = folder;
-        
         setDB('gallery', gal); 
         loadModule('Gallery');
     }
@@ -884,9 +1125,8 @@
         
         gal = gal.filter(g => g.id !== id);
         
-        // Check if we just deleted the last item in the current folder
         if (targetFolder && !gal.some(g => (g.folder || 'Uncategorized') === targetFolder)) {
-            currentGalleryFolder = null; // Kick back to root view
+            currentGalleryFolder = null; 
         }
         
         setDB('gallery', gal); 
