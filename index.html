@@ -14,6 +14,14 @@
             --accent: #8B5CF6; --text: #f8fafc;
             --glass-bg: rgba(255,255,255,0.05);
             --glass-border: rgba(255,255,255,0.1);
+            
+            /* Member Colors */
+            --c-chua: #3b82f6;
+            --c-vince: #8b5cf6;
+            --c-tanya: #ec4899;
+            --c-bren: #10b981;
+            --c-ruth: #f97316;
+            --c-team: #64748b;
         }
         body {
             margin: 0; font-family: 'Inter', system-ui, sans-serif;
@@ -22,7 +30,6 @@
             display: flex; justify-content: center; align-items: center;
         }
         
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 3px; }
         ::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.3); border-radius: 3px; }
@@ -36,6 +43,11 @@
         .neon { color: var(--secondary); text-shadow: 0 0 8px rgba(34,211,238,0.4); }
         .accent { color: var(--accent); }
         
+        .dadevs-logo {
+            width: 50px; height: 50px; flex-shrink: 0; transition: transform 0.3s ease;
+        }
+        .dadevs-logo:hover { transform: scale(1.05) rotate(5deg); }
+        
         /* Login */
         #login { padding: 40px; text-align: center; width: 320px; transition: opacity 0.5s; max-width: 90%; }
         input, select, textarea {
@@ -43,7 +55,7 @@
             border: 1px solid var(--glass-border); color: var(--text);
             border-radius: 8px; box-sizing: border-box; outline: none; font-family: inherit;
         }
-        input:disabled { background: rgba(0,0,0,0.5); color: #666; cursor: not-allowed; border-color: rgba(255,255,255,0.05); }
+        input:disabled, textarea:disabled { background: rgba(0,0,0,0.5); color: #666; cursor: not-allowed; border-color: rgba(255,255,255,0.05); }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
         input:focus:not(:disabled), select:focus, textarea:focus { border-color: var(--secondary); }
         button {
@@ -58,58 +70,48 @@
         /* App Layout */
         #app { display: none; width: 100vw; height: 100vh; flex-direction: row; }
         
-        /* Persistent Collapsible Sidebar */
+        /* Sidebar */
         #sidebar {
             width: 250px; display: flex; flex-direction: column; border-right: 1px solid var(--glass-border);
             border-radius: 0; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100;
             background: rgba(15, 23, 42, 0.5); flex-shrink: 0; overflow: hidden;
         }
         #sidebar.collapsed { width: 75px; }
-
-        .sidebar-header {
-            display: flex; justify-content: space-between; align-items: center; padding: 20px; height: 75px;
-            box-sizing: border-box; border-bottom: 1px solid var(--glass-border); white-space: nowrap;
-        }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; height: 85px; box-sizing: border-box; border-bottom: 1px solid var(--glass-border); white-space: nowrap; }
         #sidebar.collapsed .sidebar-header { justify-content: center; padding: 20px 0; }
         #sidebar.collapsed .brand-text { display: none; }
-
-        .toggle-btn {
-            background: none; border: none; color: var(--text); padding: 5px; cursor: pointer; display: flex;
-            align-items: center; justify-content: center; border-radius: 5px; transition: 0.2s; margin: 0; width: auto;
-        }
+        .toggle-btn { background: none; border: none; color: var(--text); padding: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 5px; transition: 0.2s; margin: 0; width: auto; }
         .toggle-btn:hover { color: var(--secondary); background: rgba(255,255,255,0.1); box-shadow: none; }
-
         .nav-links { flex: 1; padding: 15px 10px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 8px; }
-        .nav-item {
-            display: flex; align-items: center; gap: 15px; padding: 12px; border-radius: 8px; cursor: pointer;
-            transition: 0.2s; white-space: nowrap; font-weight: 500; font-size: 14px;
-        }
+        .nav-item { display: flex; align-items: center; gap: 15px; padding: 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; white-space: nowrap; font-weight: 500; font-size: 14px; }
         .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
         .nav-item:hover, .nav-item.active { background: rgba(34,211,238,0.1); color: var(--secondary); transform: translateX(5px); }
         #sidebar.collapsed .nav-item { justify-content: center; padding: 12px 0; transform: none; }
         #sidebar.collapsed .nav-item:hover { transform: translateY(-2px); }
         #sidebar.collapsed .nav-text { display: none; }
-
         .sidebar-footer { padding: 20px; border-top: 1px solid var(--glass-border); white-space: nowrap; display: flex; flex-direction: column; gap: 15px; }
         #sidebar.collapsed .sidebar-footer { padding: 20px 0; align-items: center; }
         #sidebar.collapsed .user-info { display: none; }
-        
-        .logout-btn {
-            display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(239, 68, 68, 0.2);
-            border: 1px solid #ef4444; color: #ef4444; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; margin: 0; width: 100%;
-        }
+        .logout-btn { display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; margin: 0; width: 100%; }
         .logout-btn:hover { background: #ef4444; color: #fff; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
         #sidebar.collapsed .logout-btn { padding: 10px; width: auto; border: none; background: transparent; }
         #sidebar.collapsed .logout-btn-text { display: none; }
 
         /* Main Content */
         #main { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; transition: 0.3s; min-width: 0; }
-        
-        /* Modules */
         .card { padding: 20px; margin-bottom: 20px; transition: transform 0.3s; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; } 
         .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; } 
+        
+        .contact-link { display: flex; justify-content: center; align-items: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .contact-link:hover { background: var(--secondary); color: #000; transform: translateY(-3px); border-color: var(--secondary); box-shadow: 0 4px 10px rgba(34,211,238,0.4); }
+
+        /* Sprint Elements */
+        .sprint-accordion { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+        .sprint-header { padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: rgba(34, 211, 238, 0.05); transition: 0.2s; }
+        .sprint-header:hover { background: rgba(34, 211, 238, 0.1); }
+        .sprint-details { padding: 15px; border-top: 1px solid var(--glass-border); display: none; font-size: 13px; color: #ccc; }
         
         .kanban-board { display: flex; gap: 20px; min-height: 400px; overflow-x: auto; padding-bottom: 20px;}
         .kanban-col { flex: 1; min-width: 280px; display: flex; flex-direction: column; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; border: 1px solid var(--glass-border); }
@@ -121,10 +123,14 @@
         .admin-panel { padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
         .admin-panel .flex-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
-        .gantt-row { display: flex; align-items: center; margin-bottom: 15px; }
-        .gantt-label { width: 220px; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 15px;}
-        .gantt-track { flex: 1; background: rgba(0,0,0,0.3); height: 28px; border-radius: 14px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); min-width: 200px; }
-        .gantt-bar { position: absolute; height: 100%; border-radius: 14px; display: flex; align-items: center; font-size: 11px; font-weight: bold; color: #fff; box-sizing: border-box; overflow: hidden; transition: 0.3s;}
+        /* Timeline Table + Gantt */
+        .phase-header { background: rgba(34, 211, 238, 0.15); padding: 10px 15px; border-radius: 8px; font-weight: bold; color: var(--secondary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border: 1px solid rgba(34, 211, 238, 0.3); }
+        .phase-header:hover { background: rgba(34, 211, 238, 0.25); }
+        .timeline-table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        .timeline-table th { text-align: left; padding: 10px; font-size: 11px; color: #aaa; text-transform: uppercase; border-bottom: 1px solid var(--glass-border); }
+        .timeline-table td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; vertical-align: middle; }
+        .gantt-track { background: rgba(0,0,0,0.3); height: 24px; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); width: 250px; }
+        .gantt-bar { position: absolute; height: 100%; border-radius: 12px; display: flex; align-items: center; font-size: 11px; font-weight: bold; color: #fff; box-sizing: border-box; overflow: hidden; transition: 0.3s; box-shadow: 0 0 10px rgba(34,211,238,0.4);}
         
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .gallery-item { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); aspect-ratio: 1 / 1; transition: 0.3s; }
@@ -134,9 +140,16 @@
         .folder-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.7); display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; cursor: pointer; transition: 0.3s;}
         .gallery-item:hover .folder-overlay { background: rgba(15, 23, 42, 0.5); }
         
-        .resource-item { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; margin-bottom: 10px; }
-        .resource-icon { width: 40px; height: 40px; border-radius: 8px; background: rgba(34,211,238,0.1); color: var(--secondary); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 20px; margin-right: 15px;}
+        /* Resource Search & Tags */
+        .res-search { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); color: #fff; border-radius: 8px; margin-bottom: 15px; outline: none; }
+        .res-search:focus { border-color: var(--secondary); box-shadow: 0 0 10px rgba(34,211,238,0.2); }
+        .tag-chip { background: rgba(34,211,238,0.1); color: var(--secondary); padding: 4px 12px; border-radius: 12px; font-size: 11px; cursor: pointer; border: 1px solid rgba(34,211,238,0.3); transition: 0.2s; white-space: nowrap; user-select: none; }
+        .tag-chip:hover, .tag-chip.active { background: var(--secondary); color: #000; }
+        .resource-item { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; margin-bottom: 10px; transition: 0.2s;}
+        .resource-item:hover { border-color: rgba(34,211,238,0.3); transform: translateX(2px);}
+        .resource-icon { width: 40px; height: 40px; border-radius: 8px; background: rgba(34,211,238,0.1); color: var(--secondary); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 20px; margin-right: 15px; flex-shrink:0;}
 
+        /* Calendar */
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; margin-top: 15px; }
         .cal-header { font-weight: bold; color: var(--secondary); font-size: 12px; padding-bottom: 10px; }
         .cal-day { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; border: 1px solid var(--glass-border); min-height: 50px; position: relative; display: flex; flex-direction: column; align-items: center;}
@@ -146,12 +159,15 @@
         .event-meeting { background: #3b82f6; box-shadow: 0 0 5px #3b82f6;}
         .event-overnight { background: #8b5cf6; box-shadow: 0 0 5px #8b5cf6;}
         .event-defense { background: #ef4444; box-shadow: 0 0 5px #ef4444;}
+        .event-birthday { background: #f59e0b; box-shadow: 0 0 5px #f59e0b;}
         .event-other { background: #10b981; box-shadow: 0 0 5px #10b981;}
         .event-list-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--glass-border);}
+        
         button.icon-btn { width: auto; padding: 8px 15px; background: rgba(255,255,255,0.1); margin: 0; }
         button.icon-btn:hover { background: var(--secondary); color: #000; }
 
-        @media (max-width: 992px) { #main { padding: 20px; } .grid-3 { grid-template-columns: 1fr; } .grid-5 { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 1200px) { .grid-5 { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 992px) { #main { padding: 20px; } .grid-3 { grid-template-columns: 1fr; } }
         @media (max-width: 768px) {
             #sidebar { width: 200px; } #sidebar.collapsed { width: 65px; } #main { padding: 15px; } 
             .grid-2 { grid-template-columns: 1fr; } .grid-5 { grid-template-columns: repeat(2, 1fr); }
@@ -164,8 +180,29 @@
 <body>
 
     <div id="login" class="glass">
-        <h1 class="neon">DaDevs <span class="accent">0.1</span></h1>
-        <p style="color:#aaa;font-size:0.9em;margin-bottom:20px">Secure Workspace Access</p>
+        <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-bottom: 10px;">
+            <svg class="dadevs-logo" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#22D3EE" />
+                        <stop offset="100%" stop-color="#8B5CF6" />
+                    </linearGradient>
+                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="4" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+                <path d="M100 15L175 58V142L100 185L25 142V58L100 15Z" stroke="url(#neonGrad)" stroke-width="8" filter="url(#glow)"/>
+                <path d="M100 40V160" stroke="#FFF" stroke-width="12" stroke-linecap="round"/>
+                <path d="M100 40C145 40 155 70 155 100C155 130 145 160 100 160" stroke="url(#neonGrad)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M70 100L45 75M70 100L45 125" stroke="#FFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="45" cy="75" r="6" fill="#22D3EE"/>
+                <circle cx="45" cy="125" r="6" fill="#8B5CF6"/>
+                <circle cx="100" cy="100" r="8" fill="#FFF" filter="url(#glow)"/>
+            </svg>
+            <h1 class="neon" style="margin:0;">DaDevs <span class="accent">0.1</span></h1>
+        </div>
+        <p style="color:#aaa;font-size:0.9em;margin-bottom:20px; margin-top:5px;">Secure Workspace Access</p>
         
         <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; font-size: 13px; color: #ccc; margin-bottom: 25px; text-align: left; line-height: 1.6;">
             <span style="color: var(--secondary); font-weight: bold;">Admin:</span> Bren<br>
@@ -181,12 +218,19 @@
     <div id="app">
         <div id="sidebar" class="glass">
             <div class="sidebar-header">
-                <h2 class="neon brand-text" style="margin:0;">DaDevs <span class="accent">0.1</span></h2>
+                <div class="brand-text" style="display:flex; align-items:center; gap:8px;">
+                    <svg class="dadevs-logo" style="width:30px; height:30px;" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 15L175 58V142L100 185L25 142V58L100 15Z" stroke="url(#neonGrad)" stroke-width="8" filter="url(#glow)"/>
+                        <path d="M100 40V160" stroke="#FFF" stroke-width="12" stroke-linecap="round"/>
+                        <path d="M100 40C145 40 155 70 155 100C155 130 145 160 100 160" stroke="url(#neonGrad)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M70 100L45 75M70 100L45 125" stroke="#FFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h2 class="neon" style="margin:0; font-size:20px;">DaDevs</h2>
+                </div>
                 <button class="toggle-btn" onclick="toggleSidebar()" title="Toggle Menu">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                 </button>
             </div>
-            
             <div class="nav-links" id="navLinks"></div>
             <div class="sidebar-footer" id="sidebarFooter"></div>
         </div>
@@ -194,7 +238,10 @@
         <div id="main">
             <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;" id="mainHeader">
                 <h2 id="viewTitle" class="neon" style="margin:0; font-size: 28px;">Workspace</h2>
-                <div id="syncStatus" style="font-size:12px; font-weight:bold; color:#aaa;"></div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div id="syncStatus" style="font-size:12px; font-weight:bold; color:#aaa;"></div>
+                    <button id="manualSyncBtn" onclick="initDB(true)" style="width:auto; padding:5px 10px; margin:0; font-size:12px; display:none;">🔄 Sync</button>
+                </div>
             </header>
             <div id="contentArea" style="flex:1; display: flex; flex-direction: column;"></div>
         </div>
@@ -202,14 +249,13 @@
 
 <script>
     // ==========================================
-    // ☁️ CLOUD SYNC CONFIGURATION ☁️
+    // CLOUD SYNC CONFIGURATION
     // ==========================================
     const ENABLE_CLOUD_SYNC = true; 
     const JSONBIN_BIN_ID = "69b53404aa77b81da9e359ea";
     const JSONBIN_MASTER_KEY = "$2a$10$Tro6Ud5UHq2VqKQnp8Kxo.1MFLWorIUvmpahlY7t9jqDPWr0Xg2em";
     // ==========================================
 
-    // --- UTILITIES (IMAGE COMPRESSION) ---
     function compressImage(file, maxSize = 800, quality = 0.6) {
         return new Promise((resolve) => {
             const reader = new FileReader();
@@ -233,26 +279,23 @@
 
     window.downloadFile = function(dataUrl, name) {
         const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = name || 'downloaded_file';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        a.href = dataUrl; a.download = name || 'downloaded_file';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
 
-    // --- PWA SETUP ---
-    const iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#0F172A"/><text x="50%" y="50%" fill="#22D3EE" font-size="200" font-family="sans-serif" font-weight="bold" dominant-baseline="middle" text-anchor="middle">DD</text></svg>`;
+    // PWA SETUP (with new abstract D SVG icon)
+    const pwaIconSVG = `<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="200" fill="#0F172A"/><path d="M100 15L175 58V142L100 185L25 142V58L100 15Z" stroke="#22D3EE" stroke-width="8"/><path d="M100 40V160" stroke="#FFF" stroke-width="12" stroke-linecap="round"/><path d="M100 40C145 40 155 70 155 100C155 130 145 160 100 160" stroke="#8B5CF6" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><path d="M70 100L45 75M70 100L45 125" stroke="#FFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     const manifest = {
-        name: "DaDevs 0.1", short_name: "DaDevs", start_url: location.href, display: "standalone",
+        name: "DaDevs Workspace", short_name: "DaDevs", start_url: location.href, display: "standalone",
         background_color: "#0F172A", theme_color: "#0F172A",
-        icons: [{ src: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(iconSVG), sizes: "512x512", type: "image/svg+xml" }]
+        icons: [{ src: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(pwaIconSVG), sizes: "512x512", type: "image/svg+xml" }]
     };
     const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
     document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(manifestBlob)}">`);
     const swCode = `self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('activate', e => e.waitUntil(clients.claim())); self.addEventListener('fetch', e => {});`;
     if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }))).catch(console.error);
 
-    // --- SYSTEM DATA & AUTH ---
+    // SYSTEM DATA & AUTH
     const users = {
         "Bren": { pass: "brenduling", role: "admin", name: "Bren" },
         "Chua": { pass: "dadevs0.1", role: "viewer", name: "Chua" },
@@ -264,10 +307,11 @@
         "Adviser": { pass: "dadevs0.1", role: "viewer", name: "Adviser" }
     };
 
-    const modules = ["Dashboard", "Timeline", "Sprint Board", "Calendar", "Funds", "Resources", "Gallery"];
+    const modules = ["Dashboard", "Team", "Timeline", "Sprint Board", "Calendar", "Funds", "Resources", "Gallery"];
     
     const navIcons = {
         "Dashboard": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>`,
+        "Team": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
         "Timeline": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
         "Sprint Board": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>`,
         "Calendar": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
@@ -277,6 +321,8 @@
     };
 
     const targetMembers = ["Chua", "Vince", "Tanya", "Bren", "Ruth"];
+    const memberColors = { "Chua": "var(--c-chua)", "Vince": "var(--c-vince)", "Tanya": "var(--c-tanya)", "Bren": "var(--c-bren)", "Ruth": "var(--c-ruth)", "Team": "var(--c-team)" };
+    const defaultResTags = ["Sheets", "Title Defense", "Survey", "Docs"];
 
     let currentUser = null; 
     let currentModule = "Dashboard"; 
@@ -284,35 +330,54 @@
     
     let currentGalleryFolder = null; 
     let editingTimelineId = null;
+    let editingMemberId = null;
+    let resSearchTerm = '';
+    let resActiveTag = null;
 
-    // Database Key updated to clear out incompatible timeline objects from previous versions
-    const DB_KEY = 'dadevs_db_v7';
-    let appDB = { tasks: [], funds: [], calendar: [], timeline: [], resources: [], gallery: [] };
+    // V15 Reset for Contact Details feature
+    const DB_KEY = 'dadevs_db_v15';
+    let appDB = { 
+        tasks: [], funds: [], calendar: [], timeline: [], resources: [], gallery: [], sprints: [],
+        members: [
+            { id: "Bren", fullName: "Bren", role: "Team Lead", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
+            { id: "Chua", fullName: "Chua", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
+            { id: "Tanya", fullName: "Tanya", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
+            { id: "Vince", fullName: "Vince", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
+            { id: "Ruth", fullName: "Ruth", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" }
+        ]
+    };
 
-    async function initDB() {
-        if (localStorage.getItem('dd_version') !== 'v7') {
-            localStorage.removeItem('dadevs_db_v6');
-            localStorage.setItem('dd_version', 'v7');
+    async function initDB(manualSync = false) {
+        if (localStorage.getItem('dd_version') !== 'v15') {
+            localStorage.removeItem('dadevs_db_v14'); localStorage.setItem('dd_version', 'v15');
         }
         if (ENABLE_CLOUD_SYNC && JSONBIN_BIN_ID && JSONBIN_MASTER_KEY) {
-            document.getElementById('syncStatus').innerText = "☁️ Syncing...";
+            document.getElementById('syncStatus').innerText = manualSync ? "☁️ Manual Syncing..." : "☁️ Syncing...";
             try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, { headers: { 'X-Master-Key': JSONBIN_MASTER_KEY } });
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest?t=${new Date().getTime()}`, { 
+                    method: 'GET', headers: { 'X-Master-Key': JSONBIN_MASTER_KEY, 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }, cache: 'no-store' 
+                });
                 const data = await res.json();
-                if (data.record && data.record.tasks) {
-                    appDB = data.record;
+                if (data.record) {
+                    appDB = { ...appDB, ...data.record };
+                    if(!appDB.sprints) appDB.sprints = [];
+                    if(!appDB.members || appDB.members.length === 0) appDB.members = [
+                        { id: "Bren", fullName: "Bren", role: "Team Lead", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
+                        { id: "Chua", fullName: "Chua", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
+                        { id: "Tanya", fullName: "Tanya", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
+                        { id: "Vince", fullName: "Vince", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
+                        { id: "Ruth", fullName: "Ruth", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" }
+                    ];
                     localStorage.setItem(DB_KEY, JSON.stringify(appDB));
                 }
                 document.getElementById('syncStatus').innerText = "🟢 Online";
+                if (manualSync) { loadModule(currentModule, true); alert("System Synced Successfully!"); }
             } catch(e) { 
-                console.error("Sync error", e); 
-                document.getElementById('syncStatus').innerText = "🔴 Offline (Using Cache)"; 
-                const local = localStorage.getItem(DB_KEY);
-                if (local) appDB = JSON.parse(local);
+                console.error("Sync error", e); document.getElementById('syncStatus').innerText = "🔴 Offline (Using Cache)"; 
+                const local = localStorage.getItem(DB_KEY); if (local) appDB = JSON.parse(local);
             }
         } else {
-            const local = localStorage.getItem(DB_KEY);
-            if (local) appDB = JSON.parse(local);
+            const local = localStorage.getItem(DB_KEY); if (local) appDB = JSON.parse(local);
             document.getElementById('syncStatus').innerText = "💾 Local Mode";
         }
     }
@@ -322,15 +387,12 @@
             document.getElementById('syncStatus').innerText = "⏳ Saving...";
             try {
                 await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_MASTER_KEY },
-                    body: JSON.stringify(appDB)
+                    method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_MASTER_KEY }, body: JSON.stringify(appDB)
                 });
                 document.getElementById('syncStatus').innerText = "🟢 Saved to Cloud";
                 localStorage.setItem(DB_KEY, JSON.stringify(appDB)); 
             } catch(e) { 
-                console.error("Save error", e); 
-                document.getElementById('syncStatus').innerText = "🔴 Save Failed"; 
+                console.error("Save error", e); document.getElementById('syncStatus').innerText = "🔴 Save Failed"; 
                 localStorage.setItem(DB_KEY, JSON.stringify(appDB)); 
             }
         } else {
@@ -357,23 +419,23 @@
         }
     }
 
-    // --- AUTHENTICATION ---
-    async function login() {
+    window.login = async function() {
         const u = document.getElementById("user").value; const p = document.getElementById("pass").value;
         if (users[u] && users[u].pass === p) { localStorage.setItem("session_user", u); await initApp(); } 
         else { document.getElementById("err").style.display = "block"; }
     }
 
-    function logout() { localStorage.removeItem("session_user"); location.reload(); }
+    window.logout = function() { localStorage.removeItem("session_user"); location.reload(); }
 
     async function initApp() {
         const session = localStorage.getItem("session_user");
         if (session && users[session]) {
             currentUser = users[session]; 
-            
             document.getElementById("login").style.display = "none";
             document.getElementById("app").style.display = "flex";
             if (window.innerWidth <= 992) document.getElementById('sidebar').classList.add('collapsed');
+
+            if (isAdmin()) document.getElementById('manualSyncBtn').style.display = "inline-block";
 
             const footerHTML = `
                 <div class="user-info">
@@ -392,12 +454,11 @@
             loadModule("Dashboard");
             startAutoSync();
         } else {
-            document.getElementById("login").style.display = "block";
-            document.getElementById("app").style.display = "none";
+            document.getElementById("login").style.display = "block"; document.getElementById("app").style.display = "none";
         }
     }
 
-    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+    window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('collapsed'); }
     function renderNav() {
         const n = document.getElementById("navLinks");
         n.innerHTML = modules.map(m => `
@@ -414,11 +475,12 @@
         }
     });
 
-    function loadModule(m, silent = false) {
+    window.loadModule = function(m, silent = false) {
         currentModule = m; document.getElementById("viewTitle").innerText = m;
         
         if (m !== 'Gallery') currentGalleryFolder = null;
         if (m !== 'Timeline') editingTimelineId = null;
+        if (m !== 'Team') editingMemberId = null;
 
         if(!silent) renderNav();
         if(!silent && window.innerWidth <= 992) document.getElementById('sidebar').classList.add('collapsed');
@@ -426,6 +488,7 @@
         const c = document.getElementById("contentArea");
         switch(m) {
             case "Dashboard": renderDashboard(c); break;
+            case "Team": renderTeam(c); break;
             case "Timeline": renderTimeline(c); break;
             case "Sprint Board": renderSprintBoard(c); break;
             case "Calendar": renderCalendar(c); break;
@@ -437,18 +500,22 @@
 
     // --- MODULE: DASHBOARD ---
     function renderDashboard(container) {
-        const tasks = getDB('tasks'); const funds = getDB('funds');
+        const sprints = getDB('sprints');
+        const funds = getDB('funds');
+        const timeline = getDB('timeline');
+        const members = getDB('members');
+        
         const totalFunds = funds.reduce((acc, curr) => curr.type === 'in' ? acc + curr.amount : acc - curr.amount, 0);
-        const doneTasks = tasks.filter(t => t.status === 'Done').length;
+        const doneSprints = sprints.filter(s => s.status === 'Done').length;
 
-        container.innerHTML = `
+        let html = `
             <div class="grid-2">
                 <div class="glass card">
                     <h3 class="neon">Sprint Progress</h3>
                     <div style="background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; margin-top: 15px; overflow: hidden;">
-                        <div style="width: ${tasks.length ? (doneTasks/tasks.length)*100 : 0}%; background: var(--secondary); height: 100%; box-shadow: 0 0 10px var(--secondary);"></div>
+                        <div style="width: ${sprints.length ? (doneSprints/sprints.length)*100 : 0}%; background: var(--secondary); height: 100%; box-shadow: 0 0 10px var(--secondary);"></div>
                     </div>
-                    <p style="margin-top: 10px; font-size: 14px; color: #aaa;">${doneTasks} of ${tasks.length} Tasks Completed</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: #aaa;">${doneSprints} of ${sprints.length} Sprints Completed</p>
                 </div>
                 <div class="glass card">
                     <h3 class="neon">Financial Overview</h3>
@@ -456,17 +523,158 @@
                     <p style="font-size: 14px; color: #aaa;">Current available balance</p>
                 </div>
             </div>
-            ${tasks.length === 0 && funds.length === 0 ? '<div class="glass card" style="text-align:center;"><p style="color:#aaa;">System initialized. Awaiting setup...</p></div>' : ''}
         `;
+
+        html += `<h3 style="margin-top: 30px; margin-bottom: 15px; color: var(--secondary);">Team Overview</h3>`;
+        html += `<div class="grid-5">`;
+        
+        members.forEach(m => {
+            const mColor = memberColors[m.id] || 'var(--accent)';
+            const mTasks = timeline.filter(t => t.owner === m.id);
+            const mDone = mTasks.filter(t => t.progress == 100).length;
+            const mFunds = funds.filter(f => f.type === 'in' && f.contributor === m.id).reduce((sum, f) => sum + f.amount, 0);
+
+            html += `
+                <div class="glass card" style="padding: 15px; border-top: 3px solid ${mColor}; text-align: center;">
+                    <div style="font-weight: bold; color: ${mColor}; font-size: 16px;">${m.fullName}</div>
+                    <div style="font-size: 10px; color: #aaa; margin-bottom: 10px;">${m.role}</div>
+                    
+                    <div style="font-size: 12px; color: #aaa; margin-bottom: 2px;">Contributions</div>
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 15px;">₱${mFunds}</div>
+                    
+                    <div style="font-size: 12px; color: #aaa; margin-bottom: 2px;">Timeline Tasks</div>
+                    <div style="font-size: 14px; font-weight: bold;">${mDone} / ${mTasks.length} Done</div>
+                </div>
+            `;
+        });
+        
+        html += `</div>`;
+        container.innerHTML = html;
+    }
+
+    // --- MODULE: TEAM PROFILES ---
+    function renderTeam(container) {
+        const members = getDB('members');
+        let html = '';
+
+        if (isAdmin()) {
+            html += `
+            <div class="glass admin-panel" id="teamAdminPanel" style="${editingMemberId ? 'display:block;' : 'display:none;'}">
+                <h4 style="margin-top:0; color:var(--accent)">Admin: Edit Member Profile</h4>
+                <div class="flex-row" style="margin-bottom: 10px;">
+                    <input id="tmFullName" placeholder="Full Name" style="flex:2;">
+                    <input id="tmRole" placeholder="Role (e.g. Lead Dev)" style="flex:2;">
+                    <div style="flex:1; display:flex; flex-direction:column;">
+                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Birthday</label>
+                        <input id="tmBirthday" type="date" style="margin:0;">
+                    </div>
+                </div>
+                <div class="flex-row">
+                    <input id="tmMessenger" placeholder="Messenger URL" style="flex:1;">
+                    <input id="tmGithub" placeholder="GitHub URL" style="flex:1;">
+                    <input id="tmGmail" placeholder="Email Address" style="flex:1;">
+                    <input id="tmPhone" placeholder="Contact Number" style="flex:1;">
+                </div>
+                <div class="flex-row" style="margin-top:10px;">
+                    <button onclick="saveMemberProfile()" style="flex:1; margin-top: 0;">Save Profile</button>
+                    <button onclick="cancelEditMember()" style="flex:0.5; margin-top: 0; background:rgba(255,255,255,0.1);">Cancel</button>
+                </div>
+            </div>`;
+        }
+
+        html += `<div class="grid-5" style="margin-top: 10px;">`;
+        members.forEach(m => {
+            const mColor = memberColors[m.id] || 'var(--accent)';
+            html += `
+                <div class="glass card" style="padding: 20px; border-top: 4px solid ${mColor}; text-align: center; position:relative;">
+                    ${isAdmin() ? `<button class="icon-btn" style="position:absolute; top:10px; right:10px; font-size:10px; background:rgba(255,255,255,0.1);" onclick="editMemberProfile('${m.id}')">Edit</button>` : ''}
+                    
+                    <div style="width:60px; height:60px; border-radius:30px; background:${mColor}; color:#fff; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:bold; margin: 0 auto 15px auto;">
+                        ${m.fullName.charAt(0).toUpperCase()}
+                    </div>
+                    <div style="font-weight: bold; font-size: 18px; margin-bottom: 5px;">${m.fullName}</div>
+                    <div style="font-size: 12px; color: var(--secondary); margin-bottom: 10px;">${m.role}</div>
+                    ${m.birthday ? `<div style="font-size: 11px; color: #aaa;">🎂 ${m.birthday}</div>` : `<div style="font-size: 11px; color: #666;">No birthday set</div>`}
+                    
+                    <div style="display:flex; justify-content:center; gap:10px; margin-top: 15px; flex-wrap: wrap;">
+                        ${m.messenger ? `<a href="${m.messenger}" target="_blank" class="contact-link" title="Messenger">💬</a>` : ''}
+                        ${m.github ? `<a href="${m.github}" target="_blank" class="contact-link" title="GitHub">🐙</a>` : ''}
+                        ${m.gmail ? `<a href="mailto:${m.gmail}" class="contact-link" title="Email">✉️</a>` : ''}
+                        ${m.phone ? `<a href="tel:${m.phone}" class="contact-link" title="Phone">📞</a>` : ''}
+                    </div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+        container.innerHTML = html;
+    }
+
+    window.editMemberProfile = function(id) {
+        const members = getDB('members');
+        const m = members.find(x => x.id === id);
+        if(!m) return;
+        editingMemberId = id;
+        loadModule('Team', true); 
+        setTimeout(() => {
+            document.getElementById('tmFullName').value = m.fullName || '';
+            document.getElementById('tmRole').value = m.role || '';
+            document.getElementById('tmBirthday').value = m.birthday || '';
+            document.getElementById('tmMessenger').value = m.messenger || '';
+            document.getElementById('tmGithub').value = m.github || '';
+            document.getElementById('tmGmail').value = m.gmail || '';
+            document.getElementById('tmPhone').value = m.phone || '';
+            document.getElementById('teamAdminPanel').scrollIntoView({ behavior: 'smooth' });
+        }, 50);
+    }
+    window.cancelEditMember = function() { editingMemberId = null; loadModule('Team'); }
+    window.saveMemberProfile = function() {
+        const fullName = document.getElementById('tmFullName').value;
+        const role = document.getElementById('tmRole').value;
+        const birthday = document.getElementById('tmBirthday').value;
+        const messenger = document.getElementById('tmMessenger').value;
+        const github = document.getElementById('tmGithub').value;
+        const gmail = document.getElementById('tmGmail').value;
+        const phone = document.getElementById('tmPhone').value;
+        
+        if(!fullName || !role) return alert("Name and Role are required.");
+        
+        let members = getDB('members');
+        const idx = members.findIndex(x => x.id === editingMemberId);
+        if (idx > -1) {
+            members[idx] = { ...members[idx], fullName, role, birthday, messenger, github, gmail, phone };
+            setDB('members', members);
+        }
+        editingMemberId = null;
+        loadModule('Team');
     }
 
     // --- MODULE: CALENDAR ---
     function renderCalendar(container) {
-        const events = getDB('calendar'); let html = '';
+        const manualEvents = getDB('calendar'); 
+        const timeline = getDB('timeline');
+        const members = getDB('members');
+        const currentYear = viewDate.getFullYear();
+        
+        let allEvents = [...manualEvents];
+        
+        timeline.forEach(t => {
+            if (t.scheduled) {
+                allEvents.push({ id: 'tl_' + t.id, title: `Due: ${t.title}`, date: t.scheduled, type: 'timeline-task', owner: t.owner });
+            }
+        });
+
+        members.forEach(m => {
+            if (m.birthday) {
+                const bdayMD = m.birthday.substring(5); 
+                allEvents.push({ id: 'bday_' + m.id, title: `🎂 ${m.fullName}'s Bday`, date: `${currentYear}-${bdayMD}`, type: 'birthday', owner: m.id });
+            }
+        });
+
+        let html = '';
         if (isAdmin()) {
             html += `
             <div class="glass admin-panel">
-                <h4 style="margin-top:0; color:var(--accent)">Admin: Schedule Event</h4>
+                <h4 style="margin-top:0; color:var(--accent)">Admin: Schedule Manual Event</h4>
                 <div class="flex-row">
                     <input id="evTitle" placeholder="Event Title" style="flex:2;">
                     <input id="evDate" type="date" style="flex:1;">
@@ -479,12 +687,13 @@
             </div>`;
         }
 
-        const currentMonth = viewDate.getMonth(); const currentYear = viewDate.getFullYear();
+        const currentMonth = viewDate.getMonth(); 
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const firstDay = new Date(currentYear, currentMonth, 1).getDay();
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const todayStr = new Date().toISOString().split('T')[0];
-        const monthEvents = events.filter(e => { const eDate = new Date(e.date); return eDate.getMonth() === currentMonth && eDate.getFullYear() === currentYear; }).sort((a,b) => new Date(a.date) - new Date(b.date));
+        
+        const monthEvents = allEvents.filter(e => { const eDate = new Date(e.date); return eDate.getMonth() === currentMonth && eDate.getFullYear() === currentYear; }).sort((a,b) => new Date(a.date) - new Date(b.date));
 
         html += `
         <div class="grid-3">
@@ -499,46 +708,72 @@
                 <div class="cal-grid">
                     <div class="cal-header">Sun</div><div class="cal-header">Mon</div><div class="cal-header">Tue</div>
                     <div class="cal-header">Wed</div><div class="cal-header">Thu</div><div class="cal-header">Fri</div><div class="cal-header">Sat</div>`;
+        
         for(let i = 0; i < firstDay; i++) { html += `<div class="cal-day empty"></div>`; }
         for(let d = 1; d <= daysInMonth; d++) {
             const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
             const isToday = dateStr === todayStr ? 'today' : '';
-            const dayEvents = events.filter(e => e.date === dateStr);
-            let dots = ''; dayEvents.forEach(e => { dots += `<div class="cal-event-dot event-${e.type}" title="${e.title}"></div>`; });
+            const dayEvents = allEvents.filter(e => e.date === dateStr);
+            
+            let dots = ''; 
+            dayEvents.forEach(e => { 
+                let style = '';
+                if (e.type === 'timeline-task') {
+                    let color = memberColors[e.owner] || 'var(--accent)';
+                    style = `background: ${color}; box-shadow: 0 0 5px ${color};`;
+                }
+                dots += `<div class="cal-event-dot event-${e.type}" style="${style}" title="${e.title}"></div>`; 
+            });
             html += `<div class="cal-day ${isToday}"><div style="font-size:14px;">${d}</div><div style="display:flex; gap:3px; flex-wrap:wrap; justify-content:center; width:100%; margin-top:2px;">${dots}</div></div>`;
         }
+        
         html += `</div></div>
             <div class="glass card" style="display:flex; flex-direction:column;">
-                <h3 style="margin-top:0; color:var(--accent);">Scheduled Events</h3><div style="flex:1; overflow-y:auto;">`;
+                <h3 style="margin-top:0; color:var(--accent);">Scheduled Events & Deadlines</h3><div style="flex:1; overflow-y:auto; padding-right:5px;">`;
         if(monthEvents.length === 0) { html += `<p style="color:#aaa; font-size:14px; text-align:center;">No events scheduled this month.</p>`; } 
         else {
             monthEvents.forEach(e => {
+                let style = '';
+                if (e.type === 'timeline-task') {
+                    let color = memberColors[e.owner] || 'var(--accent)';
+                    style = `background: ${color}; box-shadow: 0 0 5px ${color};`;
+                }
+                const isTimeline = e.type === 'timeline-task';
+                const isBday = e.type === 'birthday';
+                
+                let borderCol = 'transparent';
+                if(isTimeline) borderCol = memberColors[e.owner] || 'var(--accent)';
+                if(isBday) borderCol = '#f59e0b';
+
                 html += `
-                <div class="event-list-item">
-                    <div class="cal-event-dot event-${e.type}" style="width:12px; height:12px; margin:0;"></div>
+                <div class="event-list-item" style="border-left: 3px solid ${borderCol}">
+                    <div class="cal-event-dot event-${e.type}" style="${style} width:12px; height:12px; margin:0;"></div>
                     <div style="flex:1;">
                         <div style="font-weight:bold; font-size:14px;">${e.title}</div>
-                        <div style="font-size:11px; color:#aaa;">${e.date} &bull; <span style="text-transform:capitalize">${e.type}</span></div>
+                        <div style="font-size:11px; color:#aaa;">${e.date} &bull; <span style="text-transform:capitalize">${isTimeline ? `Timeline (${e.owner})` : e.type}</span></div>
                     </div>
-                    ${isAdmin() ? `<button class="delete-btn" style="position:relative; top:0; right:0;" onclick="deleteEvent(${e.id})">✖</button>` : ''}
+                    ${(isAdmin() && !isTimeline && !isBday) ? `<button class="delete-btn" style="position:relative; top:0; right:0;" onclick="deleteEvent(${e.id})">✖</button>` : ''}
                 </div>`;
             });
         }
         html += `</div></div></div>`; container.innerHTML = html;
     }
-    function changeMonth(dir) { viewDate.setMonth(viewDate.getMonth() + dir); loadModule('Calendar'); }
-    function addEvent() {
+    window.changeMonth = function(dir) { viewDate.setMonth(viewDate.getMonth() + dir); loadModule('Calendar'); }
+    window.addEvent = function() {
         const title = document.getElementById('evTitle').value; const date = document.getElementById('evDate').value; const type = document.getElementById('evType').value;
         if(!title || !date) return alert("Title and Date are required.");
         const events = getDB('calendar'); events.push({ id: generateId(), title, date, type }); setDB('calendar', events); loadModule('Calendar');
     }
-    function deleteEvent(id) { setDB('calendar', getDB('calendar').filter(e => e.id !== id)); loadModule('Calendar'); }
+    window.deleteEvent = function(id) { setDB('calendar', getDB('calendar').filter(e => e.id !== id)); loadModule('Calendar'); }
 
     // --- MODULE: FUNDS ---
     function renderFunds(container) {
         const funds = getDB('funds'); 
+        const members = getDB('members');
+        
         let total = 0, income = 0, expenses = 0;
-        let memberTotals = { Chua: 0, Vince: 0, Bren: 0, Ruth: 0, Tanya: 0 };
+        let memberTotals = {};
+        members.forEach(m => memberTotals[m.id] = 0);
         
         let incomeList = []; let expenseList = [];
 
@@ -546,7 +781,7 @@
             if(f.type === 'in') { 
                 total += f.amount; income += f.amount; 
                 incomeList.push(f);
-                if (targetMembers.includes(f.contributor)) memberTotals[f.contributor] += f.amount;
+                if (memberTotals[f.contributor] !== undefined) memberTotals[f.contributor] += f.amount;
             } else { 
                 total -= f.amount; expenses += f.amount; 
                 expenseList.push(f);
@@ -570,11 +805,13 @@
             </div>`;
             
         html += `<h3 style="margin-bottom: 10px;">Member Contributions (₱50 / Week)</h3><div class="grid-5" style="margin-bottom: 20px;">`;
-        targetMembers.forEach(m => {
-            const mTotal = memberTotals[m]; const weeks = Math.floor(mTotal / 50);
+        members.forEach(m => {
+            if(!targetMembers.includes(m.id)) return;
+            const mTotal = memberTotals[m.id]; const weeks = Math.floor(mTotal / 50);
+            const mColor = memberColors[m.id] || 'var(--accent)';
             html += `
-                <div class="glass card" style="padding: 15px; text-align: center;">
-                    <div style="font-weight: bold; color: var(--secondary);">${m}</div>
+                <div class="glass card" style="padding: 15px; text-align: center; border-top: 3px solid ${mColor};">
+                    <div style="font-weight: bold; color: ${mColor};">${m.fullName}</div>
                     <div style="font-size: 20px; font-weight: bold; margin: 5px 0;">₱${mTotal}</div>
                     <div style="font-size: 11px; color: #aaa;">${weeks} Weeks Paid</div>
                 </div>
@@ -584,7 +821,7 @@
 
         if (isAdmin()) {
             const todayStr = new Date().toISOString().split('T')[0];
-            const memberOpts = targetMembers.map(m => `<option value="${m}">${m}</option>`).join('');
+            const memberOpts = members.map(m => `<option value="${m.id}">${m.fullName}</option>`).join('');
             
             html += `
             <div class="glass admin-panel">
@@ -614,9 +851,10 @@
         if (incomeList.length === 0) html += `<p style="text-align:center; color:#aaa; font-size:12px;">No contributions.</p>`;
         else {
             incomeList.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(f => {
+                const cName = members.find(m=>m.id === f.contributor)?.fullName || f.contributor || 'Unknown';
                 html += `
                     <div style="display:flex; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.2); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
-                        <div><div style="font-weight:bold; color:var(--secondary); font-size:14px;">${f.contributor || 'Unknown'}</div><div style="font-size:10px; color:#aaa;">${f.date}</div></div>
+                        <div><div style="font-weight:bold; color:var(--secondary); font-size:14px;">${cName}</div><div style="font-size:10px; color:#aaa;">${f.date}</div></div>
                         <div style="display:flex; align-items:center; gap: 10px;">
                             <div style="font-weight:bold; color:#10b981;">+₱${f.amount}</div>
                             ${isAdmin() ? `<button class="delete-btn" style="position:static; padding:2px 5px;" onclick="deleteFund(${f.id})">✖</button>` : ''}
@@ -645,7 +883,7 @@
         container.innerHTML = html;
     }
     
-    function addFund() {
+    window.addFund = function() {
         const type = document.getElementById('fundType').value;
         const date = document.getElementById('fundDate').value; 
         const amt = parseFloat(document.getElementById('fundAmt').value); 
@@ -666,18 +904,25 @@
         funds.push({ id: generateId(), date, desc, amount: amt, type, contributor }); 
         setDB('funds', funds); loadModule('Funds');
     }
-    function deleteFund(id) { setDB('funds', getDB('funds').filter(f => f.id !== id)); loadModule('Funds'); }
+    window.deleteFund = function(id) { setDB('funds', getDB('funds').filter(f => f.id !== id)); loadModule('Funds'); }
 
-    // --- TIMELINE (WITH EDIT, DYNAMIC END DATES & MEMBER RECORDS) ---
+    // --- MODULE: TIMELINE ---
     function renderTimeline(container) {
-        const timeline = getDB('timeline'); let html = '';
+        const timeline = getDB('timeline'); 
+        const members = getDB('members');
+        let html = '';
         
         if (isAdmin()) {
-            const memberOpts = targetMembers.map(m => `<option value="${m}">${m}</option>`).join('');
+            const memberOpts = members.map(m => `<option value="${m.id}">${m.fullName}</option>`).join('');
+            const uniquePhases = [...new Set(timeline.map(t => t.phase || 'Phase 1'))];
+            const phaseListHtml = uniquePhases.map(f => `<option value="${f}">`).join('');
+
             html += `
             <div class="glass admin-panel" id="timelineAdminPanel">
-                <h4 style="margin-top:0; color:var(--accent)" id="tlFormTitle">Admin: Add Gantt Task</h4>
+                <h4 style="margin-top:0; color:var(--accent)" id="tlFormTitle">Admin: Add Timeline Task</h4>
+                <datalist id="phaseOptions">${phaseListHtml}</datalist>
                 <div class="flex-row" style="margin-bottom: 10px;">
+                    <input id="tlPhase" placeholder="Phase (e.g. Phase 1)" list="phaseOptions" style="flex:1; margin:0;" value="${timeline.length > 0 ? timeline[timeline.length-1].phase || 'Phase 1' : 'Phase 1'}">
                     <input id="tlTitle" placeholder="Task Name" style="flex:2;">
                     <select id="tlOwner" style="flex:1; margin:0;">
                         <option value="" disabled selected>Assign Owner...</option>
@@ -686,13 +931,8 @@
                     </select>
                     <input id="tlProgress" type="number" min="0" max="100" placeholder="Progress %" style="flex:1;" oninput="
                         const endInput = document.getElementById('tlEnd');
-                        if(this.value == 100) {
-                            endInput.disabled = false;
-                            if(!endInput.value) endInput.value = new Date().toISOString().split('T')[0];
-                        } else {
-                            endInput.disabled = true;
-                            endInput.value = '';
-                        }
+                        if(this.value == 100) { endInput.disabled = false; if(!endInput.value) endInput.value = new Date().toISOString().split('T')[0]; } 
+                        else { endInput.disabled = true; endInput.value = ''; }
                     ">
                 </div>
                 <div class="flex-row">
@@ -714,75 +954,108 @@
             </div>`;
         }
         
-        // 1. GANTT CHART
-        html += `<div class="glass card"><h3 style="margin-top:0; margin-bottom: 20px;">Project Schedule & Timeline</h3>`;
+        html += `<div class="glass card" style="padding-bottom: 5px;"><h3 style="margin-top:0; margin-bottom: 20px;">Project Schedule & Timeline</h3>`;
         if (timeline.length === 0) { 
             html += `<p style="color:#aaa;">No timeline data generated by Admin yet.</p></div>`; 
         } else {
-            // Get boundaries based on start, scheduled, and actual end dates
             const dates = timeline.flatMap(t => [new Date(t.start).getTime(), new Date(t.scheduled).getTime(), t.end ? new Date(t.end).getTime() : null]).filter(d => d);
             const minDate = Math.min(...dates); let maxDate = Math.max(...dates); let totalSpan = maxDate - minDate;
             if (totalSpan === 0) totalSpan = 86400000; totalSpan = totalSpan * 1.05;
 
-            html += `<div style="display:flex; flex-direction:column; gap: 15px; overflow-x: auto; padding-bottom: 10px;">`;
-            timeline.forEach(t => {
-                const startT = new Date(t.start).getTime(); 
-                const schedT = new Date(t.scheduled).getTime();
-                const endT = t.end ? new Date(t.end).getTime() : schedT; // Visual end of the bar defaults to scheduled if not done
-                
-                const leftPerc = ((startT - minDate) / totalSpan) * 100; 
-                let widthPerc = ((endT - startT) / totalSpan) * 100;
-                const schedPerc = ((schedT - minDate) / totalSpan) * 100;
-                
-                if (widthPerc < 2) widthPerc = 2; 
-                
-                const prog = t.progress || 0;
-                const isDone = prog == 100;
-                const isLate = isDone && endT > schedT;
-                const owner = t.owner || 'Unassigned';
+            const phases = [...new Set(timeline.map(t => t.phase || 'Unphased'))];
 
-                // Color coding based on performance
-                let barColor = "linear-gradient(90deg, var(--primary), var(--secondary))"; // Default Blue/Cyan
-                if (isDone) {
-                    barColor = isLate ? "linear-gradient(90deg, #ef4444, #b91c1c)" : "linear-gradient(90deg, #10b981, #059669)";
-                }
-
+            html += `<div style="overflow-x: auto; padding-bottom: 15px;">`;
+            
+            phases.forEach((phaseName, pIdx) => {
+                const phaseTasks = timeline.filter(t => (t.phase || 'Unphased') === phaseName);
+                
                 html += `
-                    <div class="gantt-row">
-                        <div class="gantt-label" title="${t.title}">
-                            <div style="font-weight:bold;">${t.title}</div>
-                            <div style="font-size:10px; color:var(--secondary); margin-top:2px;">👤 ${owner}</div>
-                        </div>
-                        <div class="gantt-track">
-                            <div class="gantt-bar" style="left: ${leftPerc}%; width: ${widthPerc}%; background: ${barColor};">
-                                <div style="position:absolute; left:0; top:0; height:100%; width:${prog}%; background:rgba(0,0,0,0.4);"></div>
-                                <span style="position:relative; z-index:1; padding-left:10px; white-space:nowrap;">
-                                    ${t.start} to ${t.end || t.scheduled} (${prog}%)
-                                    ${isDone ? (isLate ? ' - 🔴 LATE' : ' - 🟢 ON TIME') : ''}
-                                </span>
-                            </div>
-                            <div style="position:absolute; left:${schedPerc}%; top:0; height:100%; width:3px; background:var(--accent); z-index:2; box-shadow:0 0 8px var(--accent);" title="Scheduled Deadline: ${t.scheduled}"></div>
-                        </div>
-                        ${isAdmin() ? `
-                            <div style="display:flex; flex-shrink: 0;">
-                                <button class="icon-btn" style="background:rgba(34,211,238,0.2); color:var(--secondary); padding: 5px 10px; border-radius:5px; margin-left:15px; font-size:11px;" onclick="editTimeline(${t.id})">Edit</button>
-                                <button class="delete-btn" style="position:relative; margin-left:5px; background:rgba(239, 68, 68, 0.2); padding: 5px 10px; border-radius:5px;" onclick="deleteTimeline(${t.id})">Drop</button>
-                            </div>
-                        ` : ''}
-                    </div>`;
+                <div class="phase-container" style="margin-bottom: 15px;">
+                    <div class="phase-header" onclick="document.getElementById('phase_${pIdx}').style.display = document.getElementById('phase_${pIdx}').style.display === 'none' ? 'table-row-group' : 'none';">
+                        <span>📋 ${phaseName} (${phaseTasks.length} Tasks)</span>
+                        <span style="font-size: 10px;">▼ Expand / Collapse</span>
+                    </div>
+                    <table class="timeline-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 70px;">Task ID</th>
+                                <th style="width: 180px;">Task Name</th>
+                                <th style="width: 80px;">Owner</th>
+                                <th style="width: 90px;">Start</th>
+                                <th style="width: 90px;">Sched.</th>
+                                <th style="width: 90px;">Actual</th>
+                                <th style="width: 60px;">Prog.</th>
+                                <th style="min-width: 250px;">Gantt Chart</th>
+                                ${isAdmin() ? '<th style="width: 120px;">Actions</th>' : ''}
+                            </tr>
+                        </thead>
+                        <tbody id="phase_${pIdx}">
+                `;
+
+                phaseTasks.forEach(t => {
+                    const startT = new Date(t.start).getTime(); 
+                    const schedT = new Date(t.scheduled).getTime();
+                    const endT = t.end ? new Date(t.end).getTime() : schedT; 
+                    
+                    const leftPerc = ((startT - minDate) / totalSpan) * 100; 
+                    let widthPerc = ((endT - startT) / totalSpan) * 100;
+                    const schedPerc = ((schedT - minDate) / totalSpan) * 100;
+                    if (widthPerc < 2) widthPerc = 2; 
+                    
+                    const prog = t.progress || 0;
+                    const isDone = prog == 100;
+                    const isLate = isDone && endT > schedT;
+                    const owner = t.owner || 'Team';
+                    const oColor = memberColors[owner] || 'var(--secondary)';
+                    
+                    const ownerName = members.find(m=>m.id===owner)?.fullName || owner;
+
+                    let barColor = "linear-gradient(90deg, var(--primary), var(--secondary))"; 
+                    if (isDone) barColor = isLate ? "linear-gradient(90deg, #ef4444, #b91c1c)" : "linear-gradient(90deg, #10b981, #059669)";
+
+                    html += `
+                        <tr>
+                            <td style="color:var(--accent); font-weight:bold;">${t.taskId}</td>
+                            <td style="font-weight:500;">${t.title}</td>
+                            <td><span style="background:rgba(255,255,255,0.1); padding:3px 8px; border-radius:10px; font-size:11px; border-left: 3px solid ${oColor};">${ownerName}</span></td>
+                            <td style="color:#aaa;">${t.start.substring(5)}</td>
+                            <td style="color:var(--secondary);">${t.scheduled.substring(5)}</td>
+                            <td style="color:${isDone ? (isLate ? '#ef4444' : '#10b981') : '#666'};">${t.end ? t.end.substring(5) : '---'}</td>
+                            <td style="font-weight:bold;">${prog}%</td>
+                            <td>
+                                <div class="gantt-track">
+                                    <div class="gantt-bar" style="left: ${leftPerc}%; width: ${widthPerc}%; background: ${barColor};">
+                                        <div style="position:absolute; left:0; top:0; height:100%; width:${prog}%; background:rgba(0,0,0,0.4);"></div>
+                                    </div>
+                                    <div style="position:absolute; left:${schedPerc}%; top:0; height:100%; width:3px; background:var(--accent); z-index:2; box-shadow:0 0 8px var(--accent);" title="Scheduled Deadline: ${t.scheduled}"></div>
+                                </div>
+                            </td>
+                            ${isAdmin() ? `
+                            <td>
+                                <div style="display:flex; gap:5px;">
+                                    <button class="icon-btn" style="background:rgba(34,211,238,0.2); color:var(--secondary); padding: 4px 8px; border-radius:4px; font-size:10px;" onclick="editTimeline(${t.id})">Edit</button>
+                                    <button class="delete-btn" style="position:relative; right:auto; top:auto; background:rgba(239, 68, 68, 0.2); padding: 4px 8px; border-radius:4px; font-size:10px;" onclick="deleteTimeline(${t.id})">Drop</button>
+                                </div>
+                            </td>
+                            ` : ''}
+                        </tr>
+                    `;
+                });
+                html += `</tbody></table></div>`;
             });
             html += `</div></div>`; 
         }
 
-        // 2. INDIVIDUAL MEMBER TASK RECORDS
-        html += `<h3 style="margin-top: 30px; margin-bottom: 15px; color: var(--secondary);">Member Task Records</h3>`;
+        html += `<h3 style="margin-top: 30px; margin-bottom: 15px; color: var(--secondary);">Individual Task Records</h3>`;
         html += `<div class="grid-5" style="margin-bottom: 20px;">`;
         
-        targetMembers.forEach(m => {
-            const mTasks = timeline.filter(t => t.owner === m);
+        members.forEach(m => {
+            const mTasks = timeline.filter(t => t.owner === m.id);
+            const mColor = memberColors[m.id] || 'var(--accent)';
+            
             html += `
-                <div class="glass card" style="padding: 15px;">
-                    <div style="font-weight: bold; color: var(--secondary); margin-bottom: 10px; border-bottom: 1px solid var(--glass-border); padding-bottom: 5px;">${m}</div>
+                <div class="glass card" style="padding: 15px; border-top: 3px solid ${mColor};">
+                    <div style="font-weight: bold; color: ${mColor}; margin-bottom: 10px; border-bottom: 1px solid var(--glass-border); padding-bottom: 5px;">${m.fullName}</div>
                     <div style="display:flex; flex-direction:column; gap:8px; max-height: 250px; overflow-y: auto; padding-right: 5px;">
             `;
             if (mTasks.length === 0) {
@@ -791,17 +1064,21 @@
                 mTasks.sort((a,b) => new Date(a.scheduled) - new Date(b.scheduled)).forEach(t => {
                     const isDone = t.progress == 100;
                     const isLate = isDone && new Date(t.end) > new Date(t.scheduled);
+                    const borderCol = isDone ? (isLate ? '#ef4444' : '#10b981') : 'var(--glass-border)';
                     
                     html += `
-                        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; border: 1px solid ${isDone ? (isLate ? '#ef4444' : '#10b981') : 'var(--glass-border)'};">
-                            <div style="font-weight:bold; font-size:12px; color:${isDone ? '#fff' : '#fff'}; margin-bottom: 4px;">${t.title}</div>
+                        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; border: 1px solid ${borderCol};">
+                            <div style="display:flex; justify-content:space-between; margin-bottom: 4px;">
+                                <span style="font-weight:bold; font-size:12px; color:${isDone ? '#fff' : '#fff'};">${t.title}</span>
+                                <span style="font-size:10px; color:var(--accent);">${t.taskId}</span>
+                            </div>
                             <div style="font-size:10px; color:#aaa;">Target: ${t.scheduled}</div>
-                            ${isDone ? `<div style="font-size:10px; color:${isLate ? '#ef4444' : '#10b981'};">Completed: ${t.end}</div>` : ''}
+                            ${isDone ? `<div style="font-size:10px; color:${isLate ? '#ef4444' : '#10b981'};">Done: ${t.end} ${isLate?'(Late)':'(On Time)'}</div>` : ''}
                             
                             <div style="margin-top: 5px; background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; overflow: hidden;">
-                                <div style="width: ${t.progress || 0}%; background: ${isDone ? (isLate ? '#ef4444' : '#10b981') : 'var(--secondary)'}; height: 100%;"></div>
+                                <div style="width: ${t.progress || 0}%; background: ${isDone ? (isLate ? '#ef4444' : '#10b981') : mColor}; height: 100%;"></div>
                             </div>
-                            <div style="font-size:10px; color:var(--secondary); text-align:right; margin-top:2px;">${t.progress || 0}%</div>
+                            <div style="font-size:10px; color:${mColor}; text-align:right; margin-top:2px;">${t.progress || 0}%</div>
                         </div>
                     `;
                 });
@@ -813,7 +1090,8 @@
         container.innerHTML = html;
     }
     
-    function submitTimeline() {
+    window.submitTimeline = function() {
+        const phase = document.getElementById('tlPhase').value || 'Phase 1';
         const title = document.getElementById('tlTitle').value; 
         const owner = document.getElementById('tlOwner').value; 
         const start = document.getElementById('tlStart').value; 
@@ -830,21 +1108,30 @@
         if (editingTimelineId) {
             const idx = tl.findIndex(t => t.id === editingTimelineId);
             if (idx > -1) {
-                tl[idx] = { ...tl[idx], title, owner, start, end: end || null, scheduled: sched, progress: parseInt(progress) };
+                tl[idx] = { ...tl[idx], phase, title, owner, start, end: end || null, scheduled: sched, progress: parseInt(progress) };
             }
             editingTimelineId = null;
         } else {
-            tl.push({ id: generateId(), title, owner, start, end: end || null, scheduled: sched, progress: parseInt(progress) }); 
+            let maxId = 0;
+            tl.forEach(t => {
+                if(t.taskId && t.taskId.startsWith('TSK-')) {
+                    let num = parseInt(t.taskId.split('-')[1]);
+                    if(num > maxId) maxId = num;
+                }
+            });
+            const taskId = `TSK-${(maxId + 1).toString().padStart(3, '0')}`;
+            tl.push({ id: generateId(), taskId, phase, title, owner, start, end: end || null, scheduled: sched, progress: parseInt(progress) }); 
         }
         
         setDB('timeline', tl); loadModule('Timeline');
     }
     
-    function editTimeline(id) {
+    window.editTimeline = function(id) {
         const tl = getDB('timeline').find(t => t.id === id);
         if(!tl) return;
         
         editingTimelineId = id;
+        document.getElementById('tlPhase').value = tl.phase || 'Phase 1';
         document.getElementById('tlTitle').value = tl.title;
         
         const ownerSelect = document.getElementById('tlOwner');
@@ -856,53 +1143,59 @@
         document.getElementById('tlProgress').value = tl.progress || 0;
         
         const endInput = document.getElementById('tlEnd');
-        if (tl.progress == 100) {
-            endInput.disabled = false;
-            endInput.value = tl.end || '';
-        } else {
-            endInput.disabled = true;
-            endInput.value = '';
-        }
+        if (tl.progress == 100) { endInput.disabled = false; endInput.value = tl.end || ''; } 
+        else { endInput.disabled = true; endInput.value = ''; }
         
-        document.getElementById('tlFormTitle').innerText = "Admin: Edit Task Progress & Dates";
+        document.getElementById('tlFormTitle').innerText = `Admin: Edit Task ${tl.taskId}`;
         document.getElementById('tlSubmitBtn').innerText = "Update Task";
         document.getElementById('tlCancelBtn').style.display = "block";
-        
         document.getElementById('timelineAdminPanel').scrollIntoView({ behavior: 'smooth' });
     }
-    
-    function cancelEditTimeline() {
-        editingTimelineId = null;
-        loadModule('Timeline'); 
-    }
-    
-    function deleteTimeline(id) { setDB('timeline', getDB('timeline').filter(t => t.id !== id)); loadModule('Timeline'); }
+    window.cancelEditTimeline = function() { editingTimelineId = null; loadModule('Timeline'); }
+    window.deleteTimeline = function(id) { setDB('timeline', getDB('timeline').filter(t => t.id !== id)); loadModule('Timeline'); }
 
-    // --- SPRINT BOARD ---
+    // --- MODULE: SPRINT BOARD ---
     function renderSprintBoard(container) {
-        const tasks = getDB('tasks'); const cols = ["To Do", "In Progress", "Review", "Done"]; let html = '';
+        const sprints = getDB('sprints');
+        const cols = ["To Do", "In Progress", "Review", "Done"]; 
+        let html = '';
+        
         if (isAdmin()) {
             html += `
-            <div class="glass admin-panel">
-                <h4 style="margin-top:0; color:var(--accent)">Admin: Add Task</h4>
+            <div class="glass admin-panel" style="border-left-color: var(--secondary);">
+                <h4 style="margin-top:0; color:var(--secondary);">Admin: Create Sprint Container</h4>
+                <div class="flex-row" style="margin-bottom:10px;">
+                    <input id="smName" placeholder="Sprint Name/Number" style="flex:2;">
+                    <input id="smWeeks" type="number" placeholder="Weeks" style="flex:1;">
+                    <input id="smPhase" placeholder="Phase (e.g. Dev)" style="flex:2;">
+                </div>
                 <div class="flex-row">
-                    <input id="newTaskTitle" placeholder="Enter task description..." style="flex: 2;">
-                    <button onclick="createTask()" style="flex: 1; margin:0;">Add Task</button>
+                    <textarea id="smObj" placeholder="Objectives" style="flex:1; height: 40px;"></textarea>
+                    <textarea id="smDel" placeholder="Deliverables" style="flex:1; height: 40px;"></textarea>
+                    <button onclick="addSprintContainer()" style="flex:0.5; height: 40px; margin:0;">Create Sprint</button>
                 </div>
             </div>`;
         }
-        html += `<div class="kanban-board">`;
+        
+        html += `<h3 style="color:var(--secondary); margin-bottom: 15px;">Active Sprints Kanban Board</h3><div class="kanban-board">`;
         cols.forEach(col => {
-            const colTasks = tasks.filter(t => t.status === col);
+            const colSprints = sprints.filter(s => (s.status || 'To Do') === col);
             html += `
-                <div class="kanban-col" ondrop="dropTask(event, '${col}')" ondragover="allowDrop(event)">
-                    <h3>${col} <span style="float:right; background:rgba(255,255,255,0.1); padding: 2px 8px; border-radius:10px; font-size:10px;">${colTasks.length}</span></h3>
+                <div class="kanban-col" ondrop="dropSprint(event, '${col}')" ondragover="allowDrop(event)">
+                    <h3>${col} <span style="float:right; background:rgba(255,255,255,0.1); padding: 2px 8px; border-radius:10px; font-size:10px;">${colSprints.length}</span></h3>
                     <div class="task-list">
-                        ${colTasks.length === 0 ? '<p style="color:#aaa; font-size:12px; text-align:center;">Empty</p>' : ''}
-                        ${colTasks.map(t => `
-                            <div class="task-card" draggable="${isAdmin() ? 'true' : 'false'}" ondragstart="dragTask(event, ${t.id})">
-                                ${isAdmin() ? `<button class="delete-btn" onclick="deleteTask(${t.id})">✖</button>` : ''}
-                                <div style="font-size: 14px; margin-top: 5px; padding-right: 15px;">${t.title}</div>
+                        ${colSprints.length === 0 ? '<p style="color:#aaa; font-size:12px; text-align:center;">Empty</p>' : ''}
+                        ${colSprints.map(s => `
+                            <div class="task-card" draggable="${isAdmin() ? 'true' : 'false'}" ondragstart="dragSprint(event, ${s.id})">
+                                ${isAdmin() ? `<button class="delete-btn" onclick="deleteSprintContainer(${s.id})">✖</button>` : ''}
+                                <div style="font-weight:bold; font-size: 14px; margin-bottom: 5px; color: var(--secondary);">${s.name}</div>
+                                <div style="font-size: 11px; color: #aaa; margin-bottom: 8px;">Phase: ${s.phase} &bull; ${s.weeks} Weeks</div>
+                                <div style="font-size: 12px; color: #ddd; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px; margin-bottom: 5px;">
+                                    <strong>Obj:</strong> ${s.objectives}
+                                </div>
+                                <div style="font-size: 12px; color: #ddd; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px;">
+                                    <strong>Del:</strong> ${s.deliverables}
+                                </div>
                             </div>
                         `).join('')}
                     </div>
@@ -910,22 +1203,38 @@
         });
         html += `</div>`; container.innerHTML = html;
     }
-    function createTask() {
-        const title = document.getElementById('newTaskTitle').value; if (!title) return;
-        const tasks = getDB('tasks'); tasks.push({ id: generateId(), title: title, status: "To Do" }); setDB('tasks', tasks); loadModule('Sprint Board');
+    
+    window.addSprintContainer = function() {
+        const name = document.getElementById('smName').value;
+        const weeks = document.getElementById('smWeeks').value;
+        const phase = document.getElementById('smPhase').value;
+        if(!name) return alert("Sprint Name is required.");
+        const sprints = getDB('sprints');
+        sprints.push({
+            id: generateId(), name, weeks: weeks||1, phase: phase||'None',
+            objectives: document.getElementById('smObj').value || 'TBD',
+            deliverables: document.getElementById('smDel').value || 'TBD',
+            status: 'To Do'
+        });
+        setDB('sprints', sprints); loadModule('Sprint Board');
     }
-    function deleteTask(id) { setDB('tasks', getDB('tasks').filter(t => t.id !== id)); loadModule('Sprint Board'); }
-    function allowDrop(ev) { if(isAdmin()) ev.preventDefault(); }
-    function dragTask(ev, id) { if(isAdmin()) ev.dataTransfer.setData("taskId", id); }
-    function dropTask(ev, newStatus) {
-        if(!isAdmin()) return; ev.preventDefault(); const id = parseInt(ev.dataTransfer.getData("taskId"));
-        let tasks = getDB('tasks'); const tIdx = tasks.findIndex(t => t.id === id);
-        if (tIdx > -1) { tasks[tIdx].status = newStatus; setDB('tasks', tasks); loadModule('Sprint Board'); }
+    window.deleteSprintContainer = function(id) { setDB('sprints', getDB('sprints').filter(s => s.id !== id)); loadModule('Sprint Board'); }
+    window.allowDrop = function(ev) { if(isAdmin()) ev.preventDefault(); }
+    window.dragSprint = function(ev, id) { if(isAdmin()) ev.dataTransfer.setData("sprintId", id); }
+    window.dropSprint = function(ev, newStatus) {
+        if(!isAdmin()) return; ev.preventDefault(); const id = parseInt(ev.dataTransfer.getData("sprintId"));
+        let sprints = getDB('sprints'); const sIdx = sprints.findIndex(s => s.id === id);
+        if (sIdx > -1) { sprints[sIdx].status = newStatus; setDB('sprints', sprints); loadModule('Sprint Board'); }
     }
 
     // --- RESOURCES ---
     function renderResources(container) {
         const res = getDB('resources'); let html = '';
+        
+        const allUsedTags = [...new Set(res.flatMap(r => r.tags || []))];
+        const allTags = [...new Set([...defaultResTags, ...allUsedTags])];
+        const dlTags = allTags.map(t => `<div class="tag-chip" onclick="appendResTag('${t}')">+ ${t}</div>`).join('');
+
         if (isAdmin()) {
             html += `
             <div class="glass admin-panel">
@@ -940,21 +1249,51 @@
                         <option value="file">Upload File</option>
                     </select>
                 </div>
+                <div class="flex-row" style="margin-bottom:10px;">
+                    <input id="resUrl" placeholder="Target URL" style="flex:2; display:block; margin:0;">
+                    <input id="resFile" type="file" style="flex:2; display:none; margin:0; padding: 9px;" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.zip,.rar">
+                    <input id="resDesc" placeholder="Short Description" style="flex:2; margin:0;">
+                </div>
                 <div class="flex-row">
-                    <input id="resUrl" placeholder="Target URL" style="flex:2; display:block;">
-                    <input id="resFile" type="file" style="flex:2; display:none; margin: 8px 0; padding: 9px;" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.zip,.rar">
-                    <input id="resDesc" placeholder="Short Description" style="flex:2;">
+                    <input id="resTags" placeholder="Tags (Comma separated, e.g. Survey, Docs)" style="flex:3; margin:0;">
                     <button onclick="addResource()" style="flex:1; margin:0;">Add</button>
                 </div>
-                <div style="font-size: 10px; color: #ffaa00; margin-top: 5px;">* Uploaded files should be under 200KB to prevent cloud sync limits.</div>
+                <div style="display:flex; gap:5px; margin-top:10px; flex-wrap:wrap;">
+                    <span style="font-size:10px; color:#aaa; margin-right:5px; line-height:20px;">Quick Tags:</span>
+                    ${dlTags}
+                </div>
             </div>`;
         }
-        html += `<div class="glass card"><h3 style="margin-top:0;">Project Hub</h3>`;
-        if (res.length === 0) {
-            html += `<p style="color:#aaa;">No resources shared yet.</p>`;
+
+        const filterChips = allTags.map(t => `
+            <div class="tag-chip ${resActiveTag === t ? 'active' : ''}" onclick="setResTag('${t}')">${t}</div>
+        `).join('');
+
+        html += `
+        <div class="glass card">
+            <div style="display:flex; gap:10px; margin-bottom: 15px;">
+                <input class="res-search" placeholder="🔍 Search resources by title or description..." value="${resSearchTerm}" onkeyup="setResSearch(this.value)">
+            </div>
+            <div style="display:flex; gap:5px; margin-bottom: 20px; flex-wrap:wrap;">
+                <div class="tag-chip ${resActiveTag === null ? 'active' : ''}" onclick="setResTag(null)">All</div>
+                ${filterChips}
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+        `;
+
+        let filteredRes = res.filter(r => {
+            const matchesSearch = !resSearchTerm || r.title.toLowerCase().includes(resSearchTerm) || r.desc.toLowerCase().includes(resSearchTerm);
+            const matchesTag = !resActiveTag || (r.tags && r.tags.includes(resActiveTag));
+            return matchesSearch && matchesTag;
+        });
+
+        if (filteredRes.length === 0) {
+            html += `<p style="color:#aaa; text-align:center;">No resources found.</p>`;
         } else {
-            res.forEach(r => {
+            filteredRes.forEach(r => {
                 const isFile = r.type === 'file';
+                const tagDisplay = (r.tags || []).map(t => `<span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:9px; margin-right:5px;">${t}</span>`).join('');
+                
                 html += `
                     <div class="resource-item">
                         <div style="display:flex; align-items:center; flex:1;">
@@ -962,6 +1301,7 @@
                             <div>
                                 <div style="font-weight:bold; font-size:16px;">${r.title}</div>
                                 <div style="font-size:12px; color:#aaa; margin-top:4px;">${r.desc} ${isFile && r.fileName ? `(${r.fileName})` : ''}</div>
+                                <div style="margin-top:6px;">${tagDisplay}</div>
                             </div>
                         </div>
                         <div style="display:flex; gap:10px;">
@@ -974,43 +1314,53 @@
                     </div>`;
             });
         }
-        html += `</div>`; container.innerHTML = html;
+        html += `</div></div>`; container.innerHTML = html;
     }
     
-    async function addResource() {
+    window.setResSearch = (val) => { resSearchTerm = val.toLowerCase(); loadModule('Resources', true); }
+    window.setResTag = (tag) => { resActiveTag = resActiveTag === tag ? null : tag; loadModule('Resources', true); }
+    window.appendResTag = (tag) => {
+        const input = document.getElementById('resTags');
+        let current = input.value.split(',').map(t=>t.trim()).filter(t=>t);
+        if(!current.includes(tag)) current.push(tag);
+        input.value = current.join(', ');
+    }
+
+    window.addResource = async function() {
         const title = document.getElementById('resTitle').value; 
         const type = document.getElementById('resType').value;
         const desc = document.getElementById('resDesc').value;
+        const tagsStr = document.getElementById('resTags').value;
+        const tags = tagsStr.split(',').map(t=>t.trim()).filter(t=>t);
+
         if(!title) return alert("Title is required.");
 
         if (type === 'link') {
             const url = document.getElementById('resUrl').value;
             if(!url) return alert("URL is required.");
-            const res = getDB('resources'); res.push({ id: generateId(), title, type, url, desc }); 
+            const res = getDB('resources'); res.push({ id: generateId(), title, type, url, desc, tags }); 
             setDB('resources', res); loadModule('Resources');
         } else {
             const fileInput = document.getElementById('resFile');
             if(!fileInput.files[0]) return alert("Please select a file.");
             const file = fileInput.files[0];
-            
             if(file.size > 250000) return alert("File is too large! Max size is 250KB for JSON database storage.");
             
             document.getElementById('syncStatus').innerText = "⏳ Processing file...";
             const reader = new FileReader();
             reader.onload = (e) => {
                 const res = getDB('resources'); 
-                res.push({ id: generateId(), title, type, url: e.target.result, desc, fileName: file.name }); 
+                res.push({ id: generateId(), title, type, url: e.target.result, desc, fileName: file.name, tags }); 
                 setDB('resources', res); loadModule('Resources');
             };
             reader.readAsDataURL(file);
         }
     }
-    function deleteResource(id) { setDB('resources', getDB('resources').filter(r => r.id !== id)); loadModule('Resources'); }
+    window.deleteResource = function(id) { setDB('resources', getDB('resources').filter(r => r.id !== id)); loadModule('Resources'); }
 
     // --- GALLERY ---
     function renderGallery(container) {
-        const gal = getDB('gallery'); 
-        let html = '';
+        const gal = getDB('gallery'); let html = '';
         
         if (isAdmin()) {
             const uniqueFolders = [...new Set(gal.map(g => g.folder || 'Uncategorized'))];
@@ -1089,14 +1439,10 @@
         container.innerHTML = html;
     }
 
-    window.openGalleryFolder = function(fName) {
-        currentGalleryFolder = fName; loadModule('Gallery', true); 
-    }
-    window.closeGalleryFolder = function() {
-        currentGalleryFolder = null; loadModule('Gallery', true);
-    }
+    window.openGalleryFolder = function(fName) { currentGalleryFolder = fName; loadModule('Gallery', true); }
+    window.closeGalleryFolder = function() { currentGalleryFolder = null; loadModule('Gallery', true); }
     
-    async function addPhoto() {
+    window.addPhoto = async function() {
         const fileInput = document.getElementById('galFile');
         const files = fileInput.files;
         const caption = document.getElementById('galCap').value || 'Untitled';
@@ -1114,23 +1460,16 @@
         }
         
         currentGalleryFolder = folder;
-        setDB('gallery', gal); 
-        loadModule('Gallery');
+        setDB('gallery', gal); loadModule('Gallery');
     }
     
-    function deletePhoto(id) { 
+    window.deletePhoto = function(id) { 
         let gal = getDB('gallery');
         const photo = gal.find(g => g.id === id);
         const targetFolder = photo ? (photo.folder || 'Uncategorized') : null;
-        
         gal = gal.filter(g => g.id !== id);
-        
-        if (targetFolder && !gal.some(g => (g.folder || 'Uncategorized') === targetFolder)) {
-            currentGalleryFolder = null; 
-        }
-        
-        setDB('gallery', gal); 
-        loadModule('Gallery', true); 
+        if (targetFolder && !gal.some(g => (g.folder || 'Uncategorized') === targetFolder)) currentGalleryFolder = null; 
+        setDB('gallery', gal); loadModule('Gallery', true); 
     }
 
     // --- SECURITY OVERRIDES ---
