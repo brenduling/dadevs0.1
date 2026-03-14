@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0F172A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>DaDevs 0.1 - Workspace</title>
+    <style>
+        :root {
+            --bg-1: #0F172A; --bg-2: #1E293B;
+            --primary: #2D2A8C; --secondary: #22D3EE;
+            --accent: #8B5CF6; --text: #f8fafc;
+            --glass-bg: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+        }
+        body {
+            margin: 0; font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            color: var(--text); overflow: hidden; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .glass {
+            background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .neon { color: var(--secondary); text-shadow: 0 0 8px rgba(34,211,238,0.4); }
+        .accent { color: var(--accent); }
+        
+        /* Login */
+        #login { padding: 40px; text-align: center; width: 320px; transition: opacity 0.5s; max-width: 90%; }
+        input, select, textarea {
+            width: 100%; padding: 10px 12px; margin: 8px 0; background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border); color: var(--text);
+            border-radius: 8px; box-sizing: border-box; outline: none; font-family: inherit;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+        input:focus, select:focus, textarea:focus { border-color: var(--secondary); }
+        button {
+            width: 100%; padding: 12px; background: var(--accent); color: var(--text);
+            border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s;
+            margin-top: 5px;
+        }
+        button:hover { background: var(--primary); box-shadow: 0 0 15px rgba(34,211,238,0.35); }
+        button.danger { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; }
+        button.danger:hover { background: #ef4444; color: #fff; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+        
+        /* App Layout */
+        #app { display: none; width: 100vw; height: 100vh; flex-direction: row; }
+        
+        /* Persistent Collapsible Sidebar */
+        #sidebar {
+            width: 250px; display: flex; flex-direction: column; border-right: 1px solid var(--glass-border);
+            border-radius: 0; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100;
+            background: rgba(15, 23, 42, 0.5); flex-shrink: 0; overflow: hidden;
+        }
+        #sidebar.collapsed { width: 75px; }
+
+        .sidebar-header {
+            display: flex; justify-content: space-between; align-items: center; padding: 20px; height: 75px;
+            box-sizing: border-box; border-bottom: 1px solid var(--glass-border); white-space: nowrap;
+        }
+        #sidebar.collapsed .sidebar-header { justify-content: center; padding: 20px 0; }
+        #sidebar.collapsed .brand-text { display: none; }
+
+        .toggle-btn {
+            background: none; border: none; color: var(--text); padding: 5px; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; border-radius: 5px; transition: 0.2s; margin: 0; width: auto;
+        }
+        .toggle-btn:hover { color: var(--secondary); background: rgba(255,255,255,0.1); box-shadow: none; }
+
+        .nav-links { flex: 1; padding: 15px 10px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 8px; }
+        .nav-item {
+            display: flex; align-items: center; gap: 15px; padding: 12px; border-radius: 8px; cursor: pointer;
+            transition: 0.2s; white-space: nowrap; font-weight: 500; font-size: 14px;
+        }
+        .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .nav-item:hover, .nav-item.active { background: rgba(34,211,238,0.1); color: var(--secondary); transform: translateX(5px); }
+        #sidebar.collapsed .nav-item { justify-content: center; padding: 12px 0; transform: none; }
+        #sidebar.collapsed .nav-item:hover { transform: translateY(-2px); }
+        #sidebar.collapsed .nav-text { display: none; }
+
+        .sidebar-footer { padding: 20px; border-top: 1px solid var(--glass-border); white-space: nowrap; display: flex; flex-direction: column; gap: 15px; }
+        #sidebar.collapsed .sidebar-footer { padding: 20px 0; align-items: center; }
+        #sidebar.collapsed .user-info { display: none; }
+        
+        .logout-btn {
+            display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444; color: #ef4444; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; margin: 0; width: 100%;
+        }
+        .logout-btn:hover { background: #ef4444; color: #fff; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+        #sidebar.collapsed .logout-btn { padding: 10px; width: auto; border: none; background: transparent; }
+        #sidebar.collapsed .logout-btn-text { display: none; }
+
+        /* Main Content */
+        #main { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; transition: 0.3s; min-width: 0; }
+        
+        /* Modules */
+        .card { padding: 20px; margin-bottom: 20px; transition: transform 0.3s; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; } 
+        
+        .kanban-board { display: flex; gap: 20px; min-height: 400px; overflow-x: auto; padding-bottom: 20px;}
+        .kanban-col { flex: 1; min-width: 280px; display: flex; flex-direction: column; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; border: 1px solid var(--glass-border); }
+        .kanban-col h3 { margin-top: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary); border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; }
+        .task-card { background: var(--glass-bg); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--glass-border); transition: 0.2s; cursor: grab; position: relative;}
+        .task-card:hover { border-color: var(--secondary); transform: translateY(-2px); }
+        .delete-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ef4444; cursor: pointer; padding: 0; width: auto; font-size: 12px; }
+        
+        .admin-panel { padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
+        .admin-panel .flex-row { display: flex; gap: 10px; align-items: center; }
+        
+        .gantt-row { display: flex; align-items: center; margin-bottom: 15px; }
+        .gantt-label { width: 180px; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 15px;}
+        .gantt-track { flex: 1; background: rgba(0,0,0,0.3); height: 24px; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); min-width: 200px; }
+        .gantt-bar { position: absolute; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 12px; box-shadow: 0 0 10px rgba(34,211,238,0.4); display: flex; align-items: center; padding: 0 10px; font-size: 11px; font-weight: bold; color: #fff; box-sizing: border-box; overflow: hidden;}
+        
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .gallery-item { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); aspect-ratio: 1 / 1; transition: 0.3s; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .gallery-item:hover img { transform: scale(1.05); }
+        .gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); padding: 10px; font-size: 12px; backdrop-filter: blur(5px); }
+        .folder-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.7); display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; cursor: pointer; transition: 0.3s;}
+        .gallery-item:hover .folder-overlay { background: rgba(15, 23, 42, 0.5); }
+        
+        .resource-item { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; margin-bottom: 10px; }
+        .resource-icon { width: 40px; height: 40px; border-radius: 8px; background: rgba(34,211,238,0.1); color: var(--secondary); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 20px; margin-right: 15px;}
+
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; margin-top: 15px; }
+        .cal-header { font-weight: bold; color: var(--secondary); font-size: 12px; padding-bottom: 10px; }
+        .cal-day { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; border: 1px solid var(--glass-border); min-height: 50px; position: relative; display: flex; flex-direction: column; align-items: center;}
+        .cal-day.empty { background: transparent; border: none; }
+        .cal-day.today { border-color: var(--secondary); background: rgba(34,211,238,0.1); }
+        .cal-event-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; }
+        .event-meeting { background: #3b82f6; box-shadow: 0 0 5px #3b82f6;}
+        .event-overnight { background: #8b5cf6; box-shadow: 0 0 5px #8b5cf6;}
+        .event-defense { background: #ef4444; box-shadow: 0 0 5px #ef4444;}
+        .event-other { background: #10b981; box-shadow: 0 0 5px #10b981;}
+        .event-list-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--glass-border);}
+        button.icon-btn { width: auto; padding: 8px 15px; background: rgba(255,255,255,0.1); margin: 0; }
+        button.icon-btn:hover { background: var(--secondary); color: #000; }
+
+        @media (max-width: 992px) { #main { padding: 20px; } .grid-3 { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) {
+            #sidebar { width: 200px; } #sidebar.collapsed { width: 65px; } #main { padding: 15px; } .grid-2 { grid-template-columns: 1fr; }
+            .admin-panel .flex-row { flex-direction: column; align-items: stretch; } .admin-panel .flex-row > * { width: 100%; margin-bottom: 5px; }
+            .gantt-row { flex-direction: column; align-items: flex-start; } .gantt-label { width: 100%; margin-bottom: 5px; } .gantt-track { width: 100%; margin-bottom: 10px; }
+            .resource-item { flex-direction: column; align-items: flex-start; gap: 15px; } .resource-item > div:last-child { width: 100%; justify-content: space-between; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login" class="glass">
+        <h1 class="neon">DaDevs <span class="accent">0.1</span></h1>
+        <p style="color:#aaa;font-size:0.9em;margin-bottom:20px">Secure Workspace Access</p>
+        
+        <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; font-size: 13px; color: #ccc; margin-bottom: 25px; text-align: left; line-height: 1.6;">
+            <span style="color: var(--secondary); font-weight: bold;">Admin:</span> Bren<br>
+            <span style="color: var(--secondary); font-weight: bold;">Viewers:</span> DaDevs and Adviser
+        </div>
+
+        <input id="user" placeholder="Username">
+        <input id="pass" type="password" placeholder="Password">
+        <button onclick="login()">INITIALIZE SESSION</button>
+        <p id="err" style="color:#ef4444;display:none;margin-top:15px;font-size:0.9em">Authentication Failed</p>
+    </div>
+
+    <div id="app">
+        <div id="sidebar" class="glass">
+            <div class="sidebar-header">
+                <h2 class="neon brand-text" style="margin:0;">DaDevs <span class="accent">0.1</span></h2>
+                <button class="toggle-btn" onclick="toggleSidebar()" title="Toggle Menu">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div class="nav-links" id="navLinks"></div>
+            <div class="sidebar-footer" id="sidebarFooter"></div>
+        </div>
+
+        <div id="main">
+            <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;" id="mainHeader">
+                <h2 id="viewTitle" class="neon" style="margin:0; font-size: 28px;">Workspace</h2>
+                <div id="syncStatus" style="font-size:12px; font-weight:bold; color:#aaa;"></div>
+            </header>
+            <div id="contentArea" style="flex:1; display: flex; flex-direction: column;"></div>
+        </div>
+    </div>
+
+<script>
+    // ==========================================
+    // ☁️ CLOUD SYNC CONFIGURATION ☁️
+    // ==========================================
+    const ENABLE_CLOUD_SYNC = true; 
+    const JSONBIN_BIN_ID = "69b53404aa77b81da9e359ea";
+    const JSONBIN_MASTER_KEY = "$2a$10$Tro6Ud5UHq2VqKQnp8Kxo.1MFLWorIUvmpahlY7t9jqDPWr0Xg2em";
+    // ==========================================
+
+    // --- UTILITIES (IMAGE COMPRESSION) ---
+    function compressImage(file, maxSize = 800, quality = 0.6) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width; let height = img.height;
+                    if (width > height && width > maxSize) { height *= maxSize / width; width = maxSize; } 
+                    else if (height > maxSize) { width *= maxSize / height; height = maxSize; }
+                    canvas.width = width; canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', quality));
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    window.downloadFile = function(dataUrl, name) {
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = name || 'downloaded_file';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    // --- PWA SETUP ---
+    const iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#0F172A"/><text x="50%" y="50%" fill="#22D3EE" font-size="200" font-family="sans-serif" font-weight="bold" dominant-baseline="middle" text-anchor="middle">DD</text></svg>`;
+    const manifest = {
+        name: "DaDevs 0.1", short_name: "DaDevs", start_url: location.href, display: "standalone",
+        background_color: "#0F172A", theme_color: "#0F172A",
+        icons: [{ src: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(iconSVG), sizes: "512x512", type: "image/svg+xml" }]
+    };
+    const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+    document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(manifestBlob)}">`);
+    const swCode = `self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('activate', e => e.waitUntil(clients.claim())); self.addEventListener('fetch', e => {});`;
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }))).catch(console.error);
+
+    // --- SYSTEM DATA & AUTH ---
+    const users = {
+        "Bren": { pass: "brenduling", role: "admin", name: "Bren" },
+        "Chua": { pass: "dadevs0.1", role: "viewer", name: "Chua" },
+        "Tanya": { pass: "dadevs0.1", role: "viewer", name: "Tanya" },
+        "Vince": { pass: "dadevs0.1", role: "viewer", name: "Vince" },
+        "Ruth": { pass: "dadevs0.1", role: "viewer", name: "Ruth" },
+        "Lilian": { pass: "dadevs0.1", role: "viewer", name: "Lilian" },
+        "DaDevs": { pass: "dadevs0.1", role: "viewer", name: "DaDevs Account" },
+        "Adviser": { pass: "dadevs0.1", role: "viewer", name: "Adviser" }
+    };
+
+    const modules = ["Dashboard", "Timeline", "Sprint Board", "Calendar", "Funds", "Resources", "Gallery"];
+    
+    const navIcons = {
+        "Dashboard": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>`,
+        "Timeline": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
+        "Sprint Board": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>`,
+        "Calendar": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
+        "Funds": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`,
+        "Resources": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`,
+        "Gallery": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`
+    };
+
+    let currentUser = null; 
+    let currentModule = "Dashboard"; 
+    let viewDate = new Date();
+    let currentGalleryFolder = null; // Tracks active folder view
+
+    const DB_KEY = 'dadevs_db_v5';
+    let appDB = { tasks: [], funds: [], calendar: [], timeline: [], resources: [], gallery: [] };
+
+    async function initDB() {
+        if (ENABLE_CLOUD_SYNC && JSONBIN_BIN_ID && JSONBIN_MASTER_KEY) {
+            document.getElementById('syncStatus').innerText = "☁️ Syncing...";
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, { headers: { 'X-Master-Key': JSONBIN_MASTER_KEY } });
+                const data = await res.json();
+                if (data.record && data.record.tasks) {
+                    appDB = data.record;
+                    localStorage.setItem(DB_KEY, JSON.stringify(appDB));
+                }
+                document.getElementById('syncStatus').innerText = "🟢 Online";
+            } catch(e) { 
+                console.error("Sync error", e); 
+                document.getElementById('syncStatus').innerText = "🔴 Offline (Using Cache)"; 
+                const local = localStorage.getItem(DB_KEY);
+                if (local) appDB = JSON.parse(local);
+            }
+        } else {
+            const local = localStorage.getItem(DB_KEY);
+            if (local) appDB = JSON.parse(local);
+            document.getElementById('syncStatus').innerText = "💾 Local Mode";
+        }
+    }
+
+    async function saveDB() {
+        if (ENABLE_CLOUD_SYNC && JSONBIN_BIN_ID && JSONBIN_MASTER_KEY && isAdmin()) {
+            document.getElementById('syncStatus').innerText = "⏳ Saving...";
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_MASTER_KEY },
+                    body: JSON.stringify(appDB)
+                });
+                document.getElementById('syncStatus').innerText = "🟢 Saved to Cloud";
+                localStorage.setItem(DB_KEY, JSON.stringify(appDB)); 
+            } catch(e) { 
+                console.error("Save error", e); 
+                document.getElementById('syncStatus').innerText = "🔴 Save Failed"; 
+                localStorage.setItem(DB_KEY, JSON.stringify(appDB)); 
+            }
+        } else {
+            localStorage.setItem(DB_KEY, JSON.stringify(appDB));
+        }
+    }
+
+    const getDB = (table) => appDB[table] || [];
+    const setDB = (table, data) => { appDB[table] = data; saveDB(); };
+    const generateId = () => Math.floor(Math.random() * 1000000);
+    const isAdmin = () => currentUser && currentUser.role === 'admin';
+
+    window.addEventListener('storage', (e) => {
+        if (e.key === DB_KEY && currentUser && !ENABLE_CLOUD_SYNC) {
+            appDB = JSON.parse(e.newValue || "{}"); loadModule(currentModule, true);
+        }
+    });
+
+    let autoSyncTimer;
+    function startAutoSync() {
+        if (ENABLE_CLOUD_SYNC && !isAdmin()) {
+            if(autoSyncTimer) clearInterval(autoSyncTimer);
+            autoSyncTimer = setInterval(async () => { await initDB(); loadModule(currentModule, true); }, 5000);
+        }
+    }
+
+    // --- AUTHENTICATION ---
+    async function login() {
+        const u = document.getElementById("user").value; const p = document.getElementById("pass").value;
+        if (users[u] && users[u].pass === p) { localStorage.setItem("session_user", u); await initApp(); } 
+        else { document.getElementById("err").style.display = "block"; }
+    }
+
+    function logout() { localStorage.removeItem("session_user"); location.reload(); }
+
+    async function initApp() {
+        const session = localStorage.getItem("session_user");
+        if (session && users[session]) {
+            currentUser = users[session]; 
+            
+            document.getElementById("login").style.display = "none";
+            document.getElementById("app").style.display = "flex";
+            if (window.innerWidth <= 992) document.getElementById('sidebar').classList.add('collapsed');
+
+            const footerHTML = `
+                <div class="user-info">
+                    <div style="color: var(--secondary); font-weight: bold;">${currentUser.name}</div>
+                    <div style="font-size: 11px; color: #aaa;">Role: ${currentUser.role.toUpperCase()}</div>
+                </div>
+                <button class="logout-btn" onclick="logout()" title="Logout">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span class="logout-btn-text">Logout</span>
+                </button>
+            `;
+            document.getElementById("sidebarFooter").innerHTML = footerHTML;
+            
+            await initDB();
+            renderNav(); 
+            loadModule("Dashboard");
+            startAutoSync();
+        } else {
+            document.getElementById("login").style.display = "block";
+            document.getElementById("app").style.display = "none";
+        }
+    }
+
+    // --- NAVIGATION ---
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+    function renderNav() {
+        const n = document.getElementById("navLinks");
+        n.innerHTML = modules.map(m => `
+            <div class="nav-item ${m === currentModule ? 'active' : ''}" onclick="loadModule('${m}')" title="${m}">
+                ${navIcons[m]} <span class="nav-text">${m}</span>
+            </div>
+        `).join('');
+    }
+
+    window.addEventListener('resize', () => {
+        if(currentUser) {
+            if (window.innerWidth <= 992) document.getElementById('sidebar').classList.add('collapsed');
+            else document.getElementById('sidebar').classList.remove('collapsed');
+        }
+    });
+
+    function loadModule(m, silent = false) {
+        currentModule = m; document.getElementById("viewTitle").innerText = m;
+        
+        // Reset gallery folder view if switching modules
+        if (m !== 'Gallery') currentGalleryFolder = null;
+
+        if(!silent) renderNav();
+        if(!silent && window.innerWidth <= 992) document.getElementById('sidebar').classList.add('collapsed');
+        
+        const c = document.getElementById("contentArea");
+        switch(m) {
+            case "Dashboard": renderDashboard(c); break;
+            case "Timeline": renderTimeline(c); break;
+            case "Sprint Board": renderSprintBoard(c); break;
+            case "Calendar": renderCalendar(c); break;
+            case "Funds": renderFunds(c); break;
+            case "Resources": renderResources(c); break;
+            case "Gallery": renderGallery(c); break;
+        }
+    }
+
+    // --- MODULE: DASHBOARD ---
+    function renderDashboard(container) {
+        const tasks = getDB('tasks'); const funds = getDB('funds');
+        const totalFunds = funds.reduce((acc, curr) => curr.type === 'in' ? acc + curr.amount : acc - curr.amount, 0);
+        const doneTasks = tasks.filter(t => t.status === 'Done').length;
+
+        container.innerHTML = `
+            <div class="grid-2">
+                <div class="glass card">
+                    <h3 class="neon">Sprint Progress</h3>
+                    <div style="background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; margin-top: 15px; overflow: hidden;">
+                        <div style="width: ${tasks.length ? (doneTasks/tasks.length)*100 : 0}%; background: var(--secondary); height: 100%; box-shadow: 0 0 10px var(--secondary);"></div>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 14px; color: #aaa;">${doneTasks} of ${tasks.length} Tasks Completed</p>
+                </div>
+                <div class="glass card">
+                    <h3 class="neon">Financial Overview</h3>
+                    <h2 style="margin: 10px 0; font-size: 32px;">₱${totalFunds.toLocaleString()}</h2>
+                    <p style="font-size: 14px; color: #aaa;">Current available balance</p>
+                </div>
+            </div>
+            ${tasks.length === 0 && funds.length === 0 ? '<div class="glass card" style="text-align:center;"><p style="color:#aaa;">System initialized. Awaiting setup...</p></div>' : ''}
+        `;
+    }
+
+    // --- MODULE: CALENDAR ---
+    function renderCalendar(container) {
+        const events = getDB('calendar'); let html = '';
+        if (isAdmin()) {
+            html += `
+            <div class="glass admin-panel">
+                <h4 style="margin-top:0; color:var(--accent)">Admin: Schedule Event</h4>
+                <div class="flex-row">
+                    <input id="evTitle" placeholder="Event Title" style="flex:2;">
+                    <input id="evDate" type="date" style="flex:1;">
+                    <select id="evType" style="flex:1;">
+                        <option value="meeting">Meeting</option><option value="overnight">Overnight</option>
+                        <option value="defense">Defense</option><option value="other">Other</option>
+                    </select>
+                    <button onclick="addEvent()" style="flex:1; margin:0;">Schedule</button>
+                </div>
+            </div>`;
+        }
+
+        const currentMonth = viewDate.getMonth(); const currentYear = viewDate.getFullYear();
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const todayStr = new Date().toISOString().split('T')[0];
+        const monthEvents = events.filter(e => { const eDate = new Date(e.date); return eDate.getMonth() === currentMonth && eDate.getFullYear() === currentYear; }).sort((a,b) => new Date(a.date) - new Date(b.date));
+
+        html += `
+        <div class="grid-3">
+            <div class="glass card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+                    <h3 style="margin:0;" class="neon">${monthNames[currentMonth]} ${currentYear}</h3>
+                    <div style="display:flex; gap: 5px;">
+                        <button class="icon-btn" onclick="changeMonth(-1)">&#8592;</button>
+                        <button class="icon-btn" onclick="changeMonth(1)">&#8594;</button>
+                    </div>
+                </div>
+                <div class="cal-grid">
+                    <div class="cal-header">Sun</div><div class="cal-header">Mon</div><div class="cal-header">Tue</div>
+                    <div class="cal-header">Wed</div><div class="cal-header">Thu</div><div class="cal-header">Fri</div><div class="cal-header">Sat</div>`;
+        for(let i = 0; i < firstDay; i++) { html += `<div class="cal-day empty"></div>`; }
+        for(let d = 1; d <= daysInMonth; d++) {
+            const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+            const isToday = dateStr === todayStr ? 'today' : '';
+            const dayEvents = events.filter(e => e.date === dateStr);
+            let dots = ''; dayEvents.forEach(e => { dots += `<div class="cal-event-dot event-${e.type}" title="${e.title}"></div>`; });
+            html += `<div class="cal-day ${isToday}"><div style="font-size:14px;">${d}</div><div style="display:flex; gap:3px; flex-wrap:wrap; justify-content:center; width:100%; margin-top:2px;">${dots}</div></div>`;
+        }
+        html += `</div></div>
+            <div class="glass card" style="display:flex; flex-direction:column;">
+                <h3 style="margin-top:0; color:var(--accent);">Scheduled Events</h3><div style="flex:1; overflow-y:auto;">`;
+        if(monthEvents.length === 0) { html += `<p style="color:#aaa; font-size:14px; text-align:center;">No events scheduled this month.</p>`; } 
+        else {
+            monthEvents.forEach(e => {
+                html += `
+                <div class="event-list-item">
+                    <div class="cal-event-dot event-${e.type}" style="width:12px; height:12px; margin:0;"></div>
+                    <div style="flex:1;">
+                        <div style="font-weight:bold; font-size:14px;">${e.title}</div>
+                        <div style="font-size:11px; color:#aaa;">${e.date} &bull; <span style="text-transform:capitalize">${e.type}</span></div>
+                    </div>
+                    ${isAdmin() ? `<button class="delete-btn" style="position:relative; top:0; right:0;" onclick="deleteEvent(${e.id})">✖</button>` : ''}
+                </div>`;
+            });
+        }
+        html += `</div></div></div>`; container.innerHTML = html;
+    }
+    function changeMonth(dir) { viewDate.setMonth(viewDate.getMonth() + dir); loadModule('Calendar'); }
+    function addEvent() {
+        const title = document.getElementById('evTitle').value; const date = document.getElementById('evDate').value; const type = document.getElementById('evType').value;
+        if(!title || !date) return alert("Title and Date are required.");
+        const events = getDB('calendar'); events.push({ id: generateId(), title, date, type }); setDB('calendar', events); loadModule('Calendar');
+    }
+    function deleteEvent(id) { setDB('calendar', getDB('calendar').filter(e => e.id !== id)); loadModule('Calendar'); }
+
+    // --- MODULE: FUNDS ---
+    function renderFunds(container) {
+        const funds = getDB('funds'); let total = 0, income = 0, expenses = 0;
+        funds.forEach(f => { if(f.type === 'in') { total += f.amount; income += f.amount; } else { total -= f.amount; expenses += f.amount; } });
+
+        let html = `
+            <div class="grid-2" style="margin-bottom: 20px;">
+                <div class="glass card" style="text-align: center;">
+                    <h3 style="color:#aaa; margin-top:0; font-size:14px;">Total Balance</h3>
+                    <h2 class="neon" style="font-size: 36px; margin:10px 0;">₱${total.toLocaleString()}</h2>
+                </div>
+                <div class="grid-2">
+                    <div class="glass card" style="text-align: center; padding: 15px;">
+                        <h4 style="margin:0; color:#10b981; font-size:12px;">INCOME</h4><p style="margin:5px 0 0 0;">₱${income.toLocaleString()}</p>
+                    </div>
+                    <div class="glass card" style="text-align: center; padding: 15px;">
+                        <h4 style="margin:0; color:#ef4444; font-size:12px;">EXPENSES</h4><p style="margin:5px 0 0 0;">₱${expenses.toLocaleString()}</p>
+                    </div>
+                </div>
+            </div>`;
+
+        if (isAdmin()) {
+            const todayStr = new Date().toISOString().split('T')[0];
+            html += `
+            <div class="glass admin-panel">
+                <h4 style="margin-top:0; color:var(--accent)">Admin: Record Transaction</h4>
+                <div class="flex-row">
+                    <input id="fundDate" type="date" value="${todayStr}" style="flex:1;">
+                    <input id="fundDesc" placeholder="Description" style="flex:2;">
+                    <input id="fundAmt" type="number" placeholder="Amount (₱)" style="flex:1;">
+                    <select id="fundType" style="flex:1;">
+                        <option value="in">Income (+)</option><option value="out">Expense (-)</option>
+                    </select>
+                    <button onclick="addFund()" style="flex:1; margin:0;">Record</button>
+                </div>
+            </div>`;
+        }
+
+        html += `<div class="glass card"><h3 style="margin-top:0;">Ledger History</h3><div style="display:flex; flex-direction:column; gap:10px;">`;
+        if (funds.length === 0) {
+            html += `<p style="text-align:center; color:#aaa;">No transactions recorded.</p>`;
+        } else {
+            funds.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(f => {
+                html += `
+                    <div style="display:flex; justify-content:space-between; padding:15px; background:rgba(0,0,0,0.2); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <div style="width:40px; height:40px; border-radius:8px; background:rgba(255,255,255,0.05); display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:18px; color:${f.type==='in'?'#10b981':'#ef4444'}">${f.type === 'in' ? '+' : '-'}</div>
+                            <div><div style="font-weight:500;">${f.desc}</div><div style="font-size:11px; color:#aaa; margin-top:3px;">Recorded: ${f.date}</div></div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap: 20px;">
+                            <div style="font-weight:bold; font-size:18px; color:${f.type==='in'?'#10b981':'#ef4444'}">₱${f.amount.toLocaleString()}</div>
+                            ${isAdmin() ? `<button class="delete-btn" style="position:relative; right:0; top:0;" onclick="deleteFund(${f.id})">✖</button>` : ''}
+                        </div>
+                    </div>`;
+            });
+        }
+        html += `</div></div>`; container.innerHTML = html;
+    }
+    function addFund() {
+        const date = document.getElementById('fundDate').value; const desc = document.getElementById('fundDesc').value; const amt = parseFloat(document.getElementById('fundAmt').value); const type = document.getElementById('fundType').value;
+        if (!desc || isNaN(amt) || amt <= 0 || !date) return alert("Enter valid data.");
+        const funds = getDB('funds'); funds.push({ id: generateId(), date, desc, amount: amt, type }); setDB('funds', funds); loadModule('Funds');
+    }
+    function deleteFund(id) { setDB('funds', getDB('funds').filter(f => f.id !== id)); loadModule('Funds'); }
+
+    // --- TIMELINE ---
+    function renderTimeline(container) {
+        const timeline = getDB('timeline'); let html = '';
+        if (isAdmin()) {
+            html += `
+            <div class="glass admin-panel">
+                <h4 style="margin-top:0; color:var(--accent)">Admin: Add Gantt Task</h4>
+                <div class="flex-row">
+                    <input id="tlTitle" placeholder="Task Name" style="flex:2;">
+                    <input id="tlStart" type="date" style="flex:1;" title="Start Date">
+                    <input id="tlEnd" type="date" style="flex:1;" title="End Date">
+                    <button onclick="addTimeline()" style="flex:1; margin:0;">Add</button>
+                </div>
+            </div>`;
+        }
+        html += `<div class="glass card"><h3 style="margin-top:0; margin-bottom: 20px;">Project Timeline</h3>`;
+        if (timeline.length === 0) { html += `<p style="color:#aaa;">No timeline data generated by Admin yet.</p></div>`; container.innerHTML = html; return; }
+        
+        const dates = timeline.flatMap(t => [new Date(t.start).getTime(), new Date(t.end).getTime()]);
+        const minDate = Math.min(...dates); let maxDate = Math.max(...dates); let totalSpan = maxDate - minDate;
+        if (totalSpan === 0) totalSpan = 86400000; totalSpan = totalSpan * 1.05;
+
+        html += `<div style="display:flex; flex-direction:column; gap: 10px; overflow-x: auto; padding-bottom: 10px;">`;
+        timeline.forEach(t => {
+            const startT = new Date(t.start).getTime(); const endT = new Date(t.end).getTime();
+            const leftPerc = ((startT - minDate) / totalSpan) * 100; let widthPerc = ((endT - startT) / totalSpan) * 100;
+            if (widthPerc < 2) widthPerc = 2; 
+            html += `
+                <div class="gantt-row">
+                    <div class="gantt-label" title="${t.title}">${t.title}</div>
+                    <div class="gantt-track">
+                        <div class="gantt-bar" style="left: ${leftPerc}%; width: ${widthPerc}%;">${t.start}</div>
+                    </div>
+                    ${isAdmin() ? `<button class="delete-btn" style="position:relative; margin-left:15px; background:rgba(239, 68, 68, 0.2); padding: 5px 10px; border-radius:5px; flex-shrink: 0;" onclick="deleteTimeline(${t.id})">Drop</button>` : ''}
+                </div>`;
+        });
+        html += `</div></div>`; container.innerHTML = html;
+    }
+    function addTimeline() {
+        const title = document.getElementById('tlTitle').value; const start = document.getElementById('tlStart').value; const end = document.getElementById('tlEnd').value;
+        if(!title || !start || !end) return alert("Fill all fields."); if(new Date(start) > new Date(end)) return alert("Start date must be before end date.");
+        const tl = getDB('timeline'); tl.push({ id: generateId(), title, start, end }); setDB('timeline', tl); loadModule('Timeline');
+    }
+    function deleteTimeline(id) { setDB('timeline', getDB('timeline').filter(t => t.id !== id)); loadModule('Timeline'); }
+
+    // --- SPRINT BOARD ---
+    function renderSprintBoard(container) {
+        const tasks = getDB('tasks'); const cols = ["To Do", "In Progress", "Review", "Done"]; let html = '';
+        if (isAdmin()) {
+            html += `
+            <div class="glass admin-panel">
+                <h4 style="margin-top:0; color:var(--accent)">Admin: Add Task</h4>
+                <div class="flex-row">
+                    <input id="newTaskTitle" placeholder="Enter task description..." style="flex: 2;">
+                    <button onclick="createTask()" style="flex: 1; margin:0;">Add Task</button>
+                </div>
+            </div>`;
+        }
+        html += `<div class="kanban-board">`;
+        cols.forEach(col => {
+            const colTasks = tasks.filter(t => t.status === col);
+            html += `
+                <div class="kanban-col" ondrop="dropTask(event, '${col}')" ondragover="allowDrop(event)">
+                    <h3>${col} <span style="float:right; background:rgba(255,255,255,0.1); padding: 2px 8px; border-radius:10px; font-size:10px;">${colTasks.length}</span></h3>
+                    <div class="task-list">
+                        ${colTasks.length === 0 ? '<p style="color:#aaa; font-size:12px; text-align:center;">Empty</p>' : ''}
+                        ${colTasks.map(t => `
+                            <div class="task-card" draggable="${isAdmin() ? 'true' : 'false'}" ondragstart="dragTask(event, ${t.id})">
+                                ${isAdmin() ? `<button class="delete-btn" onclick="deleteTask(${t.id})">✖</button>` : ''}
+                                <div style="font-size: 14px; margin-top: 5px; padding-right: 15px;">${t.title}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+        });
+        html += `</div>`; container.innerHTML = html;
+    }
+    function createTask() {
+        const title = document.getElementById('newTaskTitle').value; if (!title) return;
+        const tasks = getDB('tasks'); tasks.push({ id: generateId(), title: title, status: "To Do" }); setDB('tasks', tasks); loadModule('Sprint Board');
+    }
+    function deleteTask(id) { setDB('tasks', getDB('tasks').filter(t => t.id !== id)); loadModule('Sprint Board'); }
+    function allowDrop(ev) { if(isAdmin()) ev.preventDefault(); }
+    function dragTask(ev, id) { if(isAdmin()) ev.dataTransfer.setData("taskId", id); }
+    function dropTask(ev, newStatus) {
+        if(!isAdmin()) return; ev.preventDefault(); const id = parseInt(ev.dataTransfer.getData("taskId"));
+        let tasks = getDB('tasks'); const tIdx = tasks.findIndex(t => t.id === id);
+        if (tIdx > -1) { tasks[tIdx].status = newStatus; setDB('tasks', tasks); loadModule('Sprint Board'); }
+    }
+
+    // --- RESOURCES ---
+    function renderResources(container) {
+        const res = getDB('resources'); let html = '';
+        if (isAdmin()) {
+            html += `
+            <div class="glass admin-panel">
+                <h4 style="margin-top:0; color:var(--accent)">Admin: Add Resource</h4>
+                <div class="flex-row" style="margin-bottom:10px;">
+                    <input id="resTitle" placeholder="Resource Title" style="flex:2;">
+                    <select id="resType" style="flex:1;" onchange="
+                        document.getElementById('resUrl').style.display = this.value === 'link' ? 'block' : 'none';
+                        document.getElementById('resFile').style.display = this.value === 'file' ? 'block' : 'none';
+                    ">
+                        <option value="link">Web Link</option>
+                        <option value="file">Upload File</option>
+                    </select>
+                </div>
+                <div class="flex-row">
+                    <input id="resUrl" placeholder="Target URL" style="flex:2; display:block;">
+                    <input id="resFile" type="file" style="flex:2; display:none; margin: 8px 0; padding: 9px;" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.zip,.rar">
+                    <input id="resDesc" placeholder="Short Description" style="flex:2;">
+                    <button onclick="addResource()" style="flex:1; margin:0;">Add</button>
+                </div>
+                <div style="font-size: 10px; color: #ffaa00; margin-top: 5px;">* Uploaded files should be under 200KB to prevent cloud sync limits.</div>
+            </div>`;
+        }
+        html += `<div class="glass card"><h3 style="margin-top:0;">Project Hub</h3>`;
+        if (res.length === 0) {
+            html += `<p style="color:#aaa;">No resources shared yet.</p>`;
+        } else {
+            res.forEach(r => {
+                const isFile = r.type === 'file';
+                html += `
+                    <div class="resource-item">
+                        <div style="display:flex; align-items:center; flex:1;">
+                            <div class="resource-icon">${isFile ? '📄' : '🔗'}</div>
+                            <div>
+                                <div style="font-weight:bold; font-size:16px;">${r.title}</div>
+                                <div style="font-size:12px; color:#aaa; margin-top:4px;">${r.desc} ${isFile && r.fileName ? `(${r.fileName})` : ''}</div>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            ${isFile 
+                                ? `<button onclick="downloadFile('${r.url}', '${r.fileName || 'resource'}')" style="width:auto; padding:8px 15px; margin:0;">Download</button>`
+                                : `<button onclick="window.open('${r.url}', '_blank')" style="width:auto; padding:8px 15px; margin:0;">Open</button>`
+                            }
+                            ${isAdmin() ? `<button class="danger" onclick="deleteResource(${r.id})" style="width:auto; padding:8px 15px; margin:0;">Drop</button>` : ''}
+                        </div>
+                    </div>`;
+            });
+        }
+        html += `</div>`; container.innerHTML = html;
+    }
+    
+    async function addResource() {
+        const title = document.getElementById('resTitle').value; 
+        const type = document.getElementById('resType').value;
+        const desc = document.getElementById('resDesc').value;
+        if(!title) return alert("Title is required.");
+
+        if (type === 'link') {
+            const url = document.getElementById('resUrl').value;
+            if(!url) return alert("URL is required.");
+            const res = getDB('resources'); res.push({ id: generateId(), title, type, url, desc }); 
+            setDB('resources', res); loadModule('Resources');
+        } else {
+            const fileInput = document.getElementById('resFile');
+            if(!fileInput.files[0]) return alert("Please select a file.");
+            const file = fileInput.files[0];
+            
+            if(file.size > 250000) return alert("File is too large! Max size is 250KB for JSON database storage.");
+            
+            document.getElementById('syncStatus').innerText = "⏳ Processing file...";
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const res = getDB('resources'); 
+                res.push({ id: generateId(), title, type, url: e.target.result, desc, fileName: file.name }); 
+                setDB('resources', res); loadModule('Resources');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    function deleteResource(id) { setDB('resources', getDB('resources').filter(r => r.id !== id)); loadModule('Resources'); }
+
+
+    // --- GALLERY (WITH MULTIPLE UPLOAD & FOLDERS) ---
+    function renderGallery(container) {
+        const gal = getDB('gallery'); 
+        let html = '';
+        
+        if (isAdmin()) {
+            // Extract unique folder names for datalist autocomplete
+            const uniqueFolders = [...new Set(gal.map(g => g.folder || 'Uncategorized'))];
+            const dataListHtml = uniqueFolders.map(f => `<option value="${f}">`).join('');
+
+            html += `
+            <div class="glass admin-panel">
+                <h4 style="margin-top:0; color:var(--accent)">Admin: Upload Photos</h4>
+                <datalist id="folderOptions">${dataListHtml}</datalist>
+                <div class="flex-row" style="align-items:flex-start;">
+                    <div style="flex:2;">
+                        <input id="galFile" type="file" multiple accept="image/*" style="margin:0; padding:9px;">
+                        <div style="font-size: 10px; color: #ffaa00; margin-top: 5px;">* Select multiple images. Auto-compressed for cloud sync.</div>
+                    </div>
+                    <input id="galFolder" placeholder="Folder Name (e.g. Defense Prep)" list="folderOptions" style="flex:1; margin:0;" value="${currentGalleryFolder || ''}">
+                    <input id="galCap" placeholder="Caption (Optional)" style="flex:1; margin:0;">
+                    <button onclick="addPhoto()" style="flex:1; margin:0;">Upload</button>
+                </div>
+            </div>`;
+        }
+
+        // VIEW 1: FOLDER LIST
+        if (currentGalleryFolder === null) {
+            const folders = {};
+            gal.forEach(g => {
+                const fName = g.folder || 'Uncategorized';
+                if(!folders[fName]) folders[fName] = { count: 0, cover: g.url };
+                folders[fName].count++;
+            });
+            
+            const folderNames = Object.keys(folders);
+            if (folderNames.length === 0) {
+                html += `<div><p style="color:#aaa;">No folders or images yet.</p></div>`;
+            } else {
+                html += `<div class="gallery-grid">`;
+                folderNames.forEach(fName => {
+                    html += `
+                    <div class="gallery-item" style="cursor:pointer;" onclick="window.openGalleryFolder('${fName}')">
+                        <img src="${folders[fName].cover}" alt="Folder Cover" style="opacity: 0.4;">
+                        <div class="folder-overlay">
+                            <div style="font-size: 40px; margin-bottom: 10px;">📁</div>
+                            <div style="font-weight: bold; font-size: 16px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); text-align:center; padding: 0 10px;">${fName}</div>
+                            <div style="font-size: 12px; color: var(--secondary); margin-top: 5px;">${folders[fName].count} Items</div>
+                        </div>
+                    </div>`;
+                });
+                html += `</div>`;
+            }
+        } 
+        // VIEW 2: INSIDE A FOLDER
+        else {
+            html += `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--glass-border);">
+                <h3 style="margin:0; display:flex; align-items:center; gap: 10px;">
+                    <span style="font-size:24px;">📁</span> ${currentGalleryFolder}
+                </h3>
+                <button class="icon-btn" onclick="window.closeGalleryFolder()" style="background: rgba(255,255,255,0.15);">🔙 Back to Folders</button>
+            </div>`;
+            
+            const folderItems = gal.filter(g => (g.folder || 'Uncategorized') === currentGalleryFolder);
+            
+            if (folderItems.length === 0) {
+                html += `<p style="color:#aaa;">Folder is empty.</p>`;
+            } else {
+                html += `<div class="gallery-grid">`;
+                folderItems.forEach(g => {
+                    html += `
+                    <div class="gallery-item">
+                        <img src="${g.url}" alt="${g.caption}" onerror="this.src='https://via.placeholder.com/300x300?text=Invalid+Image'">
+                        <div class="gallery-caption">
+                            <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${g.caption}</div>
+                            ${isAdmin() ? `<button class="danger" style="padding: 4px; font-size: 10px; margin:0;" onclick="deletePhoto(${g.id})">Delete</button>` : ''}
+                        </div>
+                    </div>`;
+                });
+                html += `</div>`;
+            }
+        }
+        container.innerHTML = html;
+    }
+
+    // Global hooks for gallery folder navigation
+    window.openGalleryFolder = function(fName) {
+        currentGalleryFolder = fName;
+        loadModule('Gallery', true); 
+    }
+    window.closeGalleryFolder = function() {
+        currentGalleryFolder = null;
+        loadModule('Gallery', true);
+    }
+    
+    async function addPhoto() {
+        const fileInput = document.getElementById('galFile');
+        const files = fileInput.files;
+        const caption = document.getElementById('galCap').value || 'Untitled';
+        const folder = document.getElementById('galFolder').value.trim() || 'Uncategorized';
+        
+        if(files.length === 0) return alert("Please select at least one image.");
+        document.getElementById('syncStatus').innerText = "⏳ Compressing & Uploading...";
+        
+        const gal = getDB('gallery');
+        
+        // Loop through multiple files
+        for(let i=0; i < files.length; i++) {
+            const base64 = await compressImage(files[i]);
+            let finalCaption = files.length > 1 ? `${caption} (${i+1})` : caption;
+            gal.push({ id: generateId(), url: base64, caption: finalCaption, folder: folder });
+        }
+        
+        // Automatically open the folder we just uploaded to
+        currentGalleryFolder = folder;
+        
+        setDB('gallery', gal); 
+        loadModule('Gallery');
+    }
+    
+    function deletePhoto(id) { 
+        let gal = getDB('gallery');
+        const photo = gal.find(g => g.id === id);
+        const targetFolder = photo ? (photo.folder || 'Uncategorized') : null;
+        
+        gal = gal.filter(g => g.id !== id);
+        
+        // Check if we just deleted the last item in the current folder
+        if (targetFolder && !gal.some(g => (g.folder || 'Uncategorized') === targetFolder)) {
+            currentGalleryFolder = null; // Kick back to root view
+        }
+        
+        setDB('gallery', gal); 
+        loadModule('Gallery', true); 
+    }
+
+    // --- SECURITY OVERRIDES ---
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", e => {
+        if (e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || (e.ctrlKey && e.key === "U")) {
+            e.preventDefault(); alert("DaDevs Security Protocol: Developer Tools Locked.");
+        }
+    });
+
+    window.onload = async () => { await initApp(); };
+</script>
+</body>
+</html>
