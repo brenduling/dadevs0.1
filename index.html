@@ -6,6 +6,11 @@
     <meta name="theme-color" content="#0F172A">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>DaDevs 0.1 - Workspace</title>
     <style>
         :root {
@@ -16,12 +21,12 @@
             --glass-border: rgba(255,255,255,0.1);
             
             /* Member Colors */
-            --c-chua: #3b82f6;
-            --c-vince: #8b5cf6;
-            --c-tanya: #ec4899;
-            --c-bren: #10b981;
-            --c-ruth: #f97316;
-            --c-team: #64748b;
+            --c-chua: #3b82f6; 
+            --c-vince: #8b5cf6; 
+            --c-tanya: #ec4899; 
+            --c-bren: #10b981; 
+            --c-ruth: #f97316; 
+            --c-team: #64748b; 
         }
         body {
             margin: 0; font-family: 'Inter', system-ui, sans-serif;
@@ -43,11 +48,19 @@
         .neon { color: var(--secondary); text-shadow: 0 0 8px rgba(34,211,238,0.4); }
         .accent { color: var(--accent); }
         
-        .dadevs-logo {
-            width: 50px; height: 50px; flex-shrink: 0; transition: transform 0.3s ease;
-        }
+        .dadevs-logo { width: 50px; height: 50px; flex-shrink: 0; transition: transform 0.3s ease; }
         .dadevs-logo:hover { transform: scale(1.05) rotate(5deg); }
         
+        /* Auto-Update Overlay Screen */
+        #updateOverlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            z-index: 99999; display: none; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; color: var(--text);
+        }
+        @keyframes pulseLogo { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
+        #updateOverlay .dadevs-logo { animation: pulseLogo 1.5s infinite ease-in-out; width: 80px; height: 80px; margin-bottom: 20px; }
+
         /* Login */
         #login { padding: 40px; text-align: center; width: 320px; transition: opacity 0.5s; max-width: 90%; }
         input, select, textarea {
@@ -68,13 +81,13 @@
         button.danger:hover { background: #ef4444; color: #fff; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
         
         /* App Layout */
-        #app { display: none; width: 100vw; height: 100vh; flex-direction: row; }
+        #app { display: none; width: 100vw; height: 100vh; flex-direction: row; position: relative; }
         
         /* Sidebar */
         #sidebar {
             width: 250px; display: flex; flex-direction: column; border-right: 1px solid var(--glass-border);
-            border-radius: 0; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100;
-            background: rgba(15, 23, 42, 0.5); flex-shrink: 0; overflow: hidden;
+            border-radius: 0; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000;
+            background: rgba(15, 23, 42, 0.95); flex-shrink: 0; overflow: hidden;
         }
         #sidebar.collapsed { width: 75px; }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; height: 85px; box-sizing: border-box; border-bottom: 1px solid var(--glass-border); white-space: nowrap; }
@@ -98,7 +111,10 @@
         #sidebar.collapsed .logout-btn-text { display: none; }
 
         /* Main Content */
-        #main { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; transition: 0.3s; min-width: 0; }
+        #main { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; transition: 0.3s; min-width: 0; position: relative;}
+        .mobile-header-toggle { display: none; background: transparent; border: none; color: var(--secondary); cursor: pointer; padding: 0; margin-right: 10px;}
+        .mobile-header-toggle svg { width: 28px; height: 28px; stroke: var(--secondary); }
+        
         .card { padding: 20px; margin-bottom: 20px; transition: transform 0.3s; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; } 
@@ -106,8 +122,15 @@
         
         .contact-link { display: flex; justify-content: center; align-items: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; text-decoration: none; font-size: 14px; transition: 0.3s; }
         .contact-link:hover { background: var(--secondary); color: #000; transform: translateY(-3px); border-color: var(--secondary); box-shadow: 0 4px 10px rgba(34,211,238,0.4); }
+        
+        /* Native Avatar Circles */
+        .avatar-container { position: relative; display: inline-block; margin: 0 auto 10px auto; }
+        .native-avatar { border-radius: 50%; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 3px solid var(--glass-border); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .native-avatar svg { fill: currentColor; }
+        .avatar-img { width: 100%; height: 100%; object-fit: cover; }
+        .avatar-sticker { position: absolute; bottom: -5px; right: -5px; font-size: 24px; background: var(--bg-1); border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; border: 2px solid var(--glass-border); box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .avatar-sticker-mini { position: absolute; bottom: -2px; right: -2px; font-size: 10px; background: var(--bg-1); border-radius: 50%; width: 14px; height: 14px; display: flex; justify-content: center; align-items: center; border: 1px solid var(--glass-border); }
 
-        /* Sprint Elements */
         .sprint-accordion { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
         .sprint-header { padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: rgba(34, 211, 238, 0.05); transition: 0.2s; }
         .sprint-header:hover { background: rgba(34, 211, 238, 0.1); }
@@ -119,6 +142,7 @@
         .task-card { background: var(--glass-bg); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--glass-border); transition: 0.2s; cursor: grab; position: relative;}
         .task-card:hover { border-color: var(--secondary); transform: translateY(-2px); }
         .delete-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ef4444; cursor: pointer; padding: 0; width: auto; font-size: 12px; }
+        .mobile-move-select { width: 100%; padding: 8px; font-weight:bold; font-size: 12px; background: var(--primary); border: 1px solid var(--secondary); color: #fff; border-radius: 6px; outline: none; margin-top: 12px; cursor: pointer; box-shadow: 0 0 8px rgba(34,211,238,0.2);}
         
         .admin-panel { padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
         .admin-panel .flex-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
@@ -133,7 +157,7 @@
         .gantt-bar { position: absolute; height: 100%; border-radius: 12px; display: flex; align-items: center; font-size: 11px; font-weight: bold; color: #fff; box-sizing: border-box; overflow: hidden; transition: 0.3s; box-shadow: 0 0 10px rgba(34,211,238,0.4);}
         
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .gallery-item { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); aspect-ratio: 1 / 1; transition: 0.3s; }
+        .gallery-item { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); aspect-ratio: 1 / 1; transition: 0.3s; background: rgba(0,0,0,0.5); }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
         .gallery-item:hover img { transform: scale(1.05); }
         .gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); padding: 10px; font-size: 12px; backdrop-filter: blur(5px); }
@@ -167,9 +191,18 @@
         button.icon-btn:hover { background: var(--secondary); color: #000; }
 
         @media (max-width: 1200px) { .grid-5 { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 992px) { #main { padding: 20px; } .grid-3 { grid-template-columns: 1fr; } }
+        
+        /* Mobile View Restrictions */
+        @media (max-width: 992px) { 
+            #main { padding: 20px; } .grid-3 { grid-template-columns: 1fr; } 
+            .mobile-header-toggle { display: block; }
+        }
         @media (max-width: 768px) {
-            #sidebar { width: 200px; } #sidebar.collapsed { width: 65px; } #main { padding: 15px; } 
+            #sidebar { width: 220px; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: absolute; height: 100vh; z-index: 1000; box-shadow: 5px 0 25px rgba(0,0,0,0.8); left: 0; top: 0; }
+            #sidebar.collapsed { width: 60px; position: relative; box-shadow: none; z-index: 100; }
+            #sidebar.collapsed .nav-item { padding: 12px 0; justify-content: center; }
+            
+            #main { padding: 15px; } 
             .grid-2 { grid-template-columns: 1fr; } .grid-5 { grid-template-columns: repeat(2, 1fr); }
             .admin-panel .flex-row { flex-direction: column; align-items: stretch; } .admin-panel .flex-row > * { width: 100%; margin-bottom: 5px; }
             .gantt-row { flex-direction: column; align-items: flex-start; } .gantt-label { width: 100%; margin-bottom: 5px; } .gantt-track { width: 100%; margin-bottom: 10px; }
@@ -178,6 +211,23 @@
     </style>
 </head>
 <body>
+
+    <div id="updateOverlay">
+        <svg class="dadevs-logo" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="neonGradUpdate" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#22D3EE" />
+                    <stop offset="100%" stop-color="#8B5CF6" />
+                </linearGradient>
+            </defs>
+            <path d="M100 15L175 58V142L100 185L25 142V58L100 15Z" stroke="url(#neonGradUpdate)" stroke-width="8"/>
+            <path d="M100 40V160" stroke="#FFF" stroke-width="12" stroke-linecap="round"/>
+            <path d="M100 40C145 40 155 70 155 100C155 130 145 160 100 160" stroke="url(#neonGradUpdate)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M70 100L45 75M70 100L45 125" stroke="#FFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h2 class="neon" style="margin:0 0 10px 0; font-size: 24px;">Applying New Version...</h2>
+        <p style="color:#aaa; font-size: 14px; margin:0;">Fetching fresh code from Vercel. Please wait.</p>
+    </div>
 
     <div id="login" class="glass">
         <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-bottom: 10px;">
@@ -237,7 +287,12 @@
 
         <div id="main">
             <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;" id="mainHeader">
-                <h2 id="viewTitle" class="neon" style="margin:0; font-size: 28px;">Workspace</h2>
+                <div style="display:flex; align-items:center;">
+                    <button class="mobile-header-toggle" onclick="toggleSidebar()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <h2 id="viewTitle" class="neon" style="margin:0; font-size: 28px;">Workspace</h2>
+                </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <div id="syncStatus" style="font-size:12px; font-weight:bold; color:#aaa;"></div>
                     <button id="manualSyncBtn" onclick="initDB(true)" style="width:auto; padding:5px 10px; margin:0; font-size:12px; display:none;">🔄 Sync</button>
@@ -249,51 +304,46 @@
 
 <script>
     // ==========================================
+    // AUTO-UPDATE SYSTEM (FOR VERCEL PWA)
+    // ==========================================
+    const APP_VERSION = "v34"; // <-- CHANGE THIS NUMBER EVERY TIME YOU DEPLOY TO VERCEL!
+
+    window.addEventListener('load', () => {
+        // Silently fetch the raw HTML from Vercel to check if the code has been updated
+        fetch(window.location.href, { cache: "no-store", headers: { 'Cache-Control': 'no-cache' } })
+            .then(res => res.text())
+            .then(liveHTML => {
+                // If the live version doesn't match the phone's cached version...
+                if (!liveHTML.includes(`const APP_VERSION = "${APP_VERSION}";`)) {
+                    console.log("New version detected! Applying update...");
+                    document.getElementById('updateOverlay').style.display = 'flex'; // Show loading screen
+                    setTimeout(() => window.location.reload(true), 1500); // Hard refresh after 1.5s
+                }
+            })
+            .catch(err => console.log("User offline. Skipping update ping."));
+    });
+
+    // ==========================================
     // CLOUD SYNC CONFIGURATION
     // ==========================================
     const ENABLE_CLOUD_SYNC = true; 
     const JSONBIN_BIN_ID = "69b53404aa77b81da9e359ea";
     const JSONBIN_MASTER_KEY = "$2a$10$Tro6Ud5UHq2VqKQnp8Kxo.1MFLWorIUvmpahlY7t9jqDPWr0Xg2em";
+    
+    // Cloudinary Credentials
+    const CLOUD_NAME = "dsdy1e1wl";
+    const UPLOAD_PRESET = "dadevs_preset";
     // ==========================================
 
-    function compressImage(file, maxSize = 800, quality = 0.6) {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    let width = img.width; let height = img.height;
-                    if (width > height && width > maxSize) { height *= maxSize / width; width = maxSize; } 
-                    else if (height > maxSize) { width *= maxSize / height; height = maxSize; }
-                    canvas.width = width; canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    resolve(canvas.toDataURL('image/jpeg', quality));
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        });
-    }
+    // Native Avatar SVGs (Facebook Style Silhouette)
+    const userSVG = `<svg viewBox="0 0 24 24" width="60%" height="60%" fill="currentColor" style="margin-top:15%; opacity:0.8;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
+    const userSVGMini = `<svg viewBox="0 0 24 24" width="70%" height="70%" fill="currentColor" style="margin-top:15%; opacity:0.9;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
 
     window.downloadFile = function(dataUrl, name) {
         const a = document.createElement('a');
         a.href = dataUrl; a.download = name || 'downloaded_file';
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
-
-    // PWA SETUP (with new abstract D SVG icon)
-    const pwaIconSVG = `<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="200" fill="#0F172A"/><path d="M100 15L175 58V142L100 185L25 142V58L100 15Z" stroke="#22D3EE" stroke-width="8"/><path d="M100 40V160" stroke="#FFF" stroke-width="12" stroke-linecap="round"/><path d="M100 40C145 40 155 70 155 100C155 130 145 160 100 160" stroke="#8B5CF6" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><path d="M70 100L45 75M70 100L45 125" stroke="#FFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    const manifest = {
-        name: "DaDevs Workspace", short_name: "DaDevs", start_url: location.href, display: "standalone",
-        background_color: "#0F172A", theme_color: "#0F172A",
-        icons: [{ src: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(pwaIconSVG), sizes: "512x512", type: "image/svg+xml" }]
-    };
-    const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-    document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(manifestBlob)}">`);
-    const swCode = `self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('activate', e => e.waitUntil(clients.claim())); self.addEventListener('fetch', e => {});`;
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }))).catch(console.error);
 
     // SYSTEM DATA & AUTH
     const users = {
@@ -331,25 +381,27 @@
     let currentGalleryFolder = null; 
     let editingTimelineId = null;
     let editingMemberId = null;
+    let editingResourceId = null;
     let resSearchTerm = '';
     let resActiveTag = null;
+    let collapsedPhases = {}; 
 
-    // V15 Reset for Contact Details feature
-    const DB_KEY = 'dadevs_db_v15';
+    // Database Initialization
+    const DB_KEY = 'dadevs_db_v34';
     let appDB = { 
         tasks: [], funds: [], calendar: [], timeline: [], resources: [], gallery: [], sprints: [],
         members: [
-            { id: "Bren", fullName: "Bren", role: "Team Lead", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
-            { id: "Chua", fullName: "Chua", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
-            { id: "Tanya", fullName: "Tanya", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
-            { id: "Vince", fullName: "Vince", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
-            { id: "Ruth", fullName: "Ruth", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" }
+            { id: "Bren", fullName: "Bren", role: "Team Lead", birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "👑", avatar: "" },
+            { id: "Chua", fullName: "Chua", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "🃏", avatar: "" },
+            { id: "Tanya", fullName: "Tanya", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "🏀", avatar: "" },
+            { id: "Vince", fullName: "Vince", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "💎", avatar: "" },
+            { id: "Ruth", fullName: "Ruth", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "📖", avatar: "" }
         ]
     };
 
     async function initDB(manualSync = false) {
-        if (localStorage.getItem('dd_version') !== 'v15') {
-            localStorage.removeItem('dadevs_db_v14'); localStorage.setItem('dd_version', 'v15');
+        if (localStorage.getItem('dd_version') !== 'v34') {
+            localStorage.removeItem('dadevs_db_v33'); localStorage.setItem('dd_version', 'v34');
         }
         if (ENABLE_CLOUD_SYNC && JSONBIN_BIN_ID && JSONBIN_MASTER_KEY) {
             document.getElementById('syncStatus').innerText = manualSync ? "☁️ Manual Syncing..." : "☁️ Syncing...";
@@ -361,13 +413,15 @@
                 if (data.record) {
                     appDB = { ...appDB, ...data.record };
                     if(!appDB.sprints) appDB.sprints = [];
-                    if(!appDB.members || appDB.members.length === 0) appDB.members = [
-                        { id: "Bren", fullName: "Bren", role: "Team Lead", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
-                        { id: "Chua", fullName: "Chua", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
-                        { id: "Tanya", fullName: "Tanya", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
-                        { id: "Vince", fullName: "Vince", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" },
-                        { id: "Ruth", fullName: "Ruth", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "" }
-                    ];
+                    if(!appDB.members || appDB.members.length === 0 || !appDB.members[0].sticker) {
+                        appDB.members = [
+                            { id: "Bren", fullName: "Bren", role: "Team Lead", birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "👑", avatar: "" },
+                            { id: "Chua", fullName: "Chua", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "🃏", avatar: "" },
+                            { id: "Tanya", fullName: "Tanya", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "🏀", avatar: "" },
+                            { id: "Vince", fullName: "Vince", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "💎", avatar: "" },
+                            { id: "Ruth", fullName: "Ruth", role: "Developer", birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "📖", avatar: "" }
+                        ];
+                    }
                     localStorage.setItem(DB_KEY, JSON.stringify(appDB));
                 }
                 document.getElementById('syncStatus').innerText = "🟢 Online";
@@ -386,13 +440,16 @@
         if (ENABLE_CLOUD_SYNC && JSONBIN_BIN_ID && JSONBIN_MASTER_KEY && isAdmin()) {
             document.getElementById('syncStatus').innerText = "⏳ Saving...";
             try {
-                await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
                     method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_MASTER_KEY }, body: JSON.stringify(appDB)
                 });
+                if (!response.ok) throw new Error("JSONBin rejected the payload.");
                 document.getElementById('syncStatus').innerText = "🟢 Saved to Cloud";
                 localStorage.setItem(DB_KEY, JSON.stringify(appDB)); 
             } catch(e) { 
-                console.error("Save error", e); document.getElementById('syncStatus').innerText = "🔴 Save Failed"; 
+                console.error("Save error", e); 
+                document.getElementById('syncStatus').innerText = "🔴 Save Failed"; 
+                alert("⚠️ CLOUD SAVE FAILED!\nThe database or gallery might be too large for JSONBin. Keep file uploads very small or use Web Links.");
                 localStorage.setItem(DB_KEY, JSON.stringify(appDB)); 
             }
         } else {
@@ -433,7 +490,8 @@
             currentUser = users[session]; 
             document.getElementById("login").style.display = "none";
             document.getElementById("app").style.display = "flex";
-            if (window.innerWidth <= 992) document.getElementById('sidebar').classList.add('collapsed');
+            
+            if (window.innerWidth <= 768) document.getElementById('sidebar').classList.add('collapsed');
 
             if (isAdmin()) document.getElementById('manualSyncBtn').style.display = "inline-block";
 
@@ -468,9 +526,11 @@
         `).join('');
     }
 
+    let lastWidth = window.innerWidth;
     window.addEventListener('resize', () => {
-        if(currentUser) {
-            if (window.innerWidth <= 992) document.getElementById('sidebar').classList.add('collapsed');
+        if(currentUser && window.innerWidth !== lastWidth) {
+            lastWidth = window.innerWidth;
+            if (window.innerWidth <= 768) document.getElementById('sidebar').classList.add('collapsed');
             else document.getElementById('sidebar').classList.remove('collapsed');
         }
     });
@@ -481,9 +541,11 @@
         if (m !== 'Gallery') currentGalleryFolder = null;
         if (m !== 'Timeline') editingTimelineId = null;
         if (m !== 'Team') editingMemberId = null;
+        if (m !== 'Resources') editingResourceId = null;
 
         if(!silent) renderNav();
-        if(!silent && window.innerWidth <= 992) document.getElementById('sidebar').classList.add('collapsed');
+        
+        if(!silent && window.innerWidth <= 768) document.getElementById('sidebar').classList.add('collapsed');
         
         const c = document.getElementById("contentArea");
         switch(m) {
@@ -536,6 +598,13 @@
 
             html += `
                 <div class="glass card" style="padding: 15px; border-top: 3px solid ${mColor}; text-align: center;">
+                    <div class="avatar-container">
+                        ${m.avatar 
+                            ? `<img src="${m.avatar}" class="avatar-img" style="border-color:${mColor};">` 
+                            : `<div class="native-avatar" style="width:60px; height:60px; background:${mColor}; margin: 0 auto;">${userSVG}</div>`
+                        }
+                        ${m.sticker ? `<div class="avatar-sticker">${m.sticker}</div>` : ''}
+                    </div>
                     <div style="font-weight: bold; color: ${mColor}; font-size: 16px;">${m.fullName}</div>
                     <div style="font-size: 10px; color: #aaa; margin-bottom: 10px;">${m.role}</div>
                     
@@ -562,11 +631,22 @@
             <div class="glass admin-panel" id="teamAdminPanel" style="${editingMemberId ? 'display:block;' : 'display:none;'}">
                 <h4 style="margin-top:0; color:var(--accent)">Admin: Edit Member Profile</h4>
                 <div class="flex-row" style="margin-bottom: 10px;">
-                    <input id="tmFullName" placeholder="Full Name" style="flex:2;">
-                    <input id="tmRole" placeholder="Role (e.g. Lead Dev)" style="flex:2;">
+                    <input id="tmFullName" placeholder="Full Name" style="flex:1.5;">
+                    <input id="tmRole" placeholder="Role (e.g. Lead Dev)" style="flex:1.5;">
                     <div style="flex:1; display:flex; flex-direction:column;">
                         <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Birthday</label>
                         <input id="tmBirthday" type="date" style="margin:0;">
+                    </div>
+                    <input id="tmSticker" placeholder="Sticker/Emoji (e.g. 👑)" style="flex:1; font-size: 20px;">
+                </div>
+                <div class="flex-row" style="margin-bottom: 10px;">
+                    <div style="flex:1; display:flex; flex-direction:column;">
+                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Upload Profile Picture</label>
+                        <input id="tmAvatarFile" type="file" accept="image/*" style="margin:0; padding:9px;">
+                    </div>
+                    <div style="flex:1; display:flex; flex-direction:column;">
+                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Or Paste Image URL</label>
+                        <input id="tmAvatar" placeholder="Avatar URL (Optional)" style="margin:0;">
                     </div>
                 </div>
                 <div class="flex-row">
@@ -589,9 +669,14 @@
                 <div class="glass card" style="padding: 20px; border-top: 4px solid ${mColor}; text-align: center; position:relative;">
                     ${isAdmin() ? `<button class="icon-btn" style="position:absolute; top:10px; right:10px; font-size:10px; background:rgba(255,255,255,0.1);" onclick="editMemberProfile('${m.id}')">Edit</button>` : ''}
                     
-                    <div style="width:60px; height:60px; border-radius:30px; background:${mColor}; color:#fff; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:bold; margin: 0 auto 15px auto;">
-                        ${m.fullName.charAt(0).toUpperCase()}
+                    <div class="avatar-container" style="margin-bottom:15px;">
+                        ${m.avatar 
+                            ? `<img src="${m.avatar}" class="avatar-img" style="width:80px; height:80px; border-color:${mColor};">` 
+                            : `<div class="native-avatar" style="width:80px; height:80px; background:${mColor};">${userSVG}</div>`
+                        }
+                        ${m.sticker ? `<div class="avatar-sticker">${m.sticker}</div>` : ''}
                     </div>
+                    
                     <div style="font-weight: bold; font-size: 18px; margin-bottom: 5px;">${m.fullName}</div>
                     <div style="font-size: 12px; color: var(--secondary); margin-bottom: 10px;">${m.role}</div>
                     ${m.birthday ? `<div style="font-size: 11px; color: #aaa;">🎂 ${m.birthday}</div>` : `<div style="font-size: 11px; color: #666;">No birthday set</div>`}
@@ -619,6 +704,9 @@
             document.getElementById('tmFullName').value = m.fullName || '';
             document.getElementById('tmRole').value = m.role || '';
             document.getElementById('tmBirthday').value = m.birthday || '';
+            document.getElementById('tmSticker').value = m.sticker || '';
+            document.getElementById('tmAvatar').value = m.avatar || '';
+            document.getElementById('tmAvatarFile').value = ''; 
             document.getElementById('tmMessenger').value = m.messenger || '';
             document.getElementById('tmGithub').value = m.github || '';
             document.getElementById('tmGmail').value = m.gmail || '';
@@ -627,25 +715,59 @@
         }, 50);
     }
     window.cancelEditMember = function() { editingMemberId = null; loadModule('Team'); }
-    window.saveMemberProfile = function() {
+    
+    window.saveMemberProfile = async function() {
         const fullName = document.getElementById('tmFullName').value;
         const role = document.getElementById('tmRole').value;
         const birthday = document.getElementById('tmBirthday').value;
+        const sticker = document.getElementById('tmSticker').value;
         const messenger = document.getElementById('tmMessenger').value;
         const github = document.getElementById('tmGithub').value;
         const gmail = document.getElementById('tmGmail').value;
         const phone = document.getElementById('tmPhone').value;
         
+        let avatar = document.getElementById('tmAvatar').value; 
+        const fileInput = document.getElementById('tmAvatarFile');
+
         if(!fullName || !role) return alert("Name and Role are required.");
+        
+        document.getElementById('syncStatus').innerText = "⏳ Saving Profile...";
+
+        if(fileInput && fileInput.files.length > 0) {
+            try {
+                const file = fileInput.files[0];
+                const formData = new FormData();
+                formData.append("file", file);
+                formData.append("upload_preset", "dadevs_preset");
+                
+                const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, { 
+                    method: "POST", body: formData 
+                });
+                
+                const data = await response.json();
+                if (!data.secure_url) throw new Error(data.error?.message || "Cloudinary API Rejected");
+                
+                avatar = data.secure_url; 
+            } catch(e) {
+                alert("Avatar Upload Failed: " + e.message);
+                document.getElementById('syncStatus').innerText = "🔴 Failed";
+                return; 
+            }
+        }
         
         let members = getDB('members');
         const idx = members.findIndex(x => x.id === editingMemberId);
         if (idx > -1) {
-            members[idx] = { ...members[idx], fullName, role, birthday, messenger, github, gmail, phone };
+            if (!avatar && fileInput.files.length === 0 && !document.getElementById('tmAvatar').value) {
+                avatar = members[idx].avatar; 
+            }
+            
+            members[idx] = { ...members[idx], fullName, role, birthday, sticker, messenger, github, gmail, phone, avatar };
             setDB('members', members);
         }
         editingMemberId = null;
         loadModule('Team');
+        document.getElementById('syncStatus').innerText = "🟢 Sync Complete";
     }
 
     // --- MODULE: CALENDAR ---
@@ -907,6 +1029,14 @@
     window.deleteFund = function(id) { setDB('funds', getDB('funds').filter(f => f.id !== id)); loadModule('Funds'); }
 
     // --- MODULE: TIMELINE ---
+    window.togglePhase = function(phaseName, elementId) {
+        collapsedPhases[phaseName] = !collapsedPhases[phaseName];
+        const el = document.getElementById(elementId);
+        if (el) {
+            el.style.display = collapsedPhases[phaseName] ? 'none' : 'table-row-group';
+        }
+    }
+
     function renderTimeline(container) {
         const timeline = getDB('timeline'); 
         const members = getDB('members');
@@ -969,9 +1099,12 @@
             phases.forEach((phaseName, pIdx) => {
                 const phaseTasks = timeline.filter(t => (t.phase || 'Unphased') === phaseName);
                 
+                const isCollapsed = collapsedPhases[phaseName] || false;
+                const displayState = isCollapsed ? 'none' : 'table-row-group';
+                
                 html += `
                 <div class="phase-container" style="margin-bottom: 15px;">
-                    <div class="phase-header" onclick="document.getElementById('phase_${pIdx}').style.display = document.getElementById('phase_${pIdx}').style.display === 'none' ? 'table-row-group' : 'none';">
+                    <div class="phase-header" onclick="togglePhase('${phaseName.replace(/'/g, "\\'")}', 'phase_${pIdx}')">
                         <span>📋 ${phaseName} (${phaseTasks.length} Tasks)</span>
                         <span style="font-size: 10px;">▼ Expand / Collapse</span>
                     </div>
@@ -989,7 +1122,7 @@
                                 ${isAdmin() ? '<th style="width: 120px;">Actions</th>' : ''}
                             </tr>
                         </thead>
-                        <tbody id="phase_${pIdx}">
+                        <tbody id="phase_${pIdx}" style="display: ${displayState};">
                 `;
 
                 phaseTasks.forEach(t => {
@@ -1008,7 +1141,20 @@
                     const owner = t.owner || 'Team';
                     const oColor = memberColors[owner] || 'var(--secondary)';
                     
-                    const ownerName = members.find(m=>m.id===owner)?.fullName || owner;
+                    const ownerObj = members.find(m=>m.id===owner);
+                    const ownerName = ownerObj?.fullName || owner;
+                    
+                    let avatarHTML = '';
+                    if(ownerObj && ownerObj.avatar) {
+                        avatarHTML = `<img src="${ownerObj.avatar}" class="avatar-mini">`;
+                    } else {
+                        avatarHTML = `<div class="native-avatar avatar-mini" style="background:${oColor};">${userSVGMini}</div>`;
+                    }
+                    
+                    let stickerHTML = '';
+                    if(ownerObj && ownerObj.sticker) {
+                        stickerHTML = `<span style="font-size:12px;">${ownerObj.sticker}</span>`;
+                    }
 
                     let barColor = "linear-gradient(90deg, var(--primary), var(--secondary))"; 
                     if (isDone) barColor = isLate ? "linear-gradient(90deg, #ef4444, #b91c1c)" : "linear-gradient(90deg, #10b981, #059669)";
@@ -1017,7 +1163,7 @@
                         <tr>
                             <td style="color:var(--accent); font-weight:bold;">${t.taskId}</td>
                             <td style="font-weight:500;">${t.title}</td>
-                            <td><span style="background:rgba(255,255,255,0.1); padding:3px 8px; border-radius:10px; font-size:11px; border-left: 3px solid ${oColor};">${ownerName}</span></td>
+                            <td><span style="background:rgba(255,255,255,0.1); padding:3px 8px; border-radius:12px; font-size:11px; border: 1px solid ${oColor}; display:inline-flex; align-items:center; gap:5px;">${avatarHTML} ${stickerHTML} ${ownerName}</span></td>
                             <td style="color:#aaa;">${t.start.substring(5)}</td>
                             <td style="color:var(--secondary);">${t.scheduled.substring(5)}</td>
                             <td style="color:${isDone ? (isLate ? '#ef4444' : '#10b981') : '#666'};">${t.end ? t.end.substring(5) : '---'}</td>
@@ -1055,7 +1201,13 @@
             
             html += `
                 <div class="glass card" style="padding: 15px; border-top: 3px solid ${mColor};">
-                    <div style="font-weight: bold; color: ${mColor}; margin-bottom: 10px; border-bottom: 1px solid var(--glass-border); padding-bottom: 5px;">${m.fullName}</div>
+                    <div style="font-weight: bold; color: ${mColor}; margin-bottom: 10px; border-bottom: 1px solid var(--glass-border); padding-bottom: 5px; display:flex; align-items:center; gap:8px;">
+                        <div style="position:relative;">
+                            ${m.avatar ? `<img src="${m.avatar}" class="avatar-mini">` : `<div class="native-avatar avatar-mini" style="background:${mColor};">${userSVGMini}</div>`}
+                            ${m.sticker ? `<div class="avatar-sticker-mini">${m.sticker}</div>` : ''}
+                        </div>
+                        ${m.fullName}
+                    </div>
                     <div style="display:flex; flex-direction:column; gap:8px; max-height: 250px; overflow-y: auto; padding-right: 5px;">
             `;
             if (mTasks.length === 0) {
@@ -1196,6 +1348,16 @@
                                 <div style="font-size: 12px; color: #ddd; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px;">
                                     <strong>Del:</strong> ${s.deliverables}
                                 </div>
+                                ${isAdmin() ? `
+                                <div style="margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                                    <select onchange="moveSprint(${s.id}, this.value)" class="mobile-move-select">
+                                        <option value="" disabled selected>Tap here to move Sprint...</option>
+                                        <option value="To Do">Send to: To Do</option>
+                                        <option value="In Progress">Send to: In Progress</option>
+                                        <option value="Review">Send to: Review</option>
+                                        <option value="Done">Send to: Done</option>
+                                    </select>
+                                </div>` : ''}
                             </div>
                         `).join('')}
                     </div>
@@ -1219,10 +1381,16 @@
         setDB('sprints', sprints); loadModule('Sprint Board');
     }
     window.deleteSprintContainer = function(id) { setDB('sprints', getDB('sprints').filter(s => s.id !== id)); loadModule('Sprint Board'); }
+
     window.allowDrop = function(ev) { if(isAdmin()) ev.preventDefault(); }
     window.dragSprint = function(ev, id) { if(isAdmin()) ev.dataTransfer.setData("sprintId", id); }
     window.dropSprint = function(ev, newStatus) {
         if(!isAdmin()) return; ev.preventDefault(); const id = parseInt(ev.dataTransfer.getData("sprintId"));
+        let sprints = getDB('sprints'); const sIdx = sprints.findIndex(s => s.id === id);
+        if (sIdx > -1) { sprints[sIdx].status = newStatus; setDB('sprints', sprints); loadModule('Sprint Board'); }
+    }
+    window.moveSprint = function(id, newStatus) {
+        if(!isAdmin() || !newStatus) return;
         let sprints = getDB('sprints'); const sIdx = sprints.findIndex(s => s.id === id);
         if (sIdx > -1) { sprints[sIdx].status = newStatus; setDB('sprints', sprints); loadModule('Sprint Board'); }
     }
@@ -1237,8 +1405,8 @@
 
         if (isAdmin()) {
             html += `
-            <div class="glass admin-panel">
-                <h4 style="margin-top:0; color:var(--accent)">Admin: Add Resource</h4>
+            <div class="glass admin-panel" id="resAdminPanel">
+                <h4 style="margin-top:0; color:var(--accent)" id="resFormTitle">Admin: Add Resource</h4>
                 <div class="flex-row" style="margin-bottom:10px;">
                     <input id="resTitle" placeholder="Resource Title" style="flex:2;">
                     <select id="resType" style="flex:1;" onchange="
@@ -1256,7 +1424,8 @@
                 </div>
                 <div class="flex-row">
                     <input id="resTags" placeholder="Tags (Comma separated, e.g. Survey, Docs)" style="flex:3; margin:0;">
-                    <button onclick="addResource()" style="flex:1; margin:0;">Add</button>
+                    <button id="resSubmitBtn" onclick="addResource()" style="flex:1; margin:0;">Add Resource</button>
+                    <button id="resCancelBtn" onclick="cancelEditResource()" style="flex:0.5; margin:0; display:none; background:rgba(255,255,255,0.1);">Cancel</button>
                 </div>
                 <div style="display:flex; gap:5px; margin-top:10px; flex-wrap:wrap;">
                     <span style="font-size:10px; color:#aaa; margin-right:5px; line-height:20px;">Quick Tags:</span>
@@ -1272,7 +1441,7 @@
         html += `
         <div class="glass card">
             <div style="display:flex; gap:10px; margin-bottom: 15px;">
-                <input class="res-search" placeholder="🔍 Search resources by title or description..." value="${resSearchTerm}" onkeyup="setResSearch(this.value)">
+                <input class="res-search" placeholder="🔍 Search resources by title or description..." value="${resSearchTerm}" onkeyup="setResSearch(this.value)" id="resSearchInput">
             </div>
             <div style="display:flex; gap:5px; margin-bottom: 20px; flex-wrap:wrap;">
                 <div class="tag-chip ${resActiveTag === null ? 'active' : ''}" onclick="setResTag(null)">All</div>
@@ -1309,15 +1478,26 @@
                                 ? `<button onclick="downloadFile('${r.url}', '${r.fileName || 'resource'}')" style="width:auto; padding:8px 15px; margin:0;">Download</button>`
                                 : `<button onclick="window.open('${r.url}', '_blank')" style="width:auto; padding:8px 15px; margin:0;">Open</button>`
                             }
-                            ${isAdmin() ? `<button class="danger" onclick="deleteResource(${r.id})" style="width:auto; padding:8px 15px; margin:0;">Drop</button>` : ''}
+                            ${isAdmin() ? `
+                                <button class="icon-btn" style="background:rgba(34,211,238,0.2); color:var(--secondary); padding: 8px 15px; border-radius:8px; font-size:12px;" onclick="editResource(${r.id})">Edit</button>
+                                <button class="danger" onclick="deleteResource(${r.id})" style="width:auto; padding:8px 15px; margin:0;">Drop</button>
+                            ` : ''}
                         </div>
                     </div>`;
             });
         }
         html += `</div></div>`; container.innerHTML = html;
+        
+        if(resSearchTerm !== '') {
+            const el = document.getElementById('resSearchInput');
+            if(el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
+        }
     }
     
-    window.setResSearch = (val) => { resSearchTerm = val.toLowerCase(); loadModule('Resources', true); }
+    window.setResSearch = (val) => { 
+        resSearchTerm = val.toLowerCase(); 
+        renderResources(document.getElementById('contentArea')); 
+    }
     window.setResTag = (tag) => { resActiveTag = resActiveTag === tag ? null : tag; loadModule('Resources', true); }
     window.appendResTag = (tag) => {
         const input = document.getElementById('resTags');
@@ -1325,6 +1505,33 @@
         if(!current.includes(tag)) current.push(tag);
         input.value = current.join(', ');
     }
+
+    window.editResource = function(id) {
+        const r = getDB('resources').find(x => x.id === id);
+        if(!r) return;
+        editingResourceId = id;
+        document.getElementById('resTitle').value = r.title;
+        document.getElementById('resType').value = r.type;
+        
+        if(r.type === 'link') {
+            document.getElementById('resUrl').style.display = 'block';
+            document.getElementById('resFile').style.display = 'none';
+            document.getElementById('resUrl').value = r.url;
+        } else {
+            document.getElementById('resUrl').style.display = 'none';
+            document.getElementById('resFile').style.display = 'block';
+        }
+        
+        document.getElementById('resDesc').value = r.desc;
+        document.getElementById('resTags').value = (r.tags || []).join(', ');
+        
+        document.getElementById('resFormTitle').innerText = "Admin: Edit Resource";
+        document.getElementById('resSubmitBtn').innerText = "Update";
+        document.getElementById('resCancelBtn').style.display = "block";
+        document.getElementById('resAdminPanel').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.cancelEditResource = function() { editingResourceId = null; loadModule('Resources'); }
 
     window.addResource = async function() {
         const title = document.getElementById('resTitle').value; 
@@ -1335,25 +1542,45 @@
 
         if(!title) return alert("Title is required.");
 
+        let res = getDB('resources');
+        let existing = editingResourceId ? res.find(r => r.id === editingResourceId) : null;
+
         if (type === 'link') {
             const url = document.getElementById('resUrl').value;
             if(!url) return alert("URL is required.");
-            const res = getDB('resources'); res.push({ id: generateId(), title, type, url, desc, tags }); 
+            
+            if (existing) {
+                existing.title = title; existing.type = type; existing.url = url; existing.desc = desc; existing.tags = tags;
+            } else {
+                res.push({ id: generateId(), title, type, url, desc, tags }); 
+            }
+            editingResourceId = null;
             setDB('resources', res); loadModule('Resources');
         } else {
             const fileInput = document.getElementById('resFile');
-            if(!fileInput.files[0]) return alert("Please select a file.");
-            const file = fileInput.files[0];
-            if(file.size > 250000) return alert("File is too large! Max size is 250KB for JSON database storage.");
+            if(!fileInput.files[0] && !existing) return alert("Please select a file.");
             
-            document.getElementById('syncStatus').innerText = "⏳ Processing file...";
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const res = getDB('resources'); 
-                res.push({ id: generateId(), title, type, url: e.target.result, desc, fileName: file.name, tags }); 
+            if (fileInput.files[0]) {
+                const file = fileInput.files[0];
+                if(file.size > 250000) return alert("File is too large for database storage. Use Web Link instead.");
+                
+                document.getElementById('syncStatus').innerText = "⏳ Processing file...";
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (existing) {
+                        existing.title = title; existing.type = type; existing.url = e.target.result; existing.desc = desc; existing.fileName = file.name; existing.tags = tags;
+                    } else {
+                        res.push({ id: generateId(), title, type, url: e.target.result, desc, fileName: file.name, tags }); 
+                    }
+                    editingResourceId = null;
+                    setDB('resources', res); loadModule('Resources');
+                };
+                reader.readAsDataURL(file);
+            } else if (existing) {
+                existing.title = title; existing.type = type; existing.desc = desc; existing.tags = tags;
+                editingResourceId = null;
                 setDB('resources', res); loadModule('Resources');
-            };
-            reader.readAsDataURL(file);
+            }
         }
     }
     window.deleteResource = function(id) { setDB('resources', getDB('resources').filter(r => r.id !== id)); loadModule('Resources'); }
@@ -1368,33 +1595,61 @@
 
             html += `
             <div class="glass admin-panel">
-                <h4 style="margin-top:0; color:var(--accent)">Admin: Upload Photos</h4>
-                <datalist id="folderOptions">${dataListHtml}</datalist>
-                <div class="flex-row" style="align-items:flex-start;">
-                    <div style="flex:2;">
+                <h4 style="margin-top:0; color:var(--accent)">Admin: Add Photo to Gallery</h4>
+                
+                <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 15px;">
+                    <div style="flex:1; min-width: 250px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px dashed var(--secondary);">
+                        <h5 style="margin: 0 0 10px 0; color: var(--secondary);">Option 1: Cloudinary Upload</h5>
                         <input id="galFile" type="file" multiple accept="image/*" style="margin:0; padding:9px;">
-                        <div style="font-size: 10px; color: #ffaa00; margin-top: 5px;">* Select multiple images. Auto-compressed for cloud sync.</div>
+                        <div style="font-size: 10px; color: #ffaa00; margin-top: 5px;">Uploads natively via Cloudinary API. Supports phone images cleanly.</div>
                     </div>
-                    <input id="galFolder" placeholder="Folder Name" list="folderOptions" style="flex:1; margin:0;" value="${currentGalleryFolder || ''}">
+                    
+                    <div style="flex:1; min-width: 250px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px dashed #10b981;">
+                        <h5 style="margin: 0 0 10px 0; color: #10b981;">Option 2: Paste URL (Fallback)</h5>
+                        <input id="galUrl" placeholder="Paste Image Link (e.g. Imgur, Drive)" style="margin:0;">
+                        <div style="font-size: 10px; color: #aaa; margin-top: 5px;">If file uploads ever block your device, paste a public image link here.</div>
+                    </div>
+                </div>
+
+                <datalist id="folderOptions">${dataListHtml}</datalist>
+                <div class="flex-row">
+                    <input id="galFolder" placeholder="Folder Name" list="folderOptions" style="flex:1; margin:0;" value="${currentGalleryFolder && currentGalleryFolder !== 'ALL_PHOTOS' ? currentGalleryFolder : ''}">
                     <input id="galCap" placeholder="Caption (Optional)" style="flex:1; margin:0;">
-                    <button onclick="addPhoto()" style="flex:1; margin:0;">Upload</button>
+                    <button onclick="addPhoto()" style="flex:1; margin:0;">Add to Gallery</button>
                 </div>
             </div>`;
         }
 
         if (currentGalleryFolder === null) {
             const folders = {};
+            let totalImages = 0;
+            let latestImg = null;
+            
             gal.forEach(g => {
                 const fName = g.folder || 'Uncategorized';
                 if(!folders[fName]) folders[fName] = { count: 0, cover: g.url };
                 folders[fName].count++;
+                totalImages++;
+                if(!latestImg) latestImg = g.url; // Use the first found image as the cover for All Photos
             });
             
             const folderNames = Object.keys(folders);
-            if (folderNames.length === 0) {
+            if (totalImages === 0) {
                 html += `<div><p style="color:#aaa;">No folders or images yet.</p></div>`;
             } else {
                 html += `<div class="gallery-grid">`;
+                
+                // ALL PHOTOS VIRTUAL FOLDER
+                html += `
+                <div class="gallery-item" style="cursor:pointer; border-color: var(--secondary);" onclick="window.openGalleryFolder('ALL_PHOTOS')">
+                    <img src="${latestImg}" alt="All Photos Cover" style="opacity: 0.4;">
+                    <div class="folder-overlay" style="background: rgba(34, 211, 238, 0.2);">
+                        <div style="font-size: 40px; margin-bottom: 10px;">🖼️</div>
+                        <div style="font-weight: bold; font-size: 16px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); text-align:center; padding: 0 10px;">All Photos</div>
+                        <div style="font-size: 12px; color: #fff; font-weight: bold; margin-top: 5px;">${totalImages} Items</div>
+                    </div>
+                </div>`;
+                
                 folderNames.forEach(fName => {
                     html += `
                     <div class="gallery-item" style="cursor:pointer;" onclick="window.openGalleryFolder('${fName}')">
@@ -1409,15 +1664,18 @@
                 html += `</div>`;
             }
         } else {
+            const isAll = currentGalleryFolder === 'ALL_PHOTOS';
+            const displayTitle = isAll ? '🖼️ All Photos' : `📁 ${currentGalleryFolder}`;
+            
             html += `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--glass-border);">
                 <h3 style="margin:0; display:flex; align-items:center; gap: 10px;">
-                    <span style="font-size:24px;">📁</span> ${currentGalleryFolder}
+                    <span style="font-size:24px;">${displayTitle}</span>
                 </h3>
                 <button class="icon-btn" onclick="window.closeGalleryFolder()" style="background: rgba(255,255,255,0.15);">🔙 Back to Folders</button>
             </div>`;
             
-            const folderItems = gal.filter(g => (g.folder || 'Uncategorized') === currentGalleryFolder);
+            const folderItems = isAll ? gal : gal.filter(g => (g.folder || 'Uncategorized') === currentGalleryFolder);
             
             if (folderItems.length === 0) {
                 html += `<p style="color:#aaa;">Folder is empty.</p>`;
@@ -1426,9 +1684,9 @@
                 folderItems.forEach(g => {
                     html += `
                     <div class="gallery-item">
-                        <img src="${g.url}" alt="${g.caption}" onerror="this.src='https://via.placeholder.com/300x300?text=Invalid+Image'">
+                        <img src="${g.url}" alt="${g.caption}" onerror="this.src='https://via.placeholder.com/300x300/1E293B/ef4444?text=Broken+Link'">
                         <div class="gallery-caption">
-                            <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${g.caption}</div>
+                            <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${g.caption} ${isAll ? ` <span style="color:#aaa; font-size:9px;">(${g.folder||'Uncategorized'})</span>` : ''}</div>
                             ${isAdmin() ? `<button class="danger" style="padding: 4px; font-size: 10px; margin:0;" onclick="deletePhoto(${g.id})">Delete</button>` : ''}
                         </div>
                     </div>`;
@@ -1444,23 +1702,55 @@
     
     window.addPhoto = async function() {
         const fileInput = document.getElementById('galFile');
-        const files = fileInput.files;
+        const urlInput = document.getElementById('galUrl');
         const caption = document.getElementById('galCap').value || 'Untitled';
         const folder = document.getElementById('galFolder').value.trim() || 'Uncategorized';
         
-        if(files.length === 0) return alert("Please select at least one image.");
-        document.getElementById('syncStatus').innerText = "⏳ Compressing & Uploading...";
-        
         const gal = getDB('gallery');
-        
-        for(let i=0; i < files.length; i++) {
-            const base64 = await compressImage(files[i]);
-            let finalCaption = files.length > 1 ? `${caption} (${i+1})` : caption;
-            gal.push({ id: generateId(), url: base64, caption: finalCaption, folder: folder });
+
+        // Mode 1: URL Upload
+        if (urlInput && urlInput.value.trim() !== '') {
+            gal.push({ id: generateId(), url: urlInput.value.trim(), caption: caption, folder: folder });
+            currentGalleryFolder = folder;
+            setDB('gallery', gal); 
+            loadModule('Gallery');
+            return;
         }
-        
-        currentGalleryFolder = folder;
-        setDB('gallery', gal); loadModule('Gallery');
+
+        // Mode 2: Direct File Upload to Cloudinary
+        if(fileInput && fileInput.files.length > 0) {
+            try {
+                for(let i=0; i < fileInput.files.length; i++) {
+                    const file = fileInput.files[i];
+                    document.getElementById('syncStatus').innerText = `⏳ Uploading to Cloudinary...`;
+                    
+                    const formData = new FormData();
+                    formData.append("file", file);
+                    formData.append("upload_preset", "dadevs_preset");
+                    
+                    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, { 
+                        method: "POST", body: formData 
+                    });
+                    
+                    const data = await response.json();
+                    if (!data.secure_url) throw new Error(data.error?.message || "Cloudinary API Rejected");
+                    
+                    let finalCaption = fileInput.files.length > 1 ? `${caption} (${i+1})` : caption;
+                    gal.push({ id: generateId(), url: data.secure_url, caption: finalCaption, folder: folder });
+                }
+                
+                currentGalleryFolder = folder;
+                setDB('gallery', gal); 
+                loadModule('Gallery');
+                document.getElementById('syncStatus').innerText = "🟢 Sync Complete";
+            } catch(e) {
+                alert("Cloudinary Upload Failed. Please check if 'dadevs_preset' is set to Unsigned.\n\nFallback: Upload the photo to Discord or Drive and paste the link in Option 2.");
+                document.getElementById('syncStatus').innerText = "🔴 Failed";
+            }
+            return;
+        }
+
+        alert("Please either select a file OR paste an image link.");
     }
     
     window.deletePhoto = function(id) { 
@@ -1468,7 +1758,12 @@
         const photo = gal.find(g => g.id === id);
         const targetFolder = photo ? (photo.folder || 'Uncategorized') : null;
         gal = gal.filter(g => g.id !== id);
-        if (targetFolder && !gal.some(g => (g.folder || 'Uncategorized') === targetFolder)) currentGalleryFolder = null; 
+        
+        // If we are looking at a specific folder and it's now empty, go back to root. All Photos stays open.
+        if (targetFolder && currentGalleryFolder !== 'ALL_PHOTOS' && !gal.some(g => (g.folder || 'Uncategorized') === targetFolder)) {
+            currentGalleryFolder = null; 
+        }
+        
         setDB('gallery', gal); loadModule('Gallery', true); 
     }
 
