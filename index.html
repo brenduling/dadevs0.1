@@ -124,12 +124,16 @@
         .contact-link:hover { background: var(--secondary); color: #000; transform: translateY(-3px); border-color: var(--secondary); box-shadow: 0 4px 10px rgba(34,211,238,0.4); }
         
         /* Native Avatar Circles */
-        .avatar-container { position: relative; display: inline-block; margin: 0 auto 10px auto; }
-        .native-avatar { border-radius: 50%; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 3px solid var(--glass-border); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .avatar-container { position: relative; display: inline-flex; justify-content: center; align-items: center; flex-shrink: 0; }
+        .native-avatar { border-radius: 50%; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 3px solid var(--glass-border); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.5); flex-shrink: 0; }
         .native-avatar svg { fill: currentColor; }
-        .avatar-img { width: 100%; height: 100%; object-fit: cover; }
-        .avatar-sticker { position: absolute; bottom: -5px; right: -5px; font-size: 24px; background: var(--bg-1); border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; border: 2px solid var(--glass-border); box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-        .avatar-sticker-mini { position: absolute; bottom: -2px; right: -2px; font-size: 10px; background: var(--bg-1); border-radius: 50%; width: 14px; height: 14px; display: flex; justify-content: center; align-items: center; border: 1px solid var(--glass-border); }
+        .avatar-img { border-radius: 50%; object-fit: cover; border: 3px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0,0,0,0.5); flex-shrink: 0; width: 100%; height: 100%; }
+        .avatar-sticker { position: absolute; bottom: -5px; right: -5px; font-size: 20px; background: var(--bg-1); border-radius: 50%; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border: 2px solid var(--glass-border); box-shadow: 0 2px 5px rgba(0,0,0,0.5); z-index: 2; }
+        
+        /* Mobile-Safe Mini Avatars */
+        .avatar-mini-wrapper { position: relative; width: 24px; height: 24px; min-width: 24px; min-height: 24px; max-width: 24px; max-height: 24px; flex-shrink: 0; display: inline-block; }
+        .avatar-mini { width: 24px !important; height: 24px !important; min-width: 24px !important; min-height: 24px !important; max-width: 24px !important; max-height: 24px !important; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); flex-shrink: 0; display: inline-flex; justify-content: center; align-items: center; margin: 0; padding: 0;}
+        .avatar-sticker-mini { position: absolute; bottom: -4px; right: -4px; font-size: 10px; background: var(--bg-1); border-radius: 50%; width: 14px; height: 14px; display: flex; justify-content: center; align-items: center; border: 1px solid var(--glass-border); z-index: 2; }
 
         .sprint-accordion { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
         .sprint-header { padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: rgba(34, 211, 238, 0.05); transition: 0.2s; }
@@ -142,7 +146,7 @@
         .task-card { background: var(--glass-bg); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--glass-border); transition: 0.2s; cursor: grab; position: relative;}
         .task-card:hover { border-color: var(--secondary); transform: translateY(-2px); }
         .delete-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ef4444; cursor: pointer; padding: 0; width: auto; font-size: 12px; }
-        .mobile-move-select { width: 100%; padding: 8px; font-weight:bold; font-size: 12px; background: var(--primary); border: 1px solid var(--secondary); color: #fff; border-radius: 6px; outline: none; margin-top: 12px; cursor: pointer; box-shadow: 0 0 8px rgba(34,211,238,0.2);}
+        .mobile-move-select { width: 100%; padding: 6px; font-size: 11px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: #fff; border-radius: 4px; outline: none; margin-top: 10px; cursor: pointer;}
         
         .admin-panel { padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
         .admin-panel .flex-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
@@ -263,6 +267,8 @@
         <input id="pass" type="password" placeholder="Password">
         <button onclick="login()">INITIALIZE SESSION</button>
         <p id="err" style="color:#ef4444;display:none;margin-top:15px;font-size:0.9em">Authentication Failed</p>
+        
+        <div style="margin-top: 25px; font-size: 11px; color: #475569; font-weight: 500; letter-spacing: 0.5px;">powered by brenduling</div>
     </div>
 
     <div id="app">
@@ -306,7 +312,7 @@
     // ==========================================
     // AUTO-UPDATE SYSTEM (FOR VERCEL PWA)
     // ==========================================
-    const APP_VERSION = "v34"; // <-- CHANGE THIS NUMBER EVERY TIME YOU DEPLOY TO VERCEL!
+    const APP_VERSION = "v37"; // Version bump + powered by credit
 
     window.addEventListener('load', () => {
         // Silently fetch the raw HTML from Vercel to check if the code has been updated
@@ -386,8 +392,8 @@
     let resActiveTag = null;
     let collapsedPhases = {}; 
 
-    // Database Initialization
-    const DB_KEY = 'dadevs_db_v34';
+    // DB Init
+    const DB_KEY = 'dadevs_db_v37';
     let appDB = { 
         tasks: [], funds: [], calendar: [], timeline: [], resources: [], gallery: [], sprints: [],
         members: [
@@ -400,8 +406,8 @@
     };
 
     async function initDB(manualSync = false) {
-        if (localStorage.getItem('dd_version') !== 'v34') {
-            localStorage.removeItem('dadevs_db_v33'); localStorage.setItem('dd_version', 'v34');
+        if (localStorage.getItem('dd_version') !== 'v37') {
+            localStorage.removeItem('dadevs_db_v36'); localStorage.setItem('dd_version', 'v37');
         }
         if (ENABLE_CLOUD_SYNC && JSONBIN_BIN_ID && JSONBIN_MASTER_KEY) {
             document.getElementById('syncStatus').innerText = manualSync ? "☁️ Manual Syncing..." : "☁️ Syncing...";
@@ -504,6 +510,7 @@
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                     <span class="logout-btn-text">Logout</span>
                 </button>
+                <div class="user-info" style="font-size: 10px; color: #475569; text-align: center; margin-top: 15px; font-weight: 500;">powered by brenduling</div>
             `;
             document.getElementById("sidebarFooter").innerHTML = footerHTML;
             
@@ -600,12 +607,12 @@
                 <div class="glass card" style="padding: 15px; border-top: 3px solid ${mColor}; text-align: center;">
                     <div class="avatar-container">
                         ${m.avatar 
-                            ? `<img src="${m.avatar}" class="avatar-img" style="border-color:${mColor};">` 
-                            : `<div class="native-avatar" style="width:60px; height:60px; background:${mColor}; margin: 0 auto;">${userSVG}</div>`
+                            ? `<img src="${m.avatar}" class="avatar-img" style="border-color:${mColor}; width:60px; height:60px;">` 
+                            : `<div class="native-avatar" style="width:60px; height:60px; background:${mColor};">${userSVG}</div>`
                         }
                         ${m.sticker ? `<div class="avatar-sticker">${m.sticker}</div>` : ''}
                     </div>
-                    <div style="font-weight: bold; color: ${mColor}; font-size: 16px;">${m.fullName}</div>
+                    <div style="font-weight: bold; color: ${mColor}; font-size: 16px; margin-top:5px;">${m.fullName}</div>
                     <div style="font-size: 10px; color: #aaa; margin-bottom: 10px;">${m.role}</div>
                     
                     <div style="font-size: 12px; color: #aaa; margin-bottom: 2px;">Contributions</div>
@@ -1142,18 +1149,18 @@
                     const oColor = memberColors[owner] || 'var(--secondary)';
                     
                     const ownerObj = members.find(m=>m.id===owner);
-                    const ownerName = ownerObj?.fullName || owner;
+                    const ownerName = ownerObj?.id || owner; // Owner Short ID
                     
                     let avatarHTML = '';
                     if(ownerObj && ownerObj.avatar) {
                         avatarHTML = `<img src="${ownerObj.avatar}" class="avatar-mini">`;
                     } else {
-                        avatarHTML = `<div class="native-avatar avatar-mini" style="background:${oColor};">${userSVGMini}</div>`;
+                        avatarHTML = `<div class="native-avatar avatar-mini" style="background:${oColor}; border:none;">${userSVGMini}</div>`;
                     }
                     
                     let stickerHTML = '';
                     if(ownerObj && ownerObj.sticker) {
-                        stickerHTML = `<span style="font-size:12px;">${ownerObj.sticker}</span>`;
+                        stickerHTML = `<div class="avatar-sticker-mini">${ownerObj.sticker}</div>`;
                     }
 
                     let barColor = "linear-gradient(90deg, var(--primary), var(--secondary))"; 
@@ -1163,7 +1170,15 @@
                         <tr>
                             <td style="color:var(--accent); font-weight:bold;">${t.taskId}</td>
                             <td style="font-weight:500;">${t.title}</td>
-                            <td><span style="background:rgba(255,255,255,0.1); padding:3px 8px; border-radius:12px; font-size:11px; border: 1px solid ${oColor}; display:inline-flex; align-items:center; gap:5px;">${avatarHTML} ${stickerHTML} ${ownerName}</span></td>
+                            <td>
+                                <span style="background:rgba(255,255,255,0.1); padding:3px 8px; border-radius:12px; font-size:11px; border: 1px solid ${oColor}; display:inline-flex; align-items:center; gap:5px;">
+                                    <div class="avatar-mini-wrapper">
+                                        ${avatarHTML}
+                                        ${stickerHTML}
+                                    </div>
+                                    ${ownerName}
+                                </span>
+                            </td>
                             <td style="color:#aaa;">${t.start.substring(5)}</td>
                             <td style="color:var(--secondary);">${t.scheduled.substring(5)}</td>
                             <td style="color:${isDone ? (isLate ? '#ef4444' : '#10b981') : '#666'};">${t.end ? t.end.substring(5) : '---'}</td>
@@ -1202,11 +1217,11 @@
             html += `
                 <div class="glass card" style="padding: 15px; border-top: 3px solid ${mColor};">
                     <div style="font-weight: bold; color: ${mColor}; margin-bottom: 10px; border-bottom: 1px solid var(--glass-border); padding-bottom: 5px; display:flex; align-items:center; gap:8px;">
-                        <div style="position:relative;">
-                            ${m.avatar ? `<img src="${m.avatar}" class="avatar-mini">` : `<div class="native-avatar avatar-mini" style="background:${mColor};">${userSVGMini}</div>`}
+                        <div class="avatar-mini-wrapper">
+                            ${m.avatar ? `<img src="${m.avatar}" class="avatar-mini">` : `<div class="native-avatar avatar-mini" style="background:${mColor}; border:none;">${userSVGMini}</div>`}
                             ${m.sticker ? `<div class="avatar-sticker-mini">${m.sticker}</div>` : ''}
                         </div>
-                        ${m.fullName}
+                        ${m.id}
                     </div>
                     <div style="display:flex; flex-direction:column; gap:8px; max-height: 250px; overflow-y: auto; padding-right: 5px;">
             `;
