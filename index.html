@@ -11,7 +11,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <title>DaDevs 0.1 - Workspace</title>
+    <title>DaDevs Workspace</title>
     <style>
         :root {
             /* Deep Space Neon Palette */
@@ -21,42 +21,39 @@
             --secondary: #22D3EE; 
             --accent: #8B5CF6; 
             --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(0,0,0,0.25);
             --glass-bg: rgba(255,255,255,0.05);
             --glass-border: rgba(255,255,255,0.1);
             --nav-bg: rgba(15, 23, 42, 0.85);
-            --input-bg: rgba(0,0,0,0.3);
-            --card-shadow: 0 8px 32px rgba(0,0,0,0.3);
             
-            /* Member Colors */
-            --c-chua: #3b82f6; 
-            --c-vince: #8b5cf6; 
-            --c-tanya: #ec4899; 
-            --c-bren: #10b981; 
-            --c-ruth: #f97316; 
-            --c-team: #64748b; 
+            /* Global Member Colors */
+            --c-bren: #ef4444; 
+            --c-chua: #f59e0b; 
+            --c-tanya: #10b981; 
+            --c-vince: #3b82f6; 
+            --c-ruth: #8b5cf6; 
+            --c-team: #64748b;
         }
 
         /* Light Theme Override */
         body.light-theme {
-            --bg-1: #f1f5f9; 
-            --bg-2: #e2e8f0;
+            --bg-1: #f8fafc; --bg-2: #e2e8f0;
             --text: #0f172a;
-            --glass-bg: rgba(255,255,255,0.9);
-            --glass-border: rgba(0,0,0,0.1);
-            --nav-bg: rgba(241, 245, 249, 0.9);
-            --input-bg: #fff;
-            --card-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            --secondary: #0284c7;
-            --accent: #6d28d9;
+            --text-muted: #475569;
+            --card-bg: rgba(255,255,255,0.7);
+            --glass-bg: rgba(255,255,255,0.85);
+            --glass-border: rgba(0,0,0,0.15);
+            --nav-bg: rgba(248, 250, 252, 0.85);
         }
-        body.light-theme .neon { text-shadow: none; font-weight: 800; color: var(--secondary); }
-        body.light-theme input, body.light-theme select, body.light-theme textarea { color: #000; border: 1px solid #cbd5e1; }
-        body.light-theme .timeline-table td, body.light-theme .timeline-table th { border-color: rgba(0,0,0,0.05); }
-        body.light-theme .unique-member-card { background: linear-gradient(145deg, #fff 0%, #f8fafc 100%); }
-        body.light-theme .chat-messages { background: #fff; border-radius: 8px; border: 1px solid var(--glass-border);}
-        body.light-theme .comment-box { background: #f8fafc; border-color: #cbd5e1; }
-        body.light-theme .comment-box .comment-body { color: #334155; }
-        body.light-theme .collapsible-header:hover { background: rgba(0,0,0,0.05); }
+        body.light-theme .neon { text-shadow: none; color: var(--secondary); font-weight: 800; }
+        body.light-theme input, body.light-theme select, body.light-theme textarea { background: rgba(255,255,255,0.9); color: #000; border: 1px solid #cbd5e1; }
+        body.light-theme .timeline-table td { border-color: rgba(0,0,0,0.05); }
+        body.light-theme .unique-member-card { background: linear-gradient(145deg, rgba(255,255,255,1) 0%, rgba(241,245,249,1) 100%); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        body.light-theme .chat-messages { background: #fff; border-radius: 8px; }
+        body.light-theme .comment-box { background: #f1f5f9; border-color: #cbd5e1; color: #000; }
+        body.light-theme .comment-box .comment-body { color: #333; }
+        body.light-theme .card, body.light-theme .admin-panel { background: rgba(255,255,255,0.8); }
 
         body {
             margin: 0; font-family: 'Inter', system-ui, sans-serif;
@@ -74,12 +71,12 @@
         .glass {
             background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border); border-radius: 12px;
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
-        .neon { color: var(--secondary); text-shadow: 0 0 8px var(--secondary); transition: color 0.3s, text-shadow 0.3s;}
-        .accent { color: var(--accent); transition: color 0.3s;}
+        .neon { color: var(--secondary); text-shadow: 0 0 8px var(--secondary); }
+        .accent { color: var(--accent); }
         
-        .dadevs-logo { width: 50px; height: 50px; flex-shrink: 0; transition: transform 0.3s ease; }
+        .dadevs-logo { width: 40px; height: 40px; flex-shrink: 0; transition: transform 0.3s ease; }
         .dadevs-logo:hover { transform: scale(1.05) rotate(5deg); }
         
         /* Auto-Update Overlay */
@@ -93,25 +90,25 @@
         #updateOverlay .dadevs-logo { animation: pulseLogo 1.5s infinite ease-in-out; width: 80px; height: 80px; margin-bottom: 20px; }
 
         /* Auth Screen */
-        #authScreen { padding: 40px; text-align: center; width: 340px; max-width: 90%; z-index: 10; transition: opacity 0.5s; display: none; }
-        .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
-        .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; transition: 0.3s; font-weight: bold; font-size: 14px; border-bottom: 2px solid transparent; }
+        #authScreen { padding: 30px; text-align: center; width: 320px; max-width: 90%; z-index: 10; transition: opacity 0.5s; display: none; }
+        .auth-tabs { display: flex; margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); }
+        .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: var(--text-muted); transition: 0.3s; font-weight: bold; font-size: 13px; border-bottom: 2px solid transparent; }
         .auth-tab.active { color: var(--secondary); border-bottom-color: var(--secondary); text-shadow: 0 0 8px var(--secondary); }
 
         input, select, textarea {
-            width: 100%; padding: 12px; margin: 8px 0; background: var(--input-bg);
+            width: 100%; padding: 10px; margin: 6px 0; background: var(--card-bg);
             border: 1px solid var(--glass-border); color: var(--text);
-            border-radius: 8px; box-sizing: border-box; outline: none; font-family: inherit; font-size: 14px; transition: border-color 0.3s, background 0.3s, color 0.3s;
+            border-radius: 6px; box-sizing: border-box; outline: none; font-family: inherit; font-size: 13px; transition: border-color 0.3s;
         }
-        input:disabled, textarea:disabled { background: rgba(0,0,0,0.1); color: #888; cursor: not-allowed; border-color: var(--glass-border); }
+        input:disabled, textarea:disabled { background: rgba(0,0,0,0.5); color: var(--text-muted); cursor: not-allowed; border-color: rgba(255,255,255,0.05); }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-        body.light-theme input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0); }
+        body.light-theme input[type="date"]::-webkit-calendar-picker-indicator { filter: none; }
         input:focus:not(:disabled), select:focus, textarea:focus { border-color: var(--secondary); box-shadow: 0 0 8px var(--secondary); }
         
         button {
-            width: 100%; padding: 12px; background: var(--accent); color: #fff;
-            border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-top: 5px; font-size: 14px;
+            width: 100%; padding: 10px; background: var(--accent); color: #fff;
+            border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 5px; font-size: 13px;
         }
         button:hover { background: var(--secondary); transform: translateY(-2px); box-shadow: 0 4px 15px var(--secondary); }
         button:active { transform: translateY(0); }
@@ -125,232 +122,225 @@
         
         /* Universal Floating Dock */
         #bottomNav {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 5px; padding: 10px 20px; z-index: 1000;
+            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 4px; padding: 8px 15px; z-index: 1000;
             background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-radius: 40px; border: 1px solid var(--glass-border);
             box-shadow: 0 10px 40px rgba(0,0,0,0.6); transition: background 0.3s;
         }
         .nav-item { 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; 
-            padding: 8px 15px; border-radius: 12px; cursor: pointer; transition: 0.2s; color: #888;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; 
+            padding: 6px 12px; border-radius: 10px; cursor: pointer; transition: 0.2s; color: var(--text-muted);
         }
-        .nav-item svg { width: 22px; height: 22px; flex-shrink: 0; transition: 0.2s; stroke: currentColor;}
-        .nav-text { font-size: 10px; font-weight: 600; transition: 0.2s; display: none; }
-        .nav-item:hover, .nav-item.active { background: rgba(139, 92, 246, 0.1); color: var(--secondary); transform: translateY(-3px); }
+        .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; transition: 0.2s; stroke: currentColor;}
+        .nav-text { font-size: 9px; font-weight: 600; transition: 0.2s; display: none; }
+        .nav-item:hover, .nav-item.active { background: rgba(255, 255, 255, 0.1); color: var(--secondary); transform: translateY(-3px); }
         .nav-item:hover svg, .nav-item.active svg { transform: scale(1.1); filter: drop-shadow(0 0 5px var(--secondary)); }
         .nav-item:hover .nav-text, .nav-item.active .nav-text { display: block; }
 
         /* Main Content */
-        #main { flex: 1; padding: 25px; padding-bottom: 110px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; transition: 0.3s; min-width: 0; box-sizing: border-box; word-wrap: break-word; }
+        #main { flex: 1; padding: 15px; padding-bottom: 90px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; transition: 0.3s; min-width: 0; box-sizing: border-box; word-wrap: break-word; }
         
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; position: sticky; top:0; background: linear-gradient(180deg, var(--bg-1) 80%, transparent); z-index:50;}
-        .header-actions { display: flex; align-items: center; gap: 10px; }
-        .header-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text); padding: 5px 12px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; transition: 0.3s; margin:0; font-weight: bold;}
-        .header-btn:hover { background: var(--secondary); color: #fff; transform: translateY(-2px); border-color: var(--secondary); }
-        body.light-theme .header-btn:hover { color: #000; }
-        .header-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #555; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; width: 100%; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; position: sticky; top:0; background: linear-gradient(180deg, var(--bg-1) 70%, transparent); z-index:50;}
+        .header-actions { display: flex; align-items: center; gap: 8px; }
+        
+        /* Sleek Headers */
+        .header-btn { background: transparent !important; border: none !important; box-shadow: none !important; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 12px; transition: 0.3s; margin:0; font-weight: bold;}
+        #topProfileBtn { padding: 0; background: transparent !important; border: none !important; margin-left: 2px; outline: none; cursor: pointer;}
+        #topProfileBtn:hover { transform: scale(1.08); filter: drop-shadow(0 0 8px var(--secondary)); }
 
-        .notif-bell { position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: var(--glass-bg); border: 1px solid var(--glass-border); transition: 0.2s; color: var(--text); }
-        .notif-bell:hover { background: var(--secondary); color: #fff; transform: translateY(-2px); border-color: var(--secondary); }
-        body.light-theme .notif-bell:hover { color:#000; }
-        .notif-dot { position: absolute; top: -2px; right: -2px; background: #ef4444; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 5px #ef4444; display: none; }
-        .notif-dropdown { position: absolute; top: 48px; right: 0; width: 320px; background: var(--bg-2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; z-index: 2500; display: none; box-shadow: 0 10px 40px rgba(0,0,0,0.8); max-height: 400px; overflow-y:auto;}
+        .notif-bell { position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: transparent !important; border: none !important; box-shadow: none !important; overflow: visible; transition: 0.2s; color: var(--text); }
+        .notif-bell svg { transition: 0.3s; width: 18px; height: 18px;}
+        .notif-bell:hover svg { filter: drop-shadow(0 0 8px var(--secondary)); color: var(--secondary); transform: scale(1.1); }
+        .notif-dot { position: absolute; top: 2px; right: 2px; transform: translate(25%, -25%); background: #ef4444; width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 5px #ef4444; display: none; z-index: 5;}
+        .notif-dropdown { position: absolute; top: 40px; right: 0; width: 280px; background: var(--bg-2); border: 1px solid var(--glass-border); border-radius: 10px; padding: 12px; z-index: 2500; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); max-height: 350px; overflow-y:auto;}
         
         /* Universal Chat Panel */
         #chatPanel {
-            position: fixed; right: -380px; top: 0; width: 350px; max-width: 100vw; height: 100vh;
+            position: fixed; right: -350px; top: 0; width: 320px; max-width: 100vw; height: 100vh;
             background: var(--bg-1); border-left: 1px solid var(--glass-border);
             z-index: 2000; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display:flex; flex-direction:column;
             box-shadow: -5px 0 25px rgba(0,0,0,0.7);
         }
         #chatPanel.open { right: 0; }
-        .chat-header { padding: 20px; border-bottom: 1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center; background: rgba(0,0,0,0.2);}
-        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display:flex; flex-direction:column; gap: 10px; scroll-behavior: smooth;}
-        .chat-input-area { padding: 15px; border-top: 1px solid var(--glass-border); background: var(--bg-2); }
+        .chat-header { padding: 15px; border-bottom: 1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center; background: var(--card-bg);}
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display:flex; flex-direction:column; gap: 8px; scroll-behavior: smooth;}
+        .chat-input-area { padding: 12px; border-top: 1px solid var(--glass-border); background: var(--bg-2); }
         .mention { color: var(--secondary); font-weight: bold; background: rgba(34, 211, 238, 0.1); padding: 0 4px; border-radius: 4px; }
 
-        .card { padding: 20px; margin-bottom: 20px; transition: transform 0.3s; word-break: break-word; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; } 
-        .grid-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; } 
-        
-        .contact-link { display: flex; justify-content: center; align-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text); text-decoration: none; font-size: 14px; transition: 0.3s; }
-        .contact-link:hover { background: var(--secondary); color: #fff; transform: translateY(-4px); border-color: var(--secondary); box-shadow: 0 4px 12px rgba(34, 211, 238, 0.4); }
-        body.light-theme .contact-link:hover { color:#000; }
+        /* Compact Cards & Grids */
+        .card { padding: 15px; margin-bottom: 15px; transition: transform 0.3s; word-break: break-word; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; } 
+        .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; } 
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+        .funds-contributions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 150px)); justify-content: center; gap: 12px; }
 
+        .contact-link { display: flex; justify-content: center; align-items: center; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--text); text-decoration: none; font-size: 13px; transition: 0.3s; }
+        .contact-link:hover { background: var(--secondary); color: #000; transform: translateY(-4px); border-color: var(--secondary); box-shadow: 0 4px 12px rgba(34, 211, 238, 0.4); }
+        
         .avatar-container { position: relative; display: inline-flex; justify-content: center; align-items: center; flex-shrink: 0; }
         .native-avatar { border-radius: 50%; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 3px solid var(--glass-border); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.5); flex-shrink: 0; }
         .native-avatar svg { fill: currentColor; }
         .avatar-img { border-radius: 50%; object-fit: cover; border: 3px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0,0,0,0.5); flex-shrink: 0; width: 100%; height: 100%; }
-        .avatar-sticker { position: absolute; bottom: -5px; right: -5px; font-size: 20px; background: var(--bg-1); border-radius: 50%; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border: 2px solid var(--glass-border); box-shadow: 0 2px 5px rgba(0,0,0,0.5); z-index: 2; }
+        .avatar-sticker { position: absolute; bottom: -4px; right: -4px; font-size: 16px; background: var(--bg-1); border-radius: 50%; width: 22px; height: 22px; display: flex; justify-content: center; align-items: center; border: 2px solid var(--glass-border); box-shadow: 0 2px 5px rgba(0,0,0,0.5); z-index: 2; }
         
-        .avatar-mini-wrapper { position: relative; width: 26px; height: 26px; flex-shrink: 0; display: inline-block; }
+        .avatar-mini-wrapper { position: relative; width: 24px; height: 24px; flex-shrink: 0; display: inline-block; }
         .avatar-mini { width: 100% !important; height: 100% !important; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); flex-shrink: 0; display: inline-flex; justify-content: center; align-items: center; margin: 0; padding: 0;}
-        .avatar-sticker-mini { position: absolute; bottom: -4px; right: -4px; font-size: 10px; background: var(--bg-1); border-radius: 50%; width: 14px; height: 14px; display: flex; justify-content: center; align-items: center; border: 1px solid var(--glass-border); z-index: 2; }
+        .avatar-sticker-mini { position: absolute; bottom: -3px; right: -3px; font-size: 9px; background: var(--bg-1); border-radius: 50%; width: 12px; height: 12px; display: flex; justify-content: center; align-items: center; border: 1px solid var(--glass-border); z-index: 2; }
 
         .unique-member-card {
-            border: 1px solid var(--glass-border); border-radius: 16px; 
-            background: var(--glass-bg);
-            position: relative; overflow: visible; margin-top: 30px; text-align: center;
+            border: 1px solid var(--glass-border); border-radius: 12px; 
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, var(--card-bg) 100%);
+            position: relative; overflow: visible; margin-top: 25px; text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease; display:flex; flex-direction:column;
         }
-        .unique-member-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); border-color: var(--secondary); }
+        .unique-member-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); border-color: var(--secondary); }
 
-        .kanban-board { display: flex; gap: 20px; min-height: 400px; overflow-x: auto; padding-bottom: 20px; scroll-snap-type: x mandatory;}
-        .kanban-col { flex: 1; min-width: 280px; display: flex; flex-direction: column; background: rgba(0,0,0,0.1); border-radius: 12px; padding: 15px; border: 1px solid var(--glass-border); scroll-snap-align: center;}
-        .task-card { background: var(--glass-bg); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--glass-border); transition: 0.2s; cursor: grab; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        .kanban-board { display: flex; gap: 15px; min-height: 350px; overflow-x: auto; padding-bottom: 15px; scroll-snap-type: x mandatory;}
+        .kanban-col { flex: 1; min-width: 260px; display: flex; flex-direction: column; background: var(--card-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--glass-border); scroll-snap-align: center;}
+        .task-card { background: var(--glass-bg); padding: 12px; border-radius: 6px; margin-bottom: 8px; border: 1px solid var(--glass-border); transition: 0.2s; cursor: grab; position: relative;}
         .task-card:hover { border-color: var(--secondary); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .delete-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ef4444; cursor: pointer; padding: 0; width: auto; font-size: 12px; transition: transform 0.2s;}
+        .delete-btn { position: absolute; top: 8px; right: 8px; background: none; border: none; color: #ef4444; cursor: pointer; padding: 0; width: auto; font-size: 11px; transition: transform 0.2s;}
         .delete-btn:hover { transform: scale(1.2); background: none; box-shadow: none; color: #ff0000; }
         
-        .admin-panel { padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
-        .admin-panel .flex-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .admin-panel { padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--accent); background: var(--card-bg); }
+        .admin-panel .flex-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
         
-        /* Timeline Table */
-        .phase-header { background: rgba(34, 211, 238, 0.1); padding: 12px 15px; border-radius: 8px; font-weight: bold; color: var(--secondary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border: 1px solid rgba(34, 211, 238, 0.3); transition: 0.2s; }
-        .phase-header:hover { background: rgba(34, 211, 238, 0.2); transform: translateX(2px); }
-        .timeline-table { width: 100%; border-collapse: collapse; min-width: 900px; }
-        .timeline-table th, .timeline-table td { padding: 12px 10px; font-size: 13px; vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); white-space: nowrap; } /* FIXED UNCUT */
-        .timeline-table th { font-size: 11px; color: #aaa; text-transform: uppercase; border-bottom: 1px solid var(--glass-border); }
-        
-        .gantt-track { background: rgba(0,0,0,0.2); height: 24px; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); width: 100%; min-width: 150px; }
-        .gantt-bar { position: absolute; height: 100%; border-radius: 12px; display: flex; align-items: center; font-size: 11px; font-weight: bold; color: #fff; box-sizing: border-box; overflow: hidden; transition: 0.3s; }
+        /* Timeline Table Adaptive CSS */
+        .phase-header { background: var(--card-bg); padding: 10px 12px; border-radius: 8px; font-weight: bold; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-left: 4px solid var(--secondary); transition: 0.2s; font-size: 13px; }
+        .phase-header:hover { transform: translateX(2px); background: rgba(34, 211, 238, 0.1); }
+        .timeline-table { width: 100%; border-collapse: collapse; min-width: 750px; } /* Enforce minimum width so it scrolls cleanly on mobile */
+        .timeline-table th { text-align: left; padding: 8px 10px; font-size: 10px; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid var(--glass-border); white-space: nowrap; }
+        .timeline-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px; vertical-align: middle; white-space: nowrap; }
+        .timeline-table td.wrap-text { white-space: normal; min-width: 150px; line-height: 1.4; } /* Allow only the title to wrap */
+        .gantt-track { background: var(--card-bg); height: 18px; border-radius: 9px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); width: 100%; min-width: 150px; }
+        .gantt-bar { position: absolute; height: 100%; border-radius: 9px; display: flex; align-items: center; font-size: 9px; font-weight: bold; color: #fff; box-sizing: border-box; overflow: hidden; transition: 0.3s; }
         
         /* Gallery UI */
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .gallery-item { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); aspect-ratio: 1 / 1; transition: 0.3s; background: rgba(0,0,0,0.3); cursor: pointer;}
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+        .gallery-item { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--glass-border); aspect-ratio: 1 / 1; transition: 0.3s; background: var(--card-bg); cursor: pointer;}
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
         .gallery-item:hover img { transform: scale(1.08); }
-        .gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 15px 10px 10px 10px; font-size: 12px; transition: 0.3s; color: #fff;}
-        .gallery-caption.featured-cap { display: none; } 
+        .gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 12px 8px 8px 8px; font-size: 11px; transition: 0.3s; color: #fff;}
         .folder-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.75); display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; transition: 0.3s; backdrop-filter: blur(2px);}
         .gallery-item:hover .folder-overlay { background: rgba(15, 23, 42, 0.5); }
-        .feat-badge { position: absolute; top:5px; left:5px; background: #f59e0b; color: #000; font-size:10px; font-weight:bold; padding: 2px 6px; border-radius: 10px; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.5);}
-
-        /* Smart Grouped Gallery Cards */
-        .gallery-group-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: 0.3s; }
-        .gallery-group-card:hover { border-color: var(--secondary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .gg-images { display: flex; height: 160px; }
-        .gg-img { flex: 1; height: 100%; object-fit: cover; border-right: 1px solid var(--glass-border); }
-        .gg-img:last-child { border-right: none; }
-        .gg-info { padding: 12px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.1); }
+        .feat-badge { position: absolute; top:5px; left:5px; background: #f59e0b; color: #000; font-size:9px; font-weight:bold; padding: 2px 5px; border-radius: 8px; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.5);}
 
         /* Custom Alert & Modal Logic (Smart UI) */
         #customDialogOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 1000000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .dialog-content { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 30px 25px; border-radius: 16px; width: 340px; text-align: center; box-shadow: 0 15px 50px rgba(0,0,0,0.6); transform: scale(0.9); opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .dialog-content { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 25px 20px; border-radius: 12px; width: 320px; max-width: 90vw; text-align: center; box-shadow: 0 15px 50px rgba(0,0,0,0.6); transform: scale(0.9); opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .dialog-content.active { transform: scale(1); opacity: 1; }
-        .dialog-icon { font-size: 40px; margin-bottom: 15px; display: inline-block; }
-        .dialog-msg { margin-bottom: 25px; font-size: 15px; color: var(--text); line-height: 1.5; font-weight: 500; white-space: pre-wrap;}
-        .dialog-btns { display: flex; gap: 10px; justify-content: center; }
+        .dialog-icon { font-size: 36px; margin-bottom: 12px; display: inline-block; }
+        .dialog-msg { margin-bottom: 20px; font-size: 14px; color: var(--text); line-height: 1.5; font-weight: 500;}
+        .dialog-btns { display: flex; gap: 8px; justify-content: center; }
 
-        /* Lightbox Swiper */
-        #lightboxModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 100000; display: none; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(10px); }
-        #lightboxImg { max-width: 85vw; max-height: 75vh; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); object-fit: contain; transition: opacity 0.2s;}
-        #lightboxCaption { margin-top: 20px; color: #fff; font-size: 16px; font-weight: bold; text-align: center; text-shadow: 0 2px 4px rgba(0,0,0,0.8); max-width: 80vw;}
-        .close-lightbox { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: none; color: #fff; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content:center; align-items:center; font-weight: bold; font-size: 20px; transition: 0.2s; z-index: 10;}
+        /* Lightbox Image Viewer */
+        #lightboxModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 100000; display: none; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(8px); }
+        #lightboxImg { max-width: 90vw; max-height: 80vh; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.7); object-fit: contain; }
+        #lightboxCaption { margin-top: 15px; color: #fff; font-size: 15px; font-weight: bold; text-align: center; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        .close-lightbox { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; justify-content:center; align-items:center; font-weight: bold; font-size: 16px; transition: 0.2s;}
         .close-lightbox:hover { background: #ef4444; transform: rotate(90deg); }
-        .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: white; border: none; font-size: 24px; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; z-index: 10; }
-        .lb-nav:hover { background: var(--secondary); color: #000; }
-        .lb-prev { left: 20px; }
-        .lb-next { right: 20px; }
         
-        .res-search { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: var(--text); border-radius: 8px; margin-bottom: 15px; outline: none; transition: 0.3s;}
+        .res-search { width: 100%; padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--glass-border); color: var(--text); border-radius: 6px; margin-bottom: 12px; outline: none; transition: 0.3s;}
         .res-search:focus { border-color: var(--secondary); box-shadow: 0 0 10px rgba(34, 211, 238, 0.2); }
-        .tag-chip { background: rgba(34, 211, 238, 0.1); color: var(--secondary); padding: 6px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; border: 1px solid rgba(34, 211, 238, 0.3); transition: 0.2s; white-space: nowrap; user-select: none; }
+        .tag-chip { background: rgba(34, 211, 238, 0.1); color: var(--secondary); padding: 4px 10px; border-radius: 10px; font-size: 10px; font-weight: bold; cursor: pointer; border: 1px solid rgba(34, 211, 238, 0.3); transition: 0.2s; white-space: nowrap; user-select: none; }
         .tag-chip:hover, .tag-chip.active { background: var(--secondary); color: #fff; transform: translateY(-2px); }
         
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; margin-top: 15px; }
-        .cal-header { font-weight: bold; color: var(--secondary); font-size: 12px; padding-bottom: 10px; }
-        .cal-day { background: rgba(0,0,0,0.1); padding: 10px; border-radius: 6px; border: 1px solid var(--glass-border); min-height: 50px; position: relative; display: flex; flex-direction: column; align-items: center; transition: 0.2s; cursor:pointer;}
-        .cal-day.has-events { border-color: var(--accent); background: rgba(139, 92, 246, 0.15); box-shadow: inset 0 0 8px rgba(139, 92, 246, 0.3);}
-        .cal-day:hover:not(.empty) { background: rgba(255,255,255,0.05); border-color: var(--secondary); transform: translateY(-2px);}
-        .cal-day.empty { background: transparent; border: none; cursor:default; }
-        .cal-day.today { border-color: var(--secondary); background: rgba(34, 211, 238, 0.15); box-shadow: inset 0 0 10px rgba(34,211,238,0.2);}
-        .cal-event-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-top: 12px; }
+        .cal-header { font-weight: bold; color: var(--secondary); font-size: 11px; padding-bottom: 8px; }
+        .cal-day { background: var(--card-bg); padding: 8px; border-radius: 6px; border: 1px solid var(--glass-border); min-height: 45px; position: relative; display: flex; flex-direction: column; align-items: center; transition: 0.2s;}
+        .cal-day.active-day { cursor: pointer; }
+        .cal-day.active-day:hover:not(.empty) { background: rgba(255,255,255,0.1); transform: scale(1.05); border-color: var(--secondary);}
+        .cal-day.empty { background: transparent; border: none; }
+        .cal-day.today { border-color: var(--secondary); background: rgba(34, 211, 238, 0.15); }
+        .cal-event-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; }
         
-        .comment-box { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; padding: 12px; margin-bottom: 10px; transition: 0.2s;}
+        .comment-box { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 8px; padding: 10px; margin-bottom: 8px; transition: 0.2s;}
         .comment-box:hover { border-color: rgba(255,255,255,0.2); }
-        .comment-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 12px; color: #aaa; }
+        .comment-header { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 11px; color: var(--text-muted); }
         .comment-author { font-weight: bold; color: var(--secondary); }
-        .comment-body { font-size: 13px; word-break: break-word; color: var(--text); line-height: 1.4; }
+        .comment-body { font-size: 12px; word-break: break-word; color: var(--text); line-height: 1.4; }
 
         /* User Modal Overlay */
-        #userModal { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.8); z-index: 10000; display: none; justify-content:center; align-items:center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px);}
-        .modal-content { background: var(--bg-1); border: 1px solid var(--glass-border); border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 20px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.8);}
-        .close-modal { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: var(--text); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; justify-content:center; align-items:center; font-weight: bold; transition: 0.2s;}
-        .close-modal:hover { background: #ef4444; color:#fff; transform: rotate(90deg); }
+        #userModal { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.8); z-index: 10000; display: none; justify-content:center; align-items:center; padding: 15px; box-sizing: border-box; backdrop-filter: blur(5px);}
+        .modal-content { background: var(--bg-1); border: 1px solid var(--glass-border); border-radius: 10px; width: 100%; max-width: 450px; max-height: 90vh; overflow-y: auto; padding: 20px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.8);}
+        .close-modal { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.1); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; display: flex; justify-content:center; align-items:center; font-weight: bold; transition: 0.2s;}
+        .close-modal:hover { background: #ef4444; transform: rotate(90deg); }
 
         .collapsible-header { cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; transition: 0.2s; user-select: none;}
         .collapsible-header:hover { background: rgba(255,255,255,0.1); }
-        
-        /* Hidden Sync Status */
-        #syncStatus { display: none !important; }
 
-        /* =======================================================
-           MOBILE SMART RESPONSIVENESS
-           ======================================================= */
+        /* Mobile Adjustments (SMART RESPONSIVE) */
         @media (max-width: 992px) { 
             .grid-3 { grid-template-columns: 1fr; } 
         }
         
         @media (max-width: 768px) {
-            /* General Sizing Fixes */
+            /* General Shrinkage */
             h2.neon { font-size: 18px !important; }
-            h3 { font-size: 15px !important; margin-top: 0 !important; }
-            .card { padding: 15px; margin-bottom: 12px; }
-            .grid-2, .grid-5, .grid-3, .grid-auto { grid-template-columns: 1fr; gap: 12px; }
+            h3 { font-size: 14px !important; margin-top: 0 !important; }
+            
+            /* Grids auto-collapse more efficiently */
+            .grid-2, .grid-5, .grid-3 { grid-template-columns: 1fr; gap: 10px; }
+            .grid-auto { gap: 10px; }
+            
             .admin-panel .flex-row { flex-direction: column; align-items: stretch; }
             .admin-panel .flex-row > * { width: 100%; margin-bottom: 5px; flex: none !important; }
             
-            /* Buttons & Inputs */
-            .header-btn { padding: 6px 10px; font-size: 11px; }
-            .header-btn svg { width: 14px; height: 14px; }
-            input, select, textarea { padding: 10px; font-size: 13px; }
+            /* Inputs: 16px is required to prevent iOS zoom, but we can reduce padding */
+            input, select, textarea { padding: 8px 10px; font-size: 16px !important; }
             button { padding: 10px; font-size: 13px; }
 
-            /* Bottom Navigation Dock */
+            /* Header Shrinkage */
+            .header-top { padding-bottom: 10px; margin-bottom: 10px; }
+            .header-btn { font-size: 11px; padding: 4px 6px; gap: 4px;}
+            .notif-bell { width: 28px; height: 28px; }
+            .notif-bell svg { width: 15px; height: 15px; }
+
+            /* Smart Bottom Navigation Dock - No Swipe Required */
             #bottomNav {
                 width: 100%; bottom: 0; left: 0; transform: none; border-radius: 0;
-                padding: 10px 5px; justify-content: space-around; gap: 0;
+                padding: 4px 2px; justify-content: space-evenly; gap: 0;
                 border-top: 1px solid var(--glass-border); border-bottom: none; border-left: none; border-right: none;
+                overflow-x: visible; /* All items fit on screen */
             }
-            .nav-item { padding: 6px; }
-            .nav-item svg { width: 22px; height: 22px; margin: 0; }
-            .nav-item:hover, .nav-item.active { background: transparent; transform: scale(1.1); border-radius: 0; }
+            .nav-item { padding: 4px 2px; flex: 1; min-width: 0; gap: 2px;}
+            .nav-item svg { width: 18px; height: 18px; margin: 0; }
+            .nav-item:hover, .nav-item.active { background: transparent; transform: scale(1.05); border-radius: 0; }
             .nav-item:hover .nav-text { display: none !important; }
-            .nav-item.active::after { content:''; display:block; width: 5px; height:5px; border-radius:50%; background:var(--secondary); position:absolute; bottom:-2px; }
+            .nav-item.active::after { content:''; display:block; width: 4px; height:4px; border-radius:50%; background:var(--secondary); position:absolute; bottom:-4px; }
             
             /* Main Content Adjustments */
-            #main { padding: 15px; padding-bottom: 90px; } 
-            .header-top { padding-bottom: 10px; margin-bottom: 15px; }
+            #main { padding: 10px; padding-bottom: 60px; overflow-x: hidden; } 
             
-            /* Timeline & Kanban adjustments */
-            .timeline-wrapper { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 10px; }
-            .timeline-table { min-width: 650px; } 
-            .timeline-table th, .timeline-table td { padding: 8px 6px; font-size: 11px; }
+            /* Timeline adjustments - Ensure Horizontal Scroll, NEVER hide elements */
+            .timeline-wrapper { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 10px; margin-bottom: 10px; }
+            .timeline-table { min-width: 700px; } /* Forces scroll on small screens */
+            .timeline-table th, .timeline-table td { padding: 6px 5px; font-size: 10px; }
+            .gantt-track { min-width: 120px; }
             
             .kanban-board { flex-direction: row; min-height: auto; scroll-snap-type: x mandatory; padding-bottom: 10px;}
-            .kanban-col { min-width: 85vw; scroll-snap-align: center; margin-right: 15px; }
-            .task-card { padding: 12px; }
+            .kanban-col { min-width: 80vw; scroll-snap-align: center; margin-right: 10px; padding: 10px; }
+            .task-card { padding: 10px; }
             
             /* Calendar & Gallery Adjustments */
-            .cal-day { min-height: 40px; padding: 5px; }
-            .cal-header { font-size: 10px; }
-            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-
-            /* Resources Actions Smart Alignment */
-            .resource-item { align-items: flex-start !important; }
-            .resource-item-actions { justify-content: flex-start !important; margin-top: 10px; width: 100%; flex-wrap: wrap; }
-            .resource-item-actions button { padding: 6px 12px !important; font-size: 11px !important; flex: 1; min-width: 30%; text-align:center;}
+            .cal-day { min-height: 35px; padding: 4px; }
+            .cal-header { font-size: 9px; padding-bottom: 4px; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
 
             /* Profile specific */
             .profile-controls { justify-content: center; width: 100%; margin-top: 10px; }
             .profile-controls button { flex: 1; text-align: center; justify-content: center; }
+            
+            .unique-member-card { margin-top: 20px; }
+            .unique-member-card .avatar-img, .unique-member-card .native-avatar { width: 50px; height: 50px; }
+            .unique-member-card > div:nth-child(2) { height: 30px; }
+            .unique-member-card > div:nth-child(4) { padding: 35px 10px 10px 10px; }
 
-            /* Chat & Notif Panel */
+            /* Chat Panel */
             #chatPanel { width: 100vw; right: -100vw; border-left:none;}
-            #notifDropdown { width: 300px; right: -60px; max-width: 90vw; top: 40px;}
+            #notifDropdown { width: 280px; right: -10px; max-width: 90vw; top: 40px;}
         }
     </style>
 </head>
@@ -360,8 +350,26 @@
         <div class="dialog-content" id="customDialogContent">
             <div class="dialog-icon" id="customDialogIcon">⚠️</div>
             <div class="dialog-msg" id="customDialogMsg"></div>
-            <div class="dialog-btns" id="customDialogBtns"></div>
+            <div class="dialog-btns" id="customDialogBtns">
+                </div>
         </div>
+    </div>
+
+    <div id="updateOverlay">
+        <svg class="dadevs-logo" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="neonGradUpdate" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#22D3EE" />
+                    <stop offset="100%" stop-color="#8B5CF6" />
+                </linearGradient>
+            </defs>
+            <path d="M100 15L175 58V142L100 185L25 142V58L100 15Z" stroke="url(#neonGradUpdate)" stroke-width="8"/>
+            <path d="M100 40V160" stroke="#FFF" stroke-width="12" stroke-linecap="round"/>
+            <path d="M100 40C145 40 155 70 155 100C155 130 145 160 100 160" stroke="url(#neonGradUpdate)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M70 100L45 75M70 100L45 125" stroke="#FFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h2 class="neon" style="margin:0 0 10px 0; font-size: 24px;">Applying Update...</h2>
+        <p style="color:var(--text-muted); font-size: 14px; margin:0;">Please wait.</p>
     </div>
 
     <div id="authScreen" class="glass">
@@ -387,7 +395,7 @@
             </svg>
             <h1 class="neon" style="margin:0;">DaDevs <span class="accent">0.1</span></h1>
         </div>
-        <p style="color:#aaa;font-size:0.9em;margin-bottom:20px; margin-top:5px;">Secure Workspace Access</p>
+        <p style="color:var(--text-muted);font-size:0.9em;margin-bottom:20px; margin-top:5px;">Secure Workspace Access</p>
         
         <div class="auth-tabs">
             <div class="auth-tab active" id="tabLogin" onclick="setAuthMode('login')">LOGIN</div>
@@ -402,10 +410,13 @@
         </div>
 
         <div id="formRegister" style="display:none;">
-            <input id="r_full" placeholder="Full Name (e.g. John Doe)">
-            <input id="r_user" placeholder="Username (Used globally)">
+            <input id="r_user" placeholder="Username / Full Name">
             <input id="r_pass" type="password" placeholder="Password">
-            <input id="r_secret" type="password" placeholder="Admin Confirmation Code (Leave blank if normal member)" style="border-color: #ef4444;">
+            <select id="r_role" onchange="document.getElementById('r_secret').style.display = this.value === 'admin' ? 'block' : 'none'">
+                <option value="viewer">Member</option>
+                <option value="admin">Administrator</option>
+            </select>
+            <input id="r_secret" type="password" placeholder="Admin Confirmation Code" style="display:none; border-color: #ef4444;">
             <button onclick="processRegister()">REGISTER ACCOUNT</button>
             <p id="r_err" style="color:#ef4444;display:none;margin-top:15px;font-size:12px;"></p>
             <p id="r_succ" style="color:#10b981;display:none;margin-top:15px;font-size:12px;">Registration Successful! You can login now.</p>
@@ -415,43 +426,41 @@
     </div>
 
     <div id="app">
-        <div id="bottomNav"></div>
+        <div id="bottomNav">
+            </div>
 
         <div id="main">
             <div class="header-top" id="mainHeader">
                 <div style="display:flex; flex-direction:column; gap:2px;">
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <svg class="dadevs-logo" style="width:24px; height:24px;" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M100 15L175 58V142L100 185L25 142V58L100 15Z" stroke="url(#neonGrad)" stroke-width="12" filter="url(#glow)"/>
-                            <path d="M100 40V160" stroke="#FFF" stroke-width="15" stroke-linecap="round"/>
-                            <path d="M100 40C145 40 155 70 155 100C155 130 145 160 100 160" stroke="url(#neonGrad)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M70 100L45 75M70 100L45 125" stroke="#FFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <h2 id="viewTitle" class="neon" style="margin:0; font-size: 22px;">Workspace</h2>
+                        <h2 id="viewTitle" class="neon" style="margin:0; font-size: 20px;">Workspace</h2>
                     </div>
                     <span style="font-size: 9px; color: var(--secondary); opacity: 0.8; letter-spacing: 0.5px; text-transform: lowercase;">powered by brenduling</span>
                 </div>
                 <div class="header-actions">
-                    <div id="syncStatus"></div> <div class="notif-bell" onclick="toggleChat()" title="Team Discussions">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    <div id="syncStatus" style="font-size:10px; font-weight:bold; color:var(--text-muted); display:none;"></div>
+                    
+                    <div class="notif-bell" onclick="toggleChat()" title="Team Discussions">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        <span id="chatBadge" class="notif-dot"></span>
                     </div>
 
                     <div class="notif-bell" onclick="toggleNotifications()" title="Notifications">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                         <span id="notifBadge" class="notif-dot"></span>
                         <div id="notifDropdown" class="notif-dropdown glass">
                             <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--glass-border); padding-bottom:5px; margin-bottom: 10px;">
                                 <h4 style="margin:0;">Notifications</h4>
-                                <button class="danger" style="width:auto; padding:4px 8px; font-size:10px; margin:0; border-radius:10px;" onclick="clearNotifs()" id="clearNotifsBtn" style="display:none;">Clear All</button>
+                                <button class="danger" style="width:auto; padding:2px 8px; font-size:10px; margin:0;" onclick="clearNotifs()" id="clearNotifsBtn" style="display:none;">Clear</button>
                             </div>
-                            <div id="notifList" style="font-size:12px; color:var(--text); max-height:250px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;">
-                                <p style="margin:0; text-align:center; color:#aaa;">No new notifications</p>
+                            <div id="notifList" style="font-size:12px; color:var(--text); max-height:250px; overflow-y:auto;">
+                                <p style="margin:0; text-align:center; color:var(--text-muted);">No new notifications</p>
                             </div>
                         </div>
                     </div>
-                    <button class="header-btn" onclick="loadModule('Profile')" id="topProfileBtn" style="padding: 4px 12px 4px 4px; border-radius: 20px;">
-                        <img id="topProfileImg" src="" class="header-avatar" alt="Avatar">
-                        <span id="topProfileName" class="nav-text" style="display:inline; font-size:12px;">User</span>
+                    <button class="header-btn" onclick="loadModule('Profile')" id="topProfileBtn" title="My Profile">
+                        <div id="topProfileContainer" style="width: 34px; height: 34px; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                            </div>
                     </button>
                 </div>
             </div>
@@ -463,16 +472,18 @@
             <div class="chat-header">
                 <h3 style="margin:0; color:var(--secondary);">Team Discussion</h3>
                 <div style="display:flex; gap:10px;">
-                    <button id="clearChatBtn" class="danger" style="width:auto; padding: 4px 8px; font-size:10px; margin:0; display:none; border-radius:10px;" onclick="clearChat()">Clear</button>
-                    <button class="icon-btn" onclick="toggleChat()" style="background:transparent; border:none; color:var(--text); cursor:pointer; font-size: 16px; padding: 4px 8px;">✖</button>
+                    <button id="clearChatBtn" class="danger" style="width:auto; padding: 4px 8px; font-size:10px; margin:0; display:none;" onclick="clearChat()">Clear</button>
+                    <button class="icon-btn" onclick="toggleChat()" style="background:transparent; border:none; color:var(--text); cursor:pointer; font-size: 16px;">✖</button>
                 </div>
             </div>
-            <div class="chat-messages" id="chatMessagesArea"></div>
+            <div class="chat-messages" id="chatMessagesArea">
+                </div>
             <div class="chat-input-area">
-                <textarea id="globalCommentTxt" placeholder="Type @username to mention..." style="height: 60px; margin:0 0 10px 0; font-size:13px; resize:none;"></textarea>
+                <textarea id="globalCommentTxt" placeholder="Type @username to mention..." style="height: 60px; margin:0 0 10px 0; font-size:13px;"></textarea>
                 <button onclick="postGlobalComment()" style="margin:0; padding:10px;">Send Message</button>
             </div>
         </div>
+
     </div>
 
     <div id="userModal" onclick="if(event.target === this) closeUserModal()">
@@ -481,9 +492,7 @@
 
     <div id="lightboxModal" onclick="if(event.target === this) closeLightbox()">
         <button class="close-lightbox" onclick="closeLightbox()">✖</button>
-        <button class="lb-nav lb-prev" onclick="changeLightbox(-1)">&#8249;</button>
         <img id="lightboxImg" src="" alt="Gallery Image">
-        <button class="lb-nav lb-next" onclick="changeLightbox(1)">&#8250;</button>
         <div id="lightboxCaption"></div>
     </div>
 
@@ -491,12 +500,12 @@
     // ==========================================
     // UI CORE CONTROLLERS (MODALS & ALERTS)
     // ==========================================
-    window.customAlert = function(message, icon = "⚠️") {
+    window.customAlert = function(message, icon = "⚠️", isHtml = false) {
         const overlay = document.getElementById('customDialogOverlay');
         const content = document.getElementById('customDialogContent');
         
         document.getElementById('customDialogIcon').innerText = icon;
-        document.getElementById('customDialogMsg').innerText = message;
+        document.getElementById('customDialogMsg').innerHTML = message;
         document.getElementById('customDialogBtns').innerHTML = `<button class="success" onclick="closeCustomDialog()" style="width: auto; padding: 10px 30px; border-radius: 20px;">Got it</button>`;
         
         overlay.style.display = 'flex';
@@ -508,7 +517,7 @@
         const content = document.getElementById('customDialogContent');
         
         document.getElementById('customDialogIcon').innerText = icon;
-        document.getElementById('customDialogMsg').innerText = message;
+        document.getElementById('customDialogMsg').innerHTML = message;
         
         const btnHtml = `
             <button id="cdBtnCancel" class="danger" style="width: auto; padding: 10px 25px; margin:0; border-radius: 20px;">Cancel</button>
@@ -534,9 +543,26 @@
     }
 
     // ==========================================
+    // AUTO-UPDATE SYSTEM (FOR VERCEL PWA)
+    // ==========================================
+    const APP_VERSION = "v76"; 
+
+    window.addEventListener('load', () => {
+        fetch(window.location.href, { cache: "no-store", headers: { 'Cache-Control': 'no-cache' } })
+            .then(res => res.text())
+            .then(liveHTML => {
+                if (!liveHTML.includes(`const APP_VERSION = "${APP_VERSION}";`)) {
+                    document.getElementById('updateOverlay').style.display = 'flex';
+                    setTimeout(() => window.location.reload(true), 1500);
+                }
+            })
+            .catch(err => console.log("User offline."));
+    });
+
+    // ==========================================
     // CLOUD SYNC CONFIGURATION
     // ==========================================
-    const ENABLE_CLOUD_SYNC = false; // Disabled to prevent any interruptions to user transactions. Fully local and snappy.
+    const ENABLE_CLOUD_SYNC = true; 
     const JSONBIN_BIN_ID = "69b53404aa77b81da9e359ea";
     const JSONBIN_MASTER_KEY = "$2a$10$Tro6Ud5UHq2VqKQnp8Kxo.1MFLWorIUvmpahlY7t9jqDPWr0Xg2em";
     
@@ -565,44 +591,97 @@
     };
 
     const targetMembers = ["Chua", "Vince", "Tanya", "Bren", "Ruth"];
-    const memberColors = { "Chua": "var(--c-chua)", "Vince": "var(--c-vince)", "Tanya": "var(--c-tanya)", "Bren": "var(--c-bren)", "Ruth": "var(--c-ruth)", "Team": "var(--c-team)" };
+    const predefinedColors = { "Chua": "var(--c-chua)", "Vince": "var(--c-vince)", "Tanya": "var(--c-tanya)", "Bren": "var(--c-bren)", "Ruth": "var(--c-ruth)", "Team": "var(--c-team)" };
     const defaultResTags = ["Sheets", "Title Defense", "Survey", "Docs"];
+
+    // GLOBAL MEMBER COLOR GENERATOR
+    function getMemberColor(id) {
+        if (!id) return 'var(--accent)';
+        if (predefinedColors[id]) return predefinedColors[id];
+        
+        let hash = 0;
+        for (let i = 0; i < id.length; i++) {
+            hash = id.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const hue = Math.abs(hash % 360);
+        return `hsl(${hue}, 70%, 50%)`;
+    }
 
     let currentUser = null; 
     let currentModule = "Dashboard"; 
     let viewDate = new Date();
     
     let currentGalleryFolder = null; 
-    let currentGalleryImages = []; // For Lightbox Swiping
-    let currentGalleryIndex = 0;
-
     let editingTimelineId = null;
     let resSearchTerm = '';
     let resActiveTag = null;
     let collapsedPhases = {}; 
-    
-    window.adminViewMode = 'admin'; // For admin toggle
+    let isDraggingCard = false;
 
     // DB Init
-    const DB_KEY = 'dadevs_db_v55';
+    const DB_KEY = 'dadevs_db_master';
     let appDB = { 
         tasks: [], funds: [], calendar: [], timeline: [], resources: [], gallery: [], sprints: [], comments: [], members: [], notifications: []
     };
-    
-    // Strict Default Color Logic
-    function getMemberColor(id) {
-        if (memberColors[id]) return memberColors[id]; // Force default
-        const m = getDB('members').find(x => x.id === id);
-        if (m && m.accent) return m.accent;
-        return 'var(--secondary)';
+
+    function updateUserInDB() {
+        if(!currentUser) return;
+        let members = getDB('members');
+        let idx = members.findIndex(m => m.id === currentUser.id);
+        if(idx > -1) {
+            members[idx] = currentUser;
+            setDB('members', members);
+        }
     }
 
-    async function initDB() {
-        if (localStorage.getItem('dd_version') !== 'v55') {
-            localStorage.setItem('dd_version', 'v55');
+    async function initDB(manualSync = false) {
+        // Deep Legacy Migration
+        for (let i = 65; i >= 30; i--) {
+            const legacy = localStorage.getItem(`dadevs_db_v${i}`);
+            if (legacy) {
+                localStorage.setItem(DB_KEY, legacy);
+                localStorage.removeItem(`dadevs_db_v${i}`);
+                console.log(`Migrated v${i} to master database.`);
+                break; 
+            }
         }
         
-        const local = localStorage.getItem(DB_KEY); if (local) appDB = JSON.parse(local);
+        const statusEl = document.getElementById('syncStatus');
+        const setStatus = (msg) => { if(statusEl) { statusEl.style.display="block"; statusEl.innerText = msg; } };
+
+        if (ENABLE_CLOUD_SYNC && JSONBIN_BIN_ID && JSONBIN_MASTER_KEY) {
+            setStatus(manualSync ? "☁️ Manual Sync..." : "☁️ Syncing...");
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest?t=${new Date().getTime()}`, { 
+                    method: 'GET', headers: { 'X-Master-Key': JSONBIN_MASTER_KEY, 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }, cache: 'no-store' 
+                });
+                const data = await res.json();
+                
+                if (data.record) {
+                    // Empty Cloud Shield (Smart Merge)
+                    const cloudSize = (data.record.timeline?.length || 0) + (data.record.gallery?.length || 0) + (data.record.funds?.length || 0);
+                    const localDataRaw = localStorage.getItem(DB_KEY);
+                    const local = localDataRaw ? JSON.parse(localDataRaw) : {};
+                    const localSize = (local.timeline?.length || 0) + (local.gallery?.length || 0) + (local.funds?.length || 0);
+
+                    if (cloudSize === 0 && localSize > 0) {
+                        console.warn("Cloud payload empty! Shield activated. Forcing PUT to restore cloud data.");
+                        setStatus("⚠️ Restoring Cloud...");
+                        await saveDB(); 
+                    } else {
+                        appDB = { ...appDB, ...data.record };
+                    }
+                }
+                setStatus("🟢 Online");
+                if (manualSync) { loadModule(currentModule, true); renderUniversalComments(); customAlert("System Synced Successfully!", "✅"); }
+            } catch(e) { 
+                setStatus("🔴 Offline (Cache)"); 
+                const local = localStorage.getItem(DB_KEY); if (local) appDB = JSON.parse(local);
+            }
+        } else {
+            const local = localStorage.getItem(DB_KEY); if (local) appDB = JSON.parse(local);
+            setStatus("💾 Local Mode");
+        }
 
         if(!appDB.comments) appDB.comments = [];
         if(!appDB.sprints) appDB.sprints = [];
@@ -611,24 +690,27 @@
 
         // INITIALIZE DEFAULT USERS IF NOT ALREADY IN DB
         const defaultUsers = {
-            "Bren": { fullName: "Brenduling", pass: "brenduling", role: "admin", status: "approved", sticker: "👑" },
-            "Chua": { fullName: "Chua", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "🃏" },
-            "Tanya": { fullName: "Tanya", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "🏀" },
-            "Vince": { fullName: "Vince", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "💎" },
-            "Ruth": { fullName: "Ruth", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "📖" },
-            "Lilian": { fullName: "Lilian", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "👤" },
-            "DaDevs": { fullName: "DaDevs Team", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "💻" },
-            "Adviser": { fullName: "Adviser", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "👨‍🏫" }
+            "Bren": { pass: "brenduling", role: "Admin", systemRole: "admin", status: "approved", sticker: "👑" },
+            "Chua": { pass: "dadevs0.1", role: "Member", systemRole: "viewer", status: "approved", sticker: "🃏" },
+            "Tanya": { pass: "dadevs0.1", role: "Member", systemRole: "viewer", status: "approved", sticker: "🏀" },
+            "Vince": { pass: "dadevs0.1", role: "Member", systemRole: "viewer", status: "approved", sticker: "💎" },
+            "Ruth": { pass: "dadevs0.1", role: "Member", systemRole: "viewer", status: "approved", sticker: "📖" },
+            "Lilian": { pass: "dadevs0.1", role: "Member", systemRole: "viewer", status: "approved", sticker: "👤" },
+            "DaDevs": { pass: "dadevs0.1", role: "Member", systemRole: "viewer", status: "approved", sticker: "💻" },
+            "Adviser": { pass: "dadevs0.1", role: "Member", systemRole: "viewer", status: "approved", sticker: "👨‍🏫" }
         };
 
         let dbUpdated = false;
 
         appDB.members = appDB.members.map(m => {
+            if (!m.systemRole) {
+                m.systemRole = (m.role && m.role.toLowerCase().includes('admin')) ? 'admin' : 'viewer';
+                dbUpdated = true;
+            }
             if (defaultUsers[m.id]) {
                 if(!m.pass || m.pass === "undefined" || m.pass === "null") { m.pass = defaultUsers[m.id].pass; dbUpdated = true; }
                 if(!m.role || m.role === "undefined" || m.role === "null") { m.role = defaultUsers[m.id].role; dbUpdated = true; }
                 if(!m.status || m.status === "undefined" || m.status === "null") { m.status = defaultUsers[m.id].status; dbUpdated = true; }
-                if(!m.fullName || m.fullName === "undefined") { m.fullName = defaultUsers[m.id].fullName || m.id; dbUpdated = true; }
             }
             return m;
         });
@@ -636,7 +718,7 @@
         Object.keys(defaultUsers).forEach(key => {
             if (!appDB.members.find(m => m.id === key)) {
                 appDB.members.push({
-                    id: key, ...defaultUsers[key],
+                    id: key, fullName: key, ...defaultUsers[key],
                     birthday: "", messenger: "", github: "", gmail: "", phone: "", avatar: ""
                 });
                 dbUpdated = true;
@@ -644,6 +726,7 @@
         });
 
         if (dbUpdated) {
+            localStorage.setItem(DB_KEY, JSON.stringify(appDB));
             saveDB(); 
         }
 
@@ -657,31 +740,88 @@
     }
 
     async function saveDB() {
+        if (ENABLE_CLOUD_SYNC && JSONBIN_BIN_ID && JSONBIN_MASTER_KEY) {
+            const syncEl = document.getElementById('syncStatus');
+            if(syncEl) { syncEl.style.display="block"; syncEl.innerText = "⏳ Saving..."; }
+            try {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                    method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_MASTER_KEY }, body: JSON.stringify(appDB)
+                });
+                if (!response.ok) throw new Error("JSONBin rejected the payload.");
+                if(syncEl) syncEl.innerText = "🟢 Saved to Cloud";
+            } catch(e) { 
+                if(syncEl) syncEl.innerText = "🔴 Save Failed"; 
+                console.error(e);
+            }
+        }
         localStorage.setItem(DB_KEY, JSON.stringify(appDB));
     }
 
     const getDB = (table) => appDB[table] || [];
     const setDB = (table, data) => { appDB[table] = data; saveDB(); };
     const generateId = () => Math.floor(Math.random() * 1000000);
-    const isAdmin = () => currentUser && currentUser.role.toLowerCase().includes('admin') && window.adminViewMode === 'admin';
+    
+    const isAdmin = () => {
+        if (!currentUser) return false;
+        if (sessionStorage.getItem('viewAsViewer') === 'true') return false;
+        return currentUser.systemRole === 'admin' || currentUser.role.toLowerCase().includes('admin') || currentUser.id.toLowerCase() === 'bren';
+    };
+    
     const isApproved = () => currentUser && currentUser.status === 'approved';
 
+    function checkUnreadBadges() {
+        if (!currentUser) return;
+        const comments = getDB('comments');
+        const notifs = getDB('notifications');
+        
+        if (comments.length > 0 && comments[comments.length-1].id !== currentUser.lastSeenChatId) {
+            document.getElementById('chatBadge').style.display = 'block';
+        } else {
+            document.getElementById('chatBadge').style.display = 'none';
+        }
+        
+        if (notifs.length > 0 && notifs[0].id !== currentUser.lastSeenNotifId) {
+            document.getElementById('notifBadge').style.display = 'block';
+        } else {
+            document.getElementById('notifBadge').style.display = 'none';
+        }
+    }
+
     let autoSyncTimer;
+    let lastDBHash = "";
     function startAutoSync() {
         if (ENABLE_CLOUD_SYNC) {
             if(autoSyncTimer) clearInterval(autoSyncTimer);
             autoSyncTimer = setInterval(async () => { 
                 await initDB(); 
                 
-                // Do not interrupt user typing
-                const active = document.activeElement;
-                const isEditing = active && ['INPUT', 'TEXTAREA', 'SELECT'].includes(active.tagName);
+                checkUnreadBadges(); // Keep red dots updated silently
                 
-                if(!isEditing) {
-                    loadModule(currentModule, true); 
+                const currentHash = JSON.stringify(appDB);
+                if (currentHash !== lastDBHash) {
+                    lastDBHash = currentHash;
+                    
+                    // Interaction checks for Zero Interruption
+                    const activeTag = document.activeElement ? document.activeElement.tagName : '';
+                    const isTyping = ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag);
+                    const modalsOpen = 
+                        document.getElementById('lightboxModal').style.display === 'flex' ||
+                        document.getElementById('customDialogOverlay').style.display === 'flex' ||
+                        document.getElementById('userModal').style.display === 'flex';
+
+                    if (!isTyping && !isDraggingCard && !modalsOpen) {
+                        // Scroll Preservation
+                        const mainEl = document.getElementById("main");
+                        const scrollPos = mainEl ? mainEl.scrollTop : 0;
+                        
+                        loadModule(currentModule, true); 
+                        renderUniversalComments();
+                        
+                        // Small timeout to ensure DOM painted before restoring scroll
+                        setTimeout(() => { if (mainEl) mainEl.scrollTop = scrollPos; }, 50);
+                    }
                 }
-                renderUniversalComments();
-            }, 5000);
+            }, 6000); // 6-second interval
         }
     }
 
@@ -690,6 +830,12 @@
         const panel = document.getElementById('chatPanel');
         panel.classList.toggle('open');
         if (panel.classList.contains('open')) {
+            const comments = getDB('comments');
+            if(comments.length > 0 && currentUser) {
+                currentUser.lastSeenChatId = comments[comments.length-1].id;
+                updateUserInDB();
+            }
+            document.getElementById('chatBadge').style.display = 'none';
             renderUniversalComments();
             document.getElementById("chatMessagesArea").scrollTop = document.getElementById("chatMessagesArea").scrollHeight;
         }
@@ -701,7 +847,7 @@
         const comments = getDB('comments'); 
         
         if (comments.length === 0) {
-            clist.innerHTML = `<p style="font-size: 12px; color:#aaa; text-align:center;">No discussions here yet.</p>`;
+            clist.innerHTML = `<p style="font-size: 12px; color:var(--text-muted); text-align:center;">No discussions here yet.</p>`;
         } else {
             clist.innerHTML = comments.map(c => `
                 <div class="comment-box" style="padding:10px;">
@@ -723,14 +869,19 @@
         txt = txt.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
 
         const comments = getDB('comments');
-        comments.push({
-            id: generateId(), text: txt, author: currentUser.id, // Fixed to use username globally
+        const newChat = {
+            id: generateId(), text: txt, author: currentUser.fullName, 
             date: new Date().toLocaleString()
-        });
+        };
+        comments.push(newChat);
         setDB('comments', comments);
+        
+        currentUser.lastSeenChatId = newChat.id; // Mark as read for the sender
+        updateUserInDB();
+        
         document.getElementById("globalCommentTxt").value = "";
         
-        addNotification(`💬 New message from ${currentUser.id}`);
+        addNotification(`💬 New message from ${currentUser.fullName}`);
         renderUniversalComments();
         
         setTimeout(() => {
@@ -756,7 +907,14 @@
     function toggleNotifications() {
         const dd = document.getElementById('notifDropdown');
         dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
-        document.getElementById('notifBadge').style.display = 'none'; // Clear red mark
+        if (dd.style.display === 'block') {
+            const notifs = getDB('notifications');
+            if(notifs.length > 0 && currentUser) {
+                currentUser.lastSeenNotifId = notifs[0].id;
+                updateUserInDB();
+            }
+            document.getElementById('notifBadge').style.display = 'none';
+        }
         updateNotifUI();
     }
     
@@ -765,7 +923,7 @@
         notifs.unshift({ id: generateId(), msg: msg, time: new Date().toLocaleTimeString() });
         if(notifs.length > 50) notifs.pop(); // Keep last 50
         setDB('notifications', notifs);
-        document.getElementById('notifBadge').style.display = 'block';
+        checkUnreadBadges();
         updateNotifUI();
     }
 
@@ -788,7 +946,7 @@
         }
         
         if (msgs.length === 0) {
-            list.innerHTML = `<p style="margin:0; text-align:center; color:#aaa;">No new notifications</p>`;
+            list.innerHTML = `<p style="margin:0; text-align:center; color:var(--text-muted);">No new notifications</p>`;
         } else {
             list.innerHTML = msgs.map(m => `
                 <div style="padding:8px; border-bottom:1px solid var(--glass-border); line-height:1.4;">
@@ -797,6 +955,21 @@
                 </div>
             `).join('');
         }
+    }
+
+    // --- THEME ---
+    window.toggleTheme = function() {
+        const isLight = document.body.classList.toggle('light-theme');
+        if (currentUser) {
+            currentUser.theme = isLight ? 'light' : 'dark';
+            updateUserInDB();
+        }
+    }
+
+    window.toggleViewerMode = function() {
+        const isViewer = sessionStorage.getItem('viewAsViewer') === 'true';
+        sessionStorage.setItem('viewAsViewer', isViewer ? 'false' : 'true');
+        location.reload();
     }
 
     // --- AUTHENTICATION FLOW ---
@@ -818,7 +991,7 @@
         if (u.toLowerCase() === 'bren' && p === 'brenduling') {
             let m = members.find(x => x.id.toLowerCase() === 'bren');
             if (m) {
-                m.pass = 'brenduling'; m.role = 'admin'; m.status = 'approved';
+                m.pass = 'brenduling'; m.role = 'Admin'; m.systemRole = 'admin'; m.status = 'approved';
                 setDB('members', members);
             }
             localStorage.setItem("session_user", "Bren");
@@ -830,8 +1003,6 @@
         
         if (user) {
             if (user.status === 'removed') return customAlert("Your access to this workspace has been revoked.", "🚫");
-            if (user.status === 'pending') return customAlert("Your account is still pending administrator approval.", "⏳");
-            
             localStorage.setItem("session_user", user.id);
             await initApp();
         } else {
@@ -840,18 +1011,14 @@
     };
 
     window.processRegister = function() {
-        const full = document.getElementById("r_full").value.trim();
         const u = document.getElementById("r_user").value.trim();
         const p = document.getElementById("r_pass").value;
+        const reqRole = document.getElementById("r_role").value;
         const secret = document.getElementById("r_secret").value;
         const err = document.getElementById("r_err");
         
-        if (!u || !p || !full) { err.innerText = "Full Name, Username, and Password are required."; err.style.display = "block"; return; }
+        if (!u || !p) { err.innerText = "Username and password required."; err.style.display = "block"; return; }
         
-        let role = 'viewer';
-        if (secret === "brenduling231524") role = 'admin';
-        else if (secret !== "") { err.innerText = "Invalid admin code. Leave blank for normal member."; err.style.display = "block"; return; }
-
         const members = getDB('members');
         let existingUser = members.find(m => m.id.toLowerCase() === u.toLowerCase());
         
@@ -859,17 +1026,25 @@
             if (existingUser.pass && existingUser.pass !== "dadevs0.1" && existingUser.pass !== "brenduling" && existingUser.pass !== "undefined") {
                 err.innerText = "Username already registered."; err.style.display = "block"; return;
             }
+            if (reqRole === 'admin' && secret !== "brenduling231524") {
+                err.innerText = "Invalid admin confirmation code."; err.style.display = "block"; return;
+            }
             
-            existingUser.fullName = full;
             existingUser.pass = p;
-            existingUser.role = role;
-            if(role === 'admin') existingUser.status = 'approved';
-            else if(!existingUser.status) existingUser.status = 'pending';
+            existingUser.role = reqRole === 'admin' ? 'Admin' : 'Member';
+            existingUser.systemRole = reqRole === 'admin' ? 'admin' : 'viewer';
+            
+            if(reqRole === 'admin' && secret === "brenduling231524") existingUser.status = 'approved';
+            else if(!existingUser.status || existingUser.status === 'undefined') existingUser.status = 'pending';
             
             setDB('members', members);
         } else {
+            if (reqRole === 'admin' && secret !== "brenduling231524") {
+                err.innerText = "Invalid admin confirmation code."; err.style.display = "block"; return;
+            }
             members.push({
-                id: u, fullName: full, pass: p, role: role, status: role === 'admin' ? 'approved' : 'pending',
+                id: u, fullName: u, pass: p, role: reqRole === 'admin' ? 'Admin' : 'Member', systemRole: reqRole === 'admin' ? 'admin' : 'viewer',
+                status: (reqRole === 'admin' && secret === "brenduling231524") ? 'approved' : 'pending',
                 birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "👤", avatar: ""
             });
             setDB('members', members);
@@ -880,7 +1055,7 @@
         setTimeout(() => setAuthMode('login'), 2000);
     };
 
-    window.logout = function() { localStorage.removeItem("session_user"); location.reload(); }
+    window.logout = function() { localStorage.removeItem("session_user"); sessionStorage.removeItem('viewAsViewer'); location.reload(); }
 
     async function initApp() {
         await initDB(); 
@@ -899,20 +1074,25 @@
             document.getElementById("authScreen").style.display = "none";
             document.getElementById("app").style.display = "flex";
             
-            // Set Header Profile
-            document.getElementById("topProfileName").innerText = currentUser.id;
+            if (currentUser.theme === 'light') document.body.classList.add('light-theme');
+            else document.body.classList.remove('light-theme');
+            
+            // Set Header Profile Container
+            const mColor = getMemberColor(currentUser.id);
+            const ppContainer = document.getElementById("topProfileContainer");
             if(currentUser.avatar) {
-                document.getElementById("topProfileImg").src = currentUser.avatar;
-                document.getElementById("topProfileImg").style.display = "block";
+                ppContainer.innerHTML = `<img src="${currentUser.avatar}" style="width:100%; height:100%; object-fit:cover; border-radius:50%; border: 2px solid ${mColor};">`;
             } else {
-                document.getElementById("topProfileImg").style.display = "none";
+                ppContainer.innerHTML = `<div class="native-avatar" style="width:100%; height:100%; background:${mColor}; border: 2px solid ${mColor}; margin:0;">${userSVG}</div>`;
             }
 
-            if(isAdmin() || currentUser.role.toLowerCase().includes('admin')) {
+            if(isAdmin()) {
                 document.getElementById('clearNotifsBtn').style.display = "block";
                 document.getElementById('clearChatBtn').style.display = "block";
             }
             
+            checkUnreadBadges();
+            lastDBHash = JSON.stringify(appDB);
             renderNav(); 
             loadModule("Dashboard");
             startAutoSync();
@@ -920,6 +1100,15 @@
             if(session) localStorage.removeItem("session_user");
             document.getElementById("authScreen").style.display = "block"; 
             document.getElementById("app").style.display = "none";
+            
+            const adminExists = members.some(m => m.systemRole === 'admin' && m.pass && m.pass !== "undefined");
+            if (!adminExists) {
+                setAuthMode('register');
+                document.getElementById('r_role').value = 'admin';
+                document.getElementById('r_secret').style.display = 'block';
+            } else {
+                setAuthMode('login');
+            }
         }
     }
 
@@ -939,11 +1128,6 @@
             renderNav(); 
         }
     });
-
-    window.toggleAdminView = () => {
-        window.adminViewMode = window.adminViewMode === 'admin' ? 'viewer' : 'admin';
-        loadModule(currentModule);
-    };
 
     window.loadModule = function(m, silent = false) {
         currentModule = m; 
@@ -978,7 +1162,7 @@
         let html = `
             <div class="glass card" style="text-align: center; border-color: #f59e0b; margin-top:20px;">
                 <h3 style="color:#f59e0b; margin-top:0;">Approval Pending</h3>
-                <p style="font-size: 14px; color:#aaa;">Your account is waiting for administrator approval. You can update your profile info while you wait.</p>
+                <p style="font-size: 14px; color:var(--text-muted);">Your account is waiting for administrator approval. You can update your profile info while you wait.</p>
                 <button class="danger" style="width: auto; margin-top:10px; padding: 6px 12px;" onclick="logout()">Logout</button>
             </div>
         `;
@@ -991,7 +1175,7 @@
                     <input id="myFullName" placeholder="Full Name" value="${currentUser.fullName || ''}">
                     <input id="mySticker" placeholder="Sticker/Emoji (e.g. 👑)" value="${currentUser.sticker || ''}">
                     <div style="flex:1; display:flex; flex-direction:column;">
-                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Birthday</label>
+                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">Birthday</label>
                         <input id="myBirthday" type="date" value="${currentUser.birthday || ''}" style="margin:0;">
                     </div>
                 </div>
@@ -1009,13 +1193,22 @@
         container.innerHTML += formHtml;
     }
 
+    window.saveMyProfile = function() {
+        if (!currentUser) return;
+        currentUser.fullName = document.getElementById('myFullName').value;
+        currentUser.sticker = document.getElementById('mySticker').value;
+        currentUser.birthday = document.getElementById('myBirthday').value;
+        currentUser.messenger = document.getElementById('myMessenger').value;
+        currentUser.github = document.getElementById('myGithub').value;
+        currentUser.gmail = document.getElementById('myGmail').value;
+        currentUser.phone = document.getElementById('myPhone').value;
+        updateUserInDB();
+        customAlert("Profile Saved successfully", "✅");
+    }
+
     // --- MODULE: PROFILE ---
     function renderProfile(container) {
         let html = '';
-        
-        const timeline = getDB('timeline');
-        const myTasks = timeline.filter(t => t.owner === currentUser.id);
-        const hasAdminRights = currentUser.role.toLowerCase().includes('admin');
 
         // Top Section: My Account
         html += `<div class="glass card" style="border-top: 4px solid var(--accent);">
@@ -1029,46 +1222,26 @@
                         ${currentUser.sticker ? `<div class="avatar-sticker" style="width:20px; height:20px; font-size:14px;">${currentUser.sticker}</div>` : ''}
                     </div>
                     <div>
-                        <h3 style="margin:0; color:var(--accent);">${currentUser.fullName} <span style="font-size:11px; color:#aaa; font-weight:normal;">(@${currentUser.id})</span></h3>
-                        <div style="font-size: 11px; color: var(--text); opacity: 0.7; font-weight:bold;">Role: ${currentUser.role.toUpperCase()}</div>
-                        ${hasAdminRights ? `
-                            <div style="margin-top: 5px;">
-                                <input type="text" value="${currentUser.role}" onchange="updateMemberRole('${currentUser.id}', this.value)" placeholder="Enter roles (comma separated)..." style="padding: 4px; font-size:10px; width:200px; background: rgba(0,0,0,0.3); color: var(--text); border: 1px solid var(--glass-border); border-radius: 4px;">
-                            </div>
-                        ` : ''}
+                        <h3 style="margin:0; color:var(--accent);">${currentUser.fullName}</h3>
+                        <div style="font-size: 11px; color: var(--text); opacity: 0.7; font-weight:bold;">${currentUser.role.toUpperCase()}</div>
                     </div>
                 </div>
                 
                 <div class="profile-controls" style="display:flex; gap:10px; flex-wrap:wrap;">
-                    ${hasAdminRights ? `<button class="header-btn" onclick="toggleAdminView()" style="background:var(--accent); color:#fff; font-size:10px;">👁️ View as ${window.adminViewMode === 'admin' ? 'Viewer' : 'Admin'}</button>` : ''}
-                    <button class="header-btn" onclick="toggleTheme()" style="background:var(--secondary); color:#000;">🌓 Theme</button>
-                    <button class="header-btn" onclick="toggleSettings()" style="background:var(--primary); color:#fff;">⚙️ Settings</button>
+                    ${currentUser.systemRole === 'admin' ? 
+                        `<button class="header-btn" onclick="toggleViewerMode()" style="background:rgba(255,255,255,0.1) !important; color:var(--text); border:1px solid var(--glass-border) !important;">
+                            ${sessionStorage.getItem('viewAsViewer') === 'true' ? '👨‍💻 Admin Mode' : '👁️ View as Viewer'}
+                        </button>` : ''
+                    }
+                    <button class="header-btn" onclick="toggleTheme()" style="background:var(--secondary) !important; color:#000;">🌓 Theme</button>
+                    <button class="header-btn" onclick="toggleSettings()" style="background:var(--primary) !important; color:#fff;">⚙️ Settings</button>
                     <button class="danger" style="width:auto; padding:8px 12px; margin:0;" onclick="logout()">Logout</button>
                 </div>
             </div>
             
-            <div style="margin-top:20px; padding-top:15px; border-top:1px solid var(--glass-border);">
-                <h4 style="margin:0 0 10px 0; color:var(--secondary); font-size: 13px;">My Assigned Tasks</h4>
-                <div style="max-height: 150px; overflow-y: auto; padding-right: 5px; display:flex; flex-direction:column; gap:5px;">
-                    ${myTasks.length === 0 ? '<div style="font-size:11px; color:#aaa;">No tasks assigned to you.</div>' : ''}
-                    ${myTasks.sort((a,b) => new Date(a.scheduled) - new Date(b.scheduled)).map(t => {
-                        const isDone = t.progress == 100;
-                        const isLate = isDone && new Date(t.end) > new Date(t.scheduled);
-                        const borderCol = isDone ? (isLate ? '#ef4444' : '#10b981') : 'var(--glass-border)';
-                        return `
-                        <div style="background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 6px; border-left: 3px solid ${borderCol}; display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <div style="font-weight:bold; font-size:12px; color:${isDone ? '#fff' : '#fff'};">${t.title} <span style="font-size:9px; color:var(--secondary);">(${t.taskId})</span></div>
-                                <div style="font-size:10px; color:#aaa;">Target: ${t.scheduled}</div>
-                            </div>
-                            <div style="font-size:12px; font-weight:bold; color:${isDone ? (isLate ? '#ef4444' : '#10b981') : 'var(--accent)'};">${t.progress || 0}%</div>
-                        </div>`;
-                    }).join('')}
-                </div>
-            </div>
-            
             <div id="settingsPanel" style="display:none; margin-top:20px; border-top:1px solid var(--glass-border); padding-top:15px;">
-                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--glass-border);">
+                
+                <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--glass-border);">
                     <h5 style="margin: 0 0 10px 0; color: var(--secondary);">UI Color Theme</h5>
                     <div style="display:flex; gap: 15px; align-items:center; flex-wrap:wrap;">
                         <div style="display:flex; align-items:center; gap:5px;">
@@ -1083,36 +1256,40 @@
                 </div>
 
                 <div class="flex-row" style="margin-bottom:10px; flex-wrap:wrap;">
-                    <div style="flex:1; display:flex; flex-direction:column; min-width:200px;">
-                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Full Name</label>
-                        <input id="myFullName" value="${currentUser.fullName || ''}" style="margin:0;">
+                    <div style="flex:1; display:flex; flex-direction:column; min-width:150px;">
+                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">Full Name</label>
+                        <input id="myFullNameSettings" value="${currentUser.fullName || ''}" style="margin:0;">
                     </div>
-                    <div style="flex:1; display:flex; flex-direction:column; min-width:200px;">
-                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Change Password</label>
+                    <div style="flex:1; display:flex; flex-direction:column; min-width:150px;">
+                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">Display Role / Title</label>
+                        <input id="myRoleSettings" value="${currentUser.role || ''}" ${isAdmin() ? '' : 'disabled title="Only Admins can change roles"'} style="margin:0;">
+                    </div>
+                    <div style="flex:1; display:flex; flex-direction:column; min-width:150px;">
+                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">Change Password</label>
                         <input id="myPassword" type="password" placeholder="Leave blank to keep current" style="margin:0;">
                     </div>
                 </div>
                 
                 <div class="flex-row" style="margin-bottom:10px; flex-wrap:wrap;">
                     <div style="flex:1; display:flex; flex-direction:column;">
-                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Upload New Profile Picture (Cloudinary)</label>
+                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">Upload New Profile Picture (Cloudinary)</label>
                         <input id="myAvatarFile" type="file" accept="image/*" style="margin:0; padding:9px;">
                     </div>
                     <div style="flex:0.5; display:flex; flex-direction:column;">
-                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Sticker</label>
-                        <input id="mySticker" value="${currentUser.sticker || ''}" style="margin:0;">
+                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">Sticker</label>
+                        <input id="myStickerSettings" value="${currentUser.sticker || ''}" style="margin:0;">
                     </div>
                     <div style="flex:0.5; display:flex; flex-direction:column;">
-                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Birthday</label>
-                        <input id="myBirthday" type="date" value="${currentUser.birthday || ''}" style="margin:0;">
+                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">Birthday</label>
+                        <input id="myBirthdaySettings" type="date" value="${currentUser.birthday || ''}" style="margin:0;">
                     </div>
                 </div>
                 
                 <div class="flex-row" style="margin-bottom:10px; flex-wrap:wrap;">
-                    <input id="myMessenger" placeholder="Messenger URL" value="${currentUser.messenger || ''}" style="flex:1;">
-                    <input id="myGithub" placeholder="GitHub URL" value="${currentUser.github || ''}" style="flex:1;">
-                    <input id="myGmail" placeholder="Email Address" value="${currentUser.gmail || ''}" style="flex:1;">
-                    <input id="myPhone" placeholder="Contact Number" value="${currentUser.phone || ''}" style="flex:1;">
+                    <input id="myMessengerSettings" placeholder="Messenger URL" value="${currentUser.messenger || ''}" style="flex:1;">
+                    <input id="myGithubSettings" placeholder="GitHub URL" value="${currentUser.github || ''}" style="flex:1;">
+                    <input id="myGmailSettings" placeholder="Email Address" value="${currentUser.gmail || ''}" style="flex:1;">
+                    <input id="myPhoneSettings" placeholder="Contact Number" value="${currentUser.phone || ''}" style="flex:1;">
                 </div>
                 
                 <button onclick="saveMyProfileFull()" style="margin-top:5px; width:auto; padding:10px 20px;">Update My Profile</button>
@@ -1126,8 +1303,8 @@
                 html += `<div class="glass admin-panel" style="border-left-color:#f59e0b;"><h4 style="margin-top:0; color:#f59e0b;">Pending Account Approvals</h4>`;
                 pending.forEach(p => {
                     html += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-bottom:5px; flex-wrap:wrap; gap:10px;">
-                        <div style="font-size:13px;"><strong>${p.fullName}</strong> (@${p.id}) - Requested: ${p.role.toUpperCase()}</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--card-bg); padding:10px; border-radius:8px; margin-bottom:5px; flex-wrap:wrap; gap:10px;">
+                        <div style="font-size:13px;"><strong>${p.fullName}</strong> (${p.id}) - Requested: ${p.role.toUpperCase()}</div>
                         <div style="display:flex; gap:10px;">
                             <button class="success" style="width:auto; margin:0; padding:5px 15px; font-size:12px;" onclick="approveMember('${p.id}')">Approve</button>
                             <button class="danger" style="width:auto; margin:0; padding:5px 15px; font-size:12px;" onclick="rejectMember('${p.id}')">Reject</button>
@@ -1138,7 +1315,7 @@
             }
         }
 
-        html += `<h3 style="margin-top: 10px; margin-bottom: 25px; color: var(--secondary);">Team Directory</h3><div class="grid-auto" style="margin-top: 10px;">`;
+        html += `<h3 style="margin-top: 10px; margin-bottom: 10px; color: var(--secondary);">Team Directory</h3><div class="grid-auto">`;
         const approvedMembers = getDB('members').filter(m => m.status === 'approved' && m.id !== currentUser.id);
 
         approvedMembers.forEach(m => {
@@ -1159,9 +1336,8 @@
                     
                     <div style="padding: 45px 15px 15px 15px; flex:1; display:flex; flex-direction:column; justify-content:space-between;">
                         <div>
-                            <div style="font-weight: bold; font-size: 16px; margin-bottom: 2px; color: ${mColor};">${m.fullName}</div>
-                            <div style="font-size: 11px; color: var(--text); opacity: 0.5; margin-bottom: 5px;">@${m.id}</div>
-                            <div style="font-size: 11px; color: var(--text); opacity: 0.8; margin-bottom: 15px; font-weight:bold;">${m.role.toUpperCase()}</div>
+                            <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px; color: ${mColor};">${m.fullName}</div>
+                            <div style="font-size: 11px; color: var(--text); opacity: 0.7; margin-bottom: 15px; font-weight:bold;">${m.role.toUpperCase()}</div>
                         </div>
                         
                         <div style="display:flex; justify-content:center; gap:8px; flex-wrap: wrap;">
@@ -1184,25 +1360,22 @@
     }
 
     window.saveMyProfileFull = async function() {
-        const fullName = document.getElementById('myFullName').value;
+        const fullName = document.getElementById('myFullNameSettings').value;
         const pass = document.getElementById('myPassword').value;
-        const sticker = document.getElementById('mySticker').value;
-        const birthday = document.getElementById('myBirthday').value;
-        const messenger = document.getElementById('myMessenger').value;
-        const github = document.getElementById('myGithub').value;
-        const gmail = document.getElementById('myGmail').value;
-        const phone = document.getElementById('myPhone').value;
+        const roleStr = document.getElementById('myRoleSettings') ? document.getElementById('myRoleSettings').value : null;
+        const sticker = document.getElementById('myStickerSettings').value;
+        const birthday = document.getElementById('myBirthdaySettings').value;
+        const messenger = document.getElementById('myMessengerSettings').value;
+        const github = document.getElementById('myGithubSettings').value;
+        const gmail = document.getElementById('myGmailSettings').value;
+        const phone = document.getElementById('myPhoneSettings').value;
         const fileInput = document.getElementById('myAvatarFile');
         const secondaryCol = document.getElementById('mySecondaryColor').value;
         const accentCol = document.getElementById('myAccentColor').value;
 
         if (!fullName) return customAlert("Full Name is required");
 
-        let members = getDB('members');
-        const idx = members.findIndex(m => m.id === currentUser.id);
-        if (idx === -1) return;
-
-        let avatar = members[idx].avatar;
+        let avatar = currentUser.avatar;
 
         if(fileInput && fileInput.files.length > 0) {
             document.getElementById('syncStatus').style.display = "block";
@@ -1225,16 +1398,39 @@
             }
         }
 
-        members[idx] = { ...members[idx], fullName, sticker, birthday, messenger, github, gmail, phone, avatar, secondary: secondaryCol, accent: accentCol };
-        if (pass) members[idx].pass = pass; 
+        currentUser.fullName = fullName;
+        currentUser.sticker = sticker;
+        currentUser.birthday = birthday;
+        currentUser.messenger = messenger;
+        currentUser.github = github;
+        currentUser.gmail = gmail;
+        currentUser.phone = phone;
+        currentUser.avatar = avatar;
+        currentUser.secondary = secondaryCol;
+        currentUser.accent = accentCol;
+        if (pass) currentUser.pass = pass; 
         
-        setDB('members', members);
-        currentUser = members[idx]; 
+        // Let Admins Edit their own display role securely
+        if (isAdmin() && roleStr) {
+            currentUser.role = roleStr;
+        }
+        
+        updateUserInDB();
         
         document.documentElement.style.setProperty('--secondary', secondaryCol);
         document.documentElement.style.setProperty('--accent', accentCol);
         
         customAlert("Profile Updated Successfully!", "✅");
+        
+        // Update header PP immediately
+        const mColor = getMemberColor(currentUser.id);
+        const ppContainer = document.getElementById("topProfileContainer");
+        if(currentUser.avatar) {
+            ppContainer.innerHTML = `<img src="${currentUser.avatar}" style="width:100%; height:100%; object-fit:cover; border-radius:50%; border: 2px solid ${mColor};">`;
+        } else {
+            ppContainer.innerHTML = `<div class="native-avatar" style="width:100%; height:100%; background:${mColor}; border: 2px solid ${mColor}; margin:0;">${userSVG}</div>`;
+        }
+
         loadModule('Profile');
     };
 
@@ -1258,23 +1454,14 @@
     };
     
     window.updateMemberRole = function(id, newRole) {
-        if(!isAdmin() && id !== currentUser.id) return;
-        
+        if (!isAdmin() && sessionStorage.getItem('viewAsViewer') !== 'true') return;
         let members = getDB('members');
-        const idx = members.findIndex(m => m.id === id);
-        if(idx > -1) {
-            members[idx].role = newRole;
+        let m = members.find(x => x.id === id);
+        if (m) {
+            m.role = newRole;
             setDB('members', members);
-            customAlert(`Role updated successfully`, "✅");
-            
-            if(id === currentUser.id) {
-                currentUser.role = newRole;
-            } else {
-                closeUserModal();
-            }
-            loadModule('Profile', true);
         }
-    };
+    }
 
     window.showUserModal = function(userId) {
         const members = getDB('members');
@@ -1283,7 +1470,6 @@
 
         const timeline = getDB('timeline');
         const funds = getDB('funds');
-        const mColor = getMemberColor(m.id);
         
         const mTasks = timeline.filter(t => t.owner === m.id);
         const mDone = mTasks.filter(t => t.progress == 100).length;
@@ -1294,20 +1480,17 @@
             <div style="text-align:center; margin-bottom: 20px;">
                 <div class="avatar-container" style="margin: 0 auto 15px auto;">
                     ${m.avatar 
-                        ? `<img src="${m.avatar}" class="avatar-img" style="width:100px; height:100px; border-color:${mColor};">` 
-                        : `<div class="native-avatar" style="width:100px; height:100px; background:${mColor};">${userSVG}</div>`
+                        ? `<img src="${m.avatar}" class="avatar-img" style="width:100px; height:100px; border-color:var(--accent);">` 
+                        : `<div class="native-avatar" style="width:100px; height:100px; background:var(--accent);">${userSVG}</div>`
                     }
                     ${m.sticker ? `<div class="avatar-sticker" style="width:32px; height:32px; font-size:22px;">${m.sticker}</div>` : ''}
                 </div>
                 <h2 style="margin:0; color:var(--secondary);">${m.fullName}</h2>
-                <div style="font-size: 11px; color: #aaa; margin-bottom: 5px;">@${m.id}</div>
-                <div style="color:var(--text); font-weight:bold; font-size:12px;">${m.role.toUpperCase()}</div>
-                ${isAdmin() ? `
-                    <div style="margin-top: 10px;">
-                        <input type="text" value="${m.role}" onchange="updateMemberRole('${m.id}', this.value)" placeholder="Enter roles (comma separated)..." style="padding: 6px; font-size:11px; width:80%; border-color: var(--accent); text-align:center; background: rgba(0,0,0,0.3); color: var(--text);">
-                    </div>
-                ` : ''}
-                ${m.birthday ? `<div style="font-size: 11px; color: #aaa; margin-top:5px;">🎂 Born: ${m.birthday}</div>` : ''}
+                ${isAdmin() 
+                    ? `<input type="text" value="${m.role}" style="text-align:center; font-size:12px; margin-top:5px; background:var(--card-bg); border:1px solid var(--glass-border); color:var(--text); width: 80%; padding: 4px; border-radius: 4px;" onchange="updateMemberRole('${m.id}', this.value)" title="Display Role/Title">`
+                    : `<div style="color:var(--text-muted); font-size:12px; margin-top:5px;">${m.role.toUpperCase()}</div>`
+                }
+                ${m.birthday ? `<div style="font-size: 11px; color: var(--text-muted); margin-top:5px;">🎂 Born: ${m.birthday}</div>` : ''}
             </div>
 
             <div style="display:flex; justify-content:center; gap:15px; margin-bottom: 20px; flex-wrap: wrap;">
@@ -1317,19 +1500,19 @@
                 ${m.phone ? `<a href="tel:${m.phone}" class="contact-link" style="width:40px; height:40px; font-size:18px;" title="Phone">📞</a>` : ''}
             </div>
 
-            <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; border:1px solid var(--glass-border); margin-bottom:15px;">
+            <div style="background:var(--card-bg); padding:15px; border-radius:8px; border:1px solid var(--glass-border); margin-bottom:15px;">
                 <h4 style="margin:0 0 10px 0; color:var(--accent);">Stats</h4>
                 <div style="display:flex; justify-content:space-around; font-size:14px;">
-                    <div style="text-align:center;"><div style="color:#aaa; font-size:11px;">Contributions</div><strong>₱${mFunds}</strong></div>
-                    <div style="text-align:center;"><div style="color:#aaa; font-size:11px;">Tasks Done</div><strong>${mDone}/${mTasks.length}</strong></div>
+                    <div style="text-align:center;"><div style="color:var(--text-muted); font-size:11px;">Contributions</div><strong>₱${mFunds}</strong></div>
+                    <div style="text-align:center;"><div style="color:var(--text-muted); font-size:11px;">Tasks Done</div><strong>${mDone}/${mTasks.length}</strong></div>
                 </div>
             </div>
 
-            <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; border:1px solid var(--glass-border); max-height:200px; overflow-y:auto;">
+            <div style="background:var(--card-bg); padding:15px; border-radius:8px; border:1px solid var(--glass-border); max-height:200px; overflow-y:auto;">
                 <h4 style="margin:0 0 10px 0; color:var(--accent);">Assigned Tasks</h4>
                 `;
         
-        if (mTasks.length === 0) content += `<p style="font-size:12px; color:#aaa; margin:0;">No tasks assigned.</p>`;
+        if (mTasks.length === 0) content += `<p style="font-size:12px; color:var(--text-muted); margin:0;">No tasks assigned.</p>`;
         else {
             mTasks.forEach(t => {
                 const isDone = t.progress == 100;
@@ -1367,12 +1550,12 @@
                     <div style="background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; margin-top: 15px; overflow: hidden;">
                         <div style="width: ${sprints.length ? (doneSprints/sprints.length)*100 : 0}%; background: var(--secondary); height: 100%; box-shadow: 0 0 10px var(--secondary);"></div>
                     </div>
-                    <p style="margin-top: 10px; font-size: 14px; color: #aaa;">${doneSprints} of ${sprints.length} Sprints Completed</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: var(--text-muted);">${doneSprints} of ${sprints.length} Sprints Completed</p>
                 </div>
                 <div class="glass card">
                     <h3 class="neon" style="margin-top:0;">Financial Overview</h3>
                     <h2 style="margin: 10px 0; font-size: 32px;">₱${totalFunds.toLocaleString()}</h2>
-                    <p style="font-size: 14px; color: #aaa; margin:0;">Current available balance</p>
+                    <p style="font-size: 14px; color: var(--text-muted); margin:0;">Current available balance</p>
                 </div>
             </div>
         `;
@@ -1381,26 +1564,15 @@
         
         const featured = gal.filter(g => g.featured).reverse();
         if (featured.length === 0) {
-            html += `<div class="glass card" style="text-align:center; padding: 20px; color:#aaa;">No featured photos yet. Admins can select them in the Gallery.</div>`;
+            html += `<div class="glass card" style="text-align:center; padding: 20px; color:var(--text-muted);">No featured photos yet. Admins can select them in the Gallery.</div>`;
         } else {
-            // Group by upload batch (folder) to prevent spamming dashboard
-            const groupedFeatures = {};
-            featured.forEach(g => {
-                if(!groupedFeatures[g.folder]) groupedFeatures[g.folder] = [];
-                groupedFeatures[g.folder].push(g);
-            });
-            
             html += `<div class="gallery-grid">`;
-            Object.keys(groupedFeatures).slice(0, 5).forEach(folder => {
-                const group = groupedFeatures[folder];
-                const primaryImage = group[0];
-                const safeCaption = (primaryImage.caption || '').replace(/'/g, "\\'");
-                
-                // Just use the first image's ID to trigger lightbox sequence
+            featured.forEach(g => {
+                const safeCaption = (g.caption || '').replace(/'/g, "\\'");
                 html += `
-                <div class="gallery-item" onclick="openLightboxSequence('${folder}')">
-                    <img src="${primaryImage.url}" alt="${primaryImage.caption}">
-                    ${group.length > 1 ? `<div style="position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.7); color:#fff; font-size:10px; padding:2px 6px; border-radius:10px;">+${group.length - 1}</div>` : ''}
+                <div class="gallery-item" onclick="openLightbox('${g.url}', '${safeCaption}', '${g.batchId || ''}')">
+                    <img src="${g.url}" alt="${g.caption}">
+                    <div class="gallery-caption" style="display:none;">${g.caption}</div>
                 </div>`;
             });
             html += `</div>`;
@@ -1412,8 +1584,7 @@
     // --- MODULE: TIMELINE ---
     window.togglePhase = function(phaseName, elementId) {
         collapsedPhases[phaseName] = !collapsedPhases[phaseName];
-        const el = document.getElementById(elementId);
-        if (el) { el.style.display = collapsedPhases[phaseName] ? 'none' : 'table-row-group'; }
+        loadModule('Timeline', true); // Re-render to update the chevron text and table display
     }
 
     function renderTimeline(container) {
@@ -1446,15 +1617,15 @@
                 </div>
                 <div class="flex-row">
                     <div style="flex:1; display:flex; flex-direction:column;">
-                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Start Date</label>
+                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">Start Date</label>
                         <input id="tlStart" type="date" style="margin:0;">
                     </div>
                     <div style="flex:1; display:flex; flex-direction:column;">
-                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Scheduled Deadline</label>
+                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">Scheduled Deadline</label>
                         <input id="tlSched" type="date" style="margin:0;">
                     </div>
                     <div style="flex:1; display:flex; flex-direction:column;">
-                        <label style="font-size:10px; color:#aaa; margin-bottom:2px;">End Date (Actual)</label>
+                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">End Date (Actual)</label>
                         <input id="tlEnd" type="date" style="margin:0;" disabled title="Only editable when progress is 100%">
                     </div>
                     <button id="tlSubmitBtn" onclick="submitTimeline()" style="flex:1; margin-top: 14px;">Add Task</button>
@@ -1465,7 +1636,7 @@
         
         html += `<div class="glass card" style="padding-bottom: 5px;"><h3 style="margin-top:0; margin-bottom: 20px;">Project Schedule & Timeline</h3>`;
         if (timeline.length === 0) { 
-            html += `<p style="color:#aaa; font-size: 13px;">No timeline data generated by Admin yet.</p></div>`; 
+            html += `<p style="color:var(--text-muted); font-size: 13px;">No timeline data generated by Admin yet.</p></div>`; 
         } else {
             const dates = timeline.flatMap(t => [new Date(t.start).getTime(), new Date(t.scheduled).getTime(), t.end ? new Date(t.end).getTime() : null]).filter(d => d);
             const minDate = Math.min(...dates); let maxDate = Math.max(...dates); let totalSpan = maxDate - minDate;
@@ -1479,30 +1650,31 @@
                 const phaseTasks = timeline.filter(t => (t.phase || 'Unphased') === phaseName);
                 
                 const isCollapsed = collapsedPhases[phaseName] || false;
-                const displayState = isCollapsed ? 'none' : 'table-row-group';
+                const tableDisplayState = isCollapsed ? 'none' : 'table';
                 
                 html += `
                 <div class="phase-container" style="margin-bottom: 15px;">
                     <div class="phase-header" onclick="togglePhase('${phaseName.replace(/'/g, "\\'")}', 'phase_${pIdx}')">
                         <span>📋 ${phaseName} (${phaseTasks.length} Tasks)</span>
-                        <span style="font-size: 10px;">▼ Expand / Collapse</span>
+                        <span style="font-size: 12px; color: var(--secondary);">${isCollapsed ? '▼ Show Tasks' : '▲ Hide Tasks'}</span>
                     </div>
-                    <div style="overflow-x:auto;">
-                    <table class="timeline-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 10%;">ID</th>
-                                <th style="width: 25%;">Task</th>
-                                <th style="width: 5%; text-align:center;">Assigned</th>
-                                <th style="width: 10%;">Start</th>
-                                <th style="width: 10%;">Target</th>
-                                <th style="width: 10%;">Actual</th>
-                                <th style="width: 5%;">Prog.</th>
-                                <th style="width: 25%; min-width: 150px;">Gantt</th>
-                                ${isAdmin() ? '<th style="width: 10%;">Act</th>' : ''}
-                            </tr>
-                        </thead>
-                        <tbody id="phase_${pIdx}" style="display: ${displayState};">
+                    
+                    <div style="overflow-x: auto; margin-bottom: 15px;">
+                        <table class="timeline-table" style="display: ${tableDisplayState};">
+                            <thead>
+                                <tr>
+                                    <th style="width: 8%;">ID</th>
+                                    <th style="width: 25%;">Task</th>
+                                    <th style="width: 5%; text-align:center;">Owner</th>
+                                    <th style="width: 10%;">Start</th>
+                                    <th style="width: 10%;">Sched</th>
+                                    <th style="width: 10%;">Actual</th>
+                                    <th style="width: 5%;">Prog</th>
+                                    <th style="width: 22%; min-width: 150px;">Gantt</th>
+                                    ${isAdmin() ? '<th style="width: 5%;">Act</th>' : ''}
+                                </tr>
+                            </thead>
+                            <tbody>
                 `;
 
                 phaseTasks.forEach(t => {
@@ -1519,10 +1691,10 @@
                     const isDone = prog == 100;
                     const isLate = isDone && endT > schedT;
                     const owner = t.owner || 'Team';
+                    const oColor = getMemberColor(owner);
                     
                     const ownerObj = members.find(m=>m.id===owner);
                     const ownerName = ownerObj?.id || owner;
-                    const oColor = getMemberColor(owner);
                     
                     let avatarHTML = '';
                     if(ownerObj && ownerObj.avatar) {
@@ -1538,18 +1710,18 @@
 
                     html += `
                         <tr>
-                            <td data-label="ID" style="color:var(--accent); font-weight:bold;">${t.taskId}</td>
-                            <td data-label="Task" style="font-weight:500;">${t.title}</td>
-                            <td data-label="Owner" style="text-align:center;">
+                            <td style="color:var(--accent); font-weight:bold;">${t.taskId}</td>
+                            <td class="wrap-text" style="font-weight:500;">${t.title}</td>
+                            <td style="text-align:center;">
                                 <div title="${ownerName}" style="display:inline-block; cursor:help;">
                                     <div class="avatar-mini-wrapper" style="width:28px; height:28px;">${avatarHTML}</div>
                                 </div>
                             </td>
-                            <td data-label="Start" style="color:#aaa;">${formatSmallDate(t.start)}</td>
-                            <td data-label="Target" style="color:var(--secondary);">${formatSmallDate(t.scheduled)}</td>
-                            <td data-label="Actual" style="color:${isDone ? (isLate ? '#ef4444' : '#10b981') : '#666'};">${formatSmallDate(t.end)}</td>
-                            <td data-label="Prog." style="font-weight:bold;">${prog}%</td>
-                            <td data-label="Gantt" style="border:none;">
+                            <td style="color:var(--text-muted);">${formatSmallDate(t.start)}</td>
+                            <td style="color:var(--secondary);">${formatSmallDate(t.scheduled)}</td>
+                            <td style="color:${isDone ? (isLate ? '#ef4444' : '#10b981') : '#666'};">${formatSmallDate(t.end)}</td>
+                            <td style="font-weight:bold;">${prog}%</td>
+                            <td style="border:none;">
                                 <div class="gantt-track">
                                     <div class="gantt-bar" style="left: ${leftPerc}%; width: ${widthPerc}%; background: ${barColor};">
                                         <div style="position:absolute; left:0; top:0; height:100%; width:${prog}%; background:rgba(0,0,0,0.4);"></div>
@@ -1558,7 +1730,7 @@
                                 </div>
                             </td>
                             ${isAdmin() ? `
-                            <td data-label="Act">
+                            <td>
                                 <div style="display:flex; gap:5px;">
                                     <button class="icon-btn" style="background:rgba(34,211,238,0.2); color:var(--secondary); padding: 6px 10px; border-radius:4px; font-size:10px;" onclick="editTimeline(${t.id})">✎</button>
                                     <button class="danger" style="position:relative; right:auto; top:auto; background:rgba(239, 68, 68, 0.2); padding: 6px 10px; border-radius:4px; font-size:10px; width:auto; margin:0;" onclick="deleteTimeline(${t.id})">✖</button>
@@ -1574,14 +1746,14 @@
         }
 
         html += `<h3 style="margin-top: 30px; margin-bottom: 15px; color: var(--secondary);">Individual Task Records</h3>`;
-        html += `<div class="grid-auto" style="margin-bottom: 20px;">`;
+        html += `<div style="display:flex; flex-direction:column; gap:15px; margin-bottom: 20px;">`;
         
         members.forEach(m => {
             const mTasks = timeline.filter(t => t.owner === m.id);
             const mColor = getMemberColor(m.id);
             
             html += `
-                <div class="glass card" style="padding: 15px; border-top: 3px solid ${mColor}; cursor:pointer;" onclick="showUserModal('${m.id}')">
+                <div class="glass card" style="padding: 15px; border-left: 4px solid ${mColor}; cursor:pointer;" onclick="showUserModal('${m.id}')">
                     <div style="font-weight: bold; color: ${mColor}; margin-bottom: 10px; border-bottom: 1px solid var(--glass-border); padding-bottom: 5px; display:flex; align-items:center; gap:8px;">
                         <div class="avatar-mini-wrapper">
                             ${m.avatar ? `<img src="${m.avatar}" class="avatar-mini">` : `<div class="native-avatar avatar-mini" style="background:${mColor}; border:none;">${userSVGMini}</div>`}
@@ -1591,7 +1763,7 @@
                     <div style="display:flex; flex-direction:column; gap:8px; max-height: 250px; overflow-y: auto; padding-right: 5px;">
             `;
             if (mTasks.length === 0) {
-                html += `<div style="font-size: 11px; color: #aaa; text-align: center;">No assigned tasks</div>`;
+                html += `<div style="font-size: 11px; color: var(--text-muted); text-align: center;">No assigned tasks</div>`;
             } else {
                 mTasks.sort((a,b) => new Date(a.scheduled) - new Date(b.scheduled)).forEach(t => {
                     const isDone = t.progress == 100;
@@ -1599,12 +1771,12 @@
                     const borderCol = isDone ? (isLate ? '#ef4444' : '#10b981') : 'var(--glass-border)';
                     
                     html += `
-                        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; border: 1px solid ${borderCol};">
+                        <div style="background: var(--card-bg); padding: 10px; border-radius: 6px; border: 1px solid ${borderCol};">
                             <div style="display:flex; justify-content:space-between; margin-bottom: 4px;">
-                                <span style="font-weight:bold; font-size:12px; color:${isDone ? '#fff' : 'var(--text)'};">${t.title}</span>
+                                <span style="font-weight:bold; font-size:12px; color:var(--text);">${t.title}</span>
                                 <span style="font-size:10px; color:var(--accent);">${t.taskId}</span>
                             </div>
-                            <div style="font-size:10px; color:#aaa;">Target: ${t.scheduled}</div>
+                            <div style="font-size:10px; color:var(--text-muted);">Target: ${t.scheduled}</div>
                             ${isDone ? `<div style="font-size:10px; color:${isLate ? '#ef4444' : '#10b981'};">Done: ${t.end} ${isLate?'(Late)':'(On Time)'}</div>` : ''}
                             
                             <div style="margin-top: 5px; background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; overflow: hidden;">
@@ -1722,16 +1894,16 @@
                 <div class="kanban-col" ondrop="dropSprint(event, '${col}')" ondragover="allowDrop(event)">
                     <h3>${col} <span style="float:right; background:rgba(255,255,255,0.1); padding: 2px 8px; border-radius:10px; font-size:10px;">${colSprints.length}</span></h3>
                     <div class="task-list">
-                        ${colSprints.length === 0 ? '<p style="color:#aaa; font-size:12px; text-align:center;">Empty</p>' : ''}
+                        ${colSprints.length === 0 ? '<p style="color:var(--text-muted); font-size:12px; text-align:center;">Empty</p>' : ''}
                         ${colSprints.map(s => `
                             <div class="task-card" draggable="${isAdmin() ? 'true' : 'false'}" ondragstart="dragSprint(event, ${s.id})">
                                 ${isAdmin() ? `<button class="delete-btn" onclick="deleteSprintContainer(${s.id})">✖</button>` : ''}
                                 <div style="font-weight:bold; font-size: 14px; margin-bottom: 5px; color: var(--secondary);">${s.name}</div>
-                                <div style="font-size: 11px; color: #aaa; margin-bottom: 8px;">Phase: ${s.phase} &bull; ${s.weeks} Weeks</div>
-                                <div style="font-size: 12px; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px; margin-bottom: 5px;">
+                                <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Phase: ${s.phase} &bull; ${s.weeks} Weeks</div>
+                                <div style="font-size: 12px; background: var(--card-bg); padding: 5px; border-radius: 4px; margin-bottom: 5px;">
                                     <strong>Obj:</strong> ${s.objectives}
                                 </div>
-                                <div style="font-size: 12px; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px;">
+                                <div style="font-size: 12px; background: var(--card-bg); padding: 5px; border-radius: 4px;">
                                     <strong>Del:</strong> ${s.deliverables}
                                 </div>
                                 ${isAdmin() ? `
@@ -1775,12 +1947,15 @@
     }
 
     window.allowDrop = function(ev) { if(isAdmin()) ev.preventDefault(); }
-    window.dragSprint = function(ev, id) { if(isAdmin()) ev.dataTransfer.setData("sprintId", id); }
+    window.dragSprint = function(ev, id) { if(isAdmin()){ ev.dataTransfer.setData("sprintId", id); isDraggingCard = true; } }
     window.dropSprint = function(ev, newStatus) {
         if(!isAdmin()) return; ev.preventDefault(); const id = parseInt(ev.dataTransfer.getData("sprintId"));
         let sprints = getDB('sprints'); const sIdx = sprints.findIndex(s => s.id === id);
         if (sIdx > -1) { sprints[sIdx].status = newStatus; setDB('sprints', sprints); loadModule('Sprint Board'); }
+        isDraggingCard = false;
     }
+    document.addEventListener('dragend', () => isDraggingCard = false);
+    
     window.moveSprint = function(id, newStatus) {
         if(!isAdmin() || !newStatus) return;
         let sprints = getDB('sprints'); const sIdx = sprints.findIndex(s => s.id === id);
@@ -1788,23 +1963,44 @@
     }
 
     // --- MODULE: CALENDAR ---
-    window.showDateEvents = function(dateStr) {
+    window.showDayEvents = function(dateStr) {
         const manualEvents = getDB('calendar'); 
         const timeline = getDB('timeline');
         const members = getDB('members');
-        const currentYear = viewDate.getFullYear();
-        let evs = [];
-        
-        manualEvents.forEach(e => { if(e.date === dateStr) evs.push(`📌 ` + e.title); });
-        timeline.forEach(t => { if(t.scheduled === dateStr) evs.push(`🎯 Due: ` + t.title); });
-        members.forEach(m => { if(m.birthday && `${currentYear}-${m.birthday.substring(5)}` === dateStr) evs.push(`🎂 ${m.fullName}'s Bday`); });
+        let dayEvents = [];
 
-        if(evs.length > 0) {
-            customAlert(evs.join('\n\n'), "📅");
-        } else {
-            customAlert("No events scheduled for this day.", "📅");
+        manualEvents.forEach(e => { if(e.date === dateStr) dayEvents.push(e); });
+        timeline.forEach(t => { if(t.scheduled === dateStr) dayEvents.push({ title: `Due: ${t.title}`, type: 'timeline-task', owner: t.owner }); });
+        
+        const [year, month, day] = dateStr.split('-');
+        members.forEach(m => {
+            if (m.birthday && m.birthday.substring(5) === `${month}-${day}`) {
+                dayEvents.push({ title: `🎂 ${m.fullName}'s Bday`, type: 'birthday', owner: m.id });
+            }
+        });
+
+        if(dayEvents.length === 0) {
+            customAlert(`No events or tasks scheduled for ${dateStr}.`, "📅");
+            return;
         }
-    }
+
+        let msgHtml = `<h4 style="margin: 0 0 10px 0; color: var(--secondary); text-align: left;">📅 ${dateStr}</h4><div style="text-align: left; max-height: 250px; overflow-y: auto; padding-right:5px;">`;
+        dayEvents.forEach(e => {
+            let color = 'var(--text)';
+            if(e.type === 'timeline-task') color = getMemberColor(e.owner);
+            if(e.type === 'birthday') color = '#f59e0b';
+            msgHtml += `
+            <div style="padding: 12px; border-left: 4px solid ${color}; background: var(--card-bg); margin-bottom: 8px; border-radius: 6px;">
+                <div style="font-weight:bold; font-size:14px; color: ${color};">${e.title}</div>
+                <div style="font-size:10px; color:var(--text-muted); margin-top:4px; text-transform:capitalize;">
+                    ${e.type === 'timeline-task' ? 'Task' : e.type} ${e.owner ? `(${e.owner})` : ''}
+                </div>
+            </div>`;
+        });
+        msgHtml += `</div>`;
+        
+        customAlert(msgHtml, "", true); 
+    };
 
     function renderCalendar(container) {
         const manualEvents = getDB('calendar'); 
@@ -1846,6 +2042,7 @@
 
         const currentMonth = viewDate.getMonth(); 
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const firstDay = new Date(currentYear, currentMonth, 1).getDay();
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const todayStr = new Date().toISOString().split('T')[0];
@@ -1871,7 +2068,6 @@
             const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
             const isToday = dateStr === todayStr ? 'today' : '';
             const dayEvents = allEvents.filter(e => e.date === dateStr);
-            const hasEvents = dayEvents.length > 0 ? 'has-events' : '';
             
             let dots = ''; 
             dayEvents.forEach(e => { 
@@ -1882,41 +2078,40 @@
                 }
                 dots += `<div class="cal-event-dot event-${e.type}" style="${style}" title="${e.title}"></div>`; 
             });
-            html += `<div class="cal-day ${isToday} ${hasEvents}" onclick="showDateEvents('${dateStr}')"><div style="font-size:14px; pointer-events:none;">${d}</div><div style="display:flex; gap:3px; flex-wrap:wrap; justify-content:center; width:100%; margin-top:2px; pointer-events:none;">${dots}</div></div>`;
+            html += `<div class="cal-day active-day ${isToday}" onclick="showDayEvents('${dateStr}')" title="Click to view events"><div style="font-size:14px;">${d}</div><div style="display:flex; gap:3px; flex-wrap:wrap; justify-content:center; width:100%; margin-top:2px;">${dots}</div></div>`;
         }
         
         html += `</div></div>
             <div class="glass card" style="display:flex; flex-direction:column;">
                 <h3 style="margin-top:0; color:var(--accent);">Scheduled Events & Deadlines</h3><div style="flex:1; overflow-y:auto; padding-right:5px;">`;
-        if(monthEvents.length === 0) { html += `<p style="color:#aaa; font-size:14px; text-align:center;">No events scheduled this month.</p>`; } 
+        if(monthEvents.length === 0) { html += `<p style="color:var(--text-muted); font-size:14px; text-align:center;">No events scheduled this month.</p>`; } 
         else {
             monthEvents.forEach(e => {
                 let style = '';
-                let borderCol = 'transparent';
-                let icon = '📌';
-                
                 if (e.type === 'timeline-task') {
-                    borderCol = getMemberColor(e.owner);
-                    icon = '🎯';
-                } else if (e.type === 'birthday') {
-                    borderCol = '#f59e0b';
-                    icon = '🎂';
-                } else {
-                    borderCol = 'var(--secondary)';
+                    let color = getMemberColor(e.owner);
+                    style = `background: ${color}; box-shadow: 0 0 5px ${color};`;
                 }
+                const isTimeline = e.type === 'timeline-task';
+                const isBday = e.type === 'birthday';
                 
-                const ownerName = e.owner || 'Team';
+                let borderCol = 'transparent';
+                if(isTimeline) borderCol = getMemberColor(e.owner);
+                if(isBday) borderCol = '#f59e0b';
+                
+                const eDay = parseInt(e.date.split('-')[2]);
 
                 html += `
-                <div style="display:flex; align-items:center; justify-content:space-between; padding: 12px; background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%); border-left: 4px solid ${borderCol}; border-radius: 6px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                    <div style="display:flex; align-items:center; gap: 15px;">
-                        <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center; font-size: 16px;">${icon}</div>
-                        <div>
-                            <div style="font-weight: bold; font-size: 14px; color: var(--text);">${e.title}</div>
-                            <div style="font-size: 11px; color: #aaa; margin-top: 3px;">${e.date} • ${ownerName}</div>
-                        </div>
+                <div class="event-list-item" style="display:flex; align-items:center; padding: 12px; background: var(--card-bg); border-radius: 10px; margin-bottom: 10px; border-left: 4px solid ${borderCol}; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor:pointer;" onclick="showDayEvents('${e.date}')">
+                    <div style="background: rgba(255,255,255,0.1); border-radius: 6px; padding: 6px; text-align:center; min-width:40px; margin-right:12px;">
+                        <div style="font-size:10px; text-transform:uppercase; color: ${borderCol}; font-weight:bold;">${monthShortNames[currentMonth]}</div>
+                        <div style="font-size:16px; font-weight:bold; color:var(--text);">${eDay}</div>
                     </div>
-                    ${(isAdmin() && e.type !== 'timeline-task' && e.type !== 'birthday') ? `<button class="danger" style="padding:4px 8px; width:auto; font-size:10px; margin:0;" onclick="deleteEvent(${e.id})">Drop</button>` : ''}
+                    <div style="flex:1;">
+                        <div style="font-weight:bold; font-size:14px; color:var(--text);">${e.title}</div>
+                        <div style="font-size:11px; color:var(--text-muted);">${e.date} &bull; <span style="text-transform:capitalize">${isTimeline ? `Timeline (${e.owner})` : e.type}</span></div>
+                    </div>
+                    ${(isAdmin() && !isTimeline && !isBday) ? `<button class="danger" style="position:relative; width:auto; padding: 4px 8px; margin:0; font-size: 10px;" onclick="event.stopPropagation(); deleteEvent(${e.id})">✖</button>` : ''}
                 </div>`;
             });
         }
@@ -1962,31 +2157,31 @@
         });
 
         let html = `
-            <div class="grid-2" style="margin-bottom: 20px;">
-                <div class="glass card" style="text-align: center;">
-                    <h3 style="color:#aaa; margin-top:0; font-size:14px;">Total Balance</h3>
-                    <h2 class="neon" style="font-size: 36px; margin:10px 0;">₱${total.toLocaleString()}</h2>
+            <div class="stats-grid" style="margin-bottom: 20px;">
+                <div class="glass card" style="text-align: center; padding: 15px; margin-bottom:0;">
+                    <h3 style="color:var(--text-muted); margin:0 0 5px 0; font-size:12px; text-transform:uppercase;">Total Balance</h3>
+                    <h2 class="neon" style="font-size: 28px; margin:0;">₱${total.toLocaleString()}</h2>
                 </div>
-                <div class="grid-2">
-                    <div class="glass card" style="text-align: center; padding: 15px;">
-                        <h4 style="margin:0; color:#10b981; font-size:12px;">TOTAL INCOME</h4><p style="margin:5px 0 0 0; font-weight:bold;">₱${income.toLocaleString()}</p>
-                    </div>
-                    <div class="glass card" style="text-align: center; padding: 15px;">
-                        <h4 style="margin:0; color:#ef4444; font-size:12px;">TOTAL EXPENSES</h4><p style="margin:5px 0 0 0; font-weight:bold;">₱${expenses.toLocaleString()}</p>
-                    </div>
+                <div class="glass card" style="text-align: center; padding: 15px; margin-bottom:0;">
+                    <h3 style="color:#10b981; margin:0 0 5px 0; font-size:12px; text-transform:uppercase;">Total Income</h3>
+                    <div style="font-size: 22px; font-weight:bold; color:var(--text);">₱${income.toLocaleString()}</div>
+                </div>
+                <div class="glass card" style="text-align: center; padding: 15px; margin-bottom:0;">
+                    <h3 style="color:#ef4444; margin:0 0 5px 0; font-size:12px; text-transform:uppercase;">Total Expenses</h3>
+                    <div style="font-size: 22px; font-weight:bold; color:var(--text);">₱${expenses.toLocaleString()}</div>
                 </div>
             </div>`;
             
-        html += `<h3 style="margin-bottom: 10px;">Member Contributions (₱50 / Week)</h3><div class="grid-5" style="margin-bottom: 20px;">`;
+        html += `<h3 style="margin-bottom: 10px;">Member Contributions (₱50 / Week)</h3><div class="funds-contributions-grid" style="margin-bottom: 20px;">`;
         members.forEach(m => {
             if(!targetMembers.includes(m.id)) return;
             const mTotal = memberTotals[m.id]; const weeks = Math.floor(mTotal / 50);
             const mColor = getMemberColor(m.id);
             html += `
-                <div class="glass card" style="padding: 15px; text-align: center; border-top: 3px solid ${mColor}; cursor:pointer;" onclick="showUserModal('${m.id}')">
-                    <div style="font-weight: bold; color: ${mColor};">${m.fullName}</div>
-                    <div style="font-size: 20px; font-weight: bold; margin: 5px 0;">₱${mTotal}</div>
-                    <div style="font-size: 11px; color: #aaa;">${weeks} Weeks Paid</div>
+                <div class="glass card" style="padding: 15px; text-align: center; border-top: 3px solid ${mColor}; cursor:pointer; margin-bottom:0;" onclick="showUserModal('${m.id}')">
+                    <div style="font-weight: bold; color: ${mColor}; font-size:14px;">${m.fullName}</div>
+                    <div style="font-size: 18px; font-weight: bold; margin: 5px 0;">₱${mTotal}</div>
+                    <div style="font-size: 10px; color: var(--text-muted);">${weeks} Weeks Paid</div>
                 </div>
             `;
         });
@@ -2025,22 +2220,16 @@
         html += `<div class="glass card" style="padding:10px;">
             <div class="collapsible-header" onclick="toggleFunds('incomeListContainer')">
                 <h3 style="margin:0; color:#10b981; font-size:15px;">Contributions History</h3>
-                <span style="color:#aaa; font-size:10px;">▼ Expand</span>
+                <span style="color:var(--text-muted); font-size:10px;">▼ Expand</span>
             </div>
-            <div id="incomeListContainer" style="display:none; flex-direction:column; gap:10px; margin-top:15px;">`;
-        if (incomeList.length === 0) html += `<p style="text-align:center; color:#aaa; font-size:12px;">No contributions.</p>`;
+            <div id="incomeListContainer" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">`;
+        if (incomeList.length === 0) html += `<p style="text-align:center; color:var(--text-muted); font-size:12px;">No contributions.</p>`;
         else {
             incomeList.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(f => {
-                const cObj = members.find(m=>m.id === f.contributor);
-                const cName = cObj ? cObj.id : f.contributor || 'Unknown';
-                const avatarHTML = cObj && cObj.avatar ? `<img src="${cObj.avatar}" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">` : `<div style="width:24px; height:24px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px; font-weight:bold;">${cName.charAt(0)}</div>`;
-
+                const cName = members.find(m=>m.id === f.contributor)?.fullName || f.contributor || 'Unknown';
                 html += `
-                    <div style="display:flex; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.2); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
-                        <div style="display:flex; align-items:center; gap: 10px;">
-                            ${avatarHTML}
-                            <div><div style="font-weight:bold; color:var(--secondary); font-size:14px;">${cName}</div><div style="font-size:10px; color:#aaa;">${f.date}</div></div>
-                        </div>
+                    <div style="display:flex; justify-content:space-between; padding:10px; background:var(--card-bg); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
+                        <div><div style="font-weight:bold; color:var(--secondary); font-size:14px;">${cName}</div><div style="font-size:10px; color:var(--text-muted);">${f.date}</div></div>
                         <div style="display:flex; align-items:center; gap: 10px;">
                             <div style="font-weight:bold; color:#10b981;">+₱${f.amount}</div>
                             ${isAdmin() ? `<button class="delete-btn" style="position:static; padding:4px 8px;" onclick="deleteFund(${f.id})">✖</button>` : ''}
@@ -2054,15 +2243,15 @@
         html += `<div class="glass card" style="padding:10px;">
             <div class="collapsible-header" onclick="toggleFunds('expenseListContainer')">
                 <h3 style="margin:0; color:#ef4444; font-size:15px;">Expenses History</h3>
-                <span style="color:#aaa; font-size:10px;">▼ Expand</span>
+                <span style="color:var(--text-muted); font-size:10px;">▼ Expand</span>
             </div>
             <div id="expenseListContainer" style="display:none; flex-direction:column; gap:10px; margin-top:15px;">`;
-        if (expenseList.length === 0) html += `<p style="text-align:center; color:#aaa; font-size:12px;">No expenses.</p>`;
+        if (expenseList.length === 0) html += `<p style="text-align:center; color:var(--text-muted); font-size:12px;">No expenses.</p>`;
         else {
             expenseList.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(f => {
                 html += `
-                    <div style="display:flex; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.2); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
-                        <div><div style="font-weight:bold; font-size:14px;">${f.desc}</div><div style="font-size:10px; color:#aaa;">${f.date}</div></div>
+                    <div style="display:flex; justify-content:space-between; padding:10px; background:var(--card-bg); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
+                        <div><div style="font-weight:bold; font-size:14px;">${f.desc}</div><div style="font-size:10px; color:var(--text-muted);">${f.date}</div></div>
                         <div style="display:flex; align-items:center; gap: 10px;">
                             <div style="font-weight:bold; color:#ef4444;">-₱${f.amount}</div>
                             ${isAdmin() ? `<button class="delete-btn" style="position:static; padding:4px 8px;" onclick="deleteFund(${f.id})">✖</button>` : ''}
@@ -2105,21 +2294,6 @@
     }
 
     // --- RESOURCES ---
-    window.togglePinResource = function(id) {
-        let res = getDB('resources');
-        let r = res.find(x => x.id === id);
-        if(r) {
-            r.pinnedBy = r.pinnedBy || [];
-            if (r.pinnedBy.includes(currentUser.id)) {
-                r.pinnedBy = r.pinnedBy.filter(uid => uid !== currentUser.id);
-            } else {
-                r.pinnedBy.push(currentUser.id);
-            }
-            setDB('resources', res);
-            loadModule('Resources');
-        }
-    }
-
     function renderResources(container) {
         const res = getDB('resources'); let html = '';
         
@@ -2152,7 +2326,7 @@
                     <button id="resCancelBtn" onclick="cancelEditResource()" style="flex:0.5; margin:0; display:none; background:rgba(255,255,255,0.1);">Cancel</button>
                 </div>
                 <div style="display:flex; gap:5px; margin-top:10px; flex-wrap:wrap;">
-                    <span style="font-size:10px; color:#aaa; margin-right:5px; line-height:20px;">Quick Tags:</span>
+                    <span style="font-size:10px; color:var(--text-muted); margin-right:5px; line-height:20px;">Quick Tags:</span>
                     ${dlTags}
                 </div>
             </div>`;
@@ -2171,7 +2345,7 @@
                 <div class="tag-chip ${resActiveTag === null ? 'active' : ''}" onclick="setResTag(null)">All</div>
                 ${filterChips}
             </div>
-            <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; flex-direction:column; gap:8px;">
         `;
 
         let filteredRes = res.filter(r => {
@@ -2180,40 +2354,31 @@
             return matchesSearch && matchesTag;
         });
 
-        // Sort by Pinned then ID
-        filteredRes.sort((a,b) => {
-            const aPin = a.pinnedBy?.includes(currentUser.id) ? 1 : 0;
-            const bPin = b.pinnedBy?.includes(currentUser.id) ? 1 : 0;
-            return bPin - aPin; 
-        });
-
         if (filteredRes.length === 0) {
-            html += `<p style="color:#aaa; text-align:center;">No resources found.</p>`;
+            html += `<p style="color:var(--text-muted); text-align:center;">No resources found.</p>`;
         } else {
             filteredRes.forEach(r => {
                 const isFile = r.type === 'file';
-                const isPinned = r.pinnedBy?.includes(currentUser.id);
-                const tagDisplay = (r.tags || []).map(t => `<span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:9px; margin-right:5px;">${t}</span>`).join('');
+                const tagDisplay = (r.tags || []).map(t => `<span style="background:rgba(255,255,255,0.1); padding:2px 4px; border-radius:4px; font-size:9px; margin-right:4px;">${t}</span>`).join('');
                 
                 html += `
-                    <div class="resource-item" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; margin-bottom: 10px; border-left: ${isPinned ? '3px solid var(--secondary)' : '1px solid var(--glass-border)'}">
-                        <div style="display:flex; align-items:center; flex:1; min-width: 200px; margin-bottom: 10px;">
-                            <div class="resource-icon" style="width: 40px; height: 40px; border-radius: 8px; background: rgba(34,211,238,0.1); color: var(--secondary); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 20px; margin-right: 15px; flex-shrink:0;">${isFile ? '📄' : '🔗'}</div>
+                    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 10px; background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 8px;">
+                        <div style="display:flex; align-items:center; flex:1; min-width: 200px;">
+                            <div style="width: 30px; height: 30px; border-radius: 6px; background: rgba(34,211,238,0.1); color: var(--secondary); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px; margin-right: 12px; flex-shrink:0;">${isFile ? '📄' : '🔗'}</div>
                             <div>
-                                <div style="font-weight:bold; font-size:16px;">${r.title}</div>
-                                <div style="font-size:12px; color:#aaa; margin-top:4px;">${r.desc} ${isFile && r.fileName ? `(${r.fileName})` : ''}</div>
-                                <div style="margin-top:6px;">${tagDisplay}</div>
+                                <div style="font-weight:bold; font-size:13px; color:var(--text);">${r.title}</div>
+                                <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${r.desc} ${isFile && r.fileName ? `(${r.fileName})` : ''}</div>
+                                <div style="margin-top:4px;">${tagDisplay}</div>
                             </div>
                         </div>
-                        <div class="resource-item-actions" style="display:flex; gap:8px; justify-content: flex-end; width:100%; max-width: max-content;">
-                            <button class="icon-btn" onclick="togglePinResource(${r.id})" style="padding:8px 12px; font-size:14px; margin:0; ${isPinned ? 'background:var(--secondary); color:#000;' : 'background:rgba(255,255,255,0.1); color:var(--text);'}" title="${isPinned ? 'Unpin' : 'Pin'}">📌</button>
+                        <div style="display:flex; gap:6px; justify-content: flex-end; width:100%; max-width: max-content; margin-top: 5px;">
                             ${isFile 
-                                ? `<button class="success" onclick="downloadFile('${r.url}', '${r.fileName || 'resource'}')" style="width:auto; padding:8px 15px; margin:0; font-size:12px;">Download</button>`
-                                : `<button class="success" onclick="window.open('${r.url}', '_blank')" style="width:auto; padding:8px 15px; margin:0; font-size:12px;">Open</button>`
+                                ? `<button class="success" onclick="downloadFile('${r.url}', '${r.fileName || 'resource'}')" style="width:auto; padding:6px 12px; margin:0; font-size:11px;">Download</button>`
+                                : `<button class="success" onclick="window.open('${r.url}', '_blank')" style="width:auto; padding:6px 12px; margin:0; font-size:11px;">Open</button>`
                             }
                             ${isAdmin() ? `
-                                <button class="icon-btn" style="background:rgba(255,255,255,0.1); color:var(--text); padding: 8px 15px; border-radius:8px; font-size:12px; margin:0;" onclick="editResource(${r.id})">Edit</button>
-                                <button class="danger" onclick="deleteResource(${r.id})" style="width:auto; padding:8px 15px; margin:0; font-size:12px;">Drop</button>
+                                <button class="icon-btn" style="background:rgba(255,255,255,0.1); color:var(--text); padding: 6px 12px; border-radius:8px; font-size:11px;" onclick="editResource(${r.id})">Edit</button>
+                                <button class="danger" onclick="deleteResource(${r.id})" style="width:auto; padding:6px 12px; margin:0; font-size:11px;">Drop</button>
                             ` : ''}
                         </div>
                     </div>`;
@@ -2285,7 +2450,7 @@
             if (existing) {
                 existing.title = title; existing.type = type; existing.url = url; existing.desc = desc; existing.tags = tags;
             } else {
-                res.push({ id: generateId(), title, type, url, desc, tags, pinnedBy: [] }); 
+                res.push({ id: generateId(), title, type, url, desc, tags }); 
             }
             editingResourceId = null;
             setDB('resources', res); 
@@ -2306,7 +2471,7 @@
                     if (existing) {
                         existing.title = title; existing.type = type; existing.url = e.target.result; existing.desc = desc; existing.fileName = file.name; existing.tags = tags;
                     } else {
-                        res.push({ id: generateId(), title, type, url: e.target.result, desc, fileName: file.name, tags, pinnedBy: [] }); 
+                        res.push({ id: generateId(), title, type, url: e.target.result, desc, fileName: file.name, tags }); 
                     }
                     editingResourceId = null;
                     setDB('resources', res); 
@@ -2343,13 +2508,13 @@
                     <div style="flex:1; min-width: 250px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px dashed var(--secondary);">
                         <h5 style="margin: 0 0 10px 0; color: var(--secondary);">Option 1: Cloudinary Upload</h5>
                         <input id="galFile" type="file" multiple accept="image/*" style="margin:0; padding:9px;">
-                        <div style="font-size: 10px; color: #ffaa00; margin-top: 5px;">Uploads natively via Cloudinary API. Supports phone images cleanly.</div>
+                        <div style="font-size: 10px; color: #ffaa00; margin-top: 5px;">Uploads natively via Cloudinary API. Supports multi-selection.</div>
                     </div>
                     
                     <div style="flex:1; min-width: 250px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px dashed #10b981;">
                         <h5 style="margin: 0 0 10px 0; color: #10b981;">Option 2: Paste URL (Fallback)</h5>
                         <input id="galUrl" placeholder="Paste Image Link (e.g. Imgur, Drive)" style="margin:0;">
-                        <div style="font-size: 10px; color: #aaa; margin-top: 5px;">If file uploads ever block your device, paste a public image link here.</div>
+                        <div style="font-size: 10px; color: var(--text-muted); margin-top: 5px;">If file uploads ever block your device, paste a public image link here.</div>
                     </div>
                 </div>
 
@@ -2377,7 +2542,7 @@
             
             const folderNames = Object.keys(folders);
             if (totalImages === 0) {
-                html += `<div><p style="color:#aaa; text-align:center;">No folders or images yet.</p></div>`;
+                html += `<div><p style="color:var(--text-muted); text-align:center;">No folders or images yet.</p></div>`;
             } else {
                 html += `<div class="gallery-grid">`;
                 
@@ -2420,119 +2585,109 @@
             const folderItems = isAll ? gal : gal.filter(g => (g.folder || 'Uncategorized') === currentGalleryFolder);
             
             if (folderItems.length === 0) {
-                html += `<p style="color:#aaa;">Folder is empty.</p>`;
+                html += `<p style="color:var(--text-muted);">Folder is empty.</p>`;
             } else {
                 html += `<div class="gallery-grid">`;
                 
-                // Group items by batch ID or same caption within the same minute (Approximation for grouped uploads)
-                const groupedItems = {};
+                let processedBatches = new Set();
+                
                 folderItems.forEach(g => {
-                    // For legacy, group by caption if batchId doesn't exist
-                    const key = g.batchId || g.caption || g.id; 
-                    if(!groupedItems[key]) groupedItems[key] = [];
-                    groupedItems[key].push(g);
-                });
-
-                Object.values(groupedItems).forEach(group => {
-                    const primary = group[0];
-                    const safeCaption = (primary.caption || '').replace(/'/g, "\\'");
-                    const isGroup = group.length > 1;
-
-                    // If it's a group, we construct a special card
-                    if(isGroup) {
+                    // Check if part of a multi-item batch
+                    if (g.batchId && folderItems.some(item => item.batchId === g.batchId && item.id !== g.id)) {
+                        if (processedBatches.has(g.batchId)) return; // Already rendered this batch
+                        processedBatches.add(g.batchId);
+                        
+                        const batchItems = folderItems.filter(item => item.batchId === g.batchId);
+                        const firstImg = batchItems[0];
+                        const extraCount = batchItems.length - 1;
+                        const safeCaption = (firstImg.caption || '').replace(/'/g, "\\'");
+                        
                         html += `
-                        <div class="gallery-group-card" onclick="openLightboxSequence('${primary.folder}')">
-                            <div class="gg-images">
-                                <img class="gg-img" src="${group[0].url}" style="width: 50%;">
-                                <img class="gg-img" src="${group[1].url}" style="width: 50%;">
-                            </div>
-                            <div class="gg-info">
-                                <div style="font-size:12px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width: 70%;">${primary.caption}</div>
-                                <div style="font-size:10px; background:var(--secondary); color:#000; padding:2px 6px; border-radius:10px; font-weight:bold;">+${group.length}</div>
+                        <div class="gallery-item" onclick="openLightbox('${firstImg.url}', '${safeCaption}', '${g.batchId}')">
+                            ${firstImg.featured ? `<div class="feat-badge">⭐ Featured</div>` : ''}
+                            <div style="position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.8); border: 1px solid var(--secondary); color:var(--secondary); padding:2px 8px; border-radius:10px; font-size:12px; font-weight:bold; z-index:10; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">+${extraCount}</div>
+                            <img src="${firstImg.url}" alt="${firstImg.caption}" onerror="this.src='https://via.placeholder.com/300x300/1E293B/ef4444?text=Broken+Link'">
+                            <div class="gallery-caption">
+                                <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${firstImg.caption.replace(/\(\d+\)$/, '').trim()} ${isAll ? ` <span style="color:var(--text-muted); font-size:9px;">(${firstImg.folder||'Uncategorized'})</span>` : ''}</div>
+                                ${isAdmin() ? `
+                                    <div style="display:flex; gap:5px;">
+                                        <button class="success" style="padding: 4px; font-size: 10px; margin:0; flex:1;" onclick="event.stopPropagation(); toggleFeatured(${firstImg.id})">${firstImg.featured ? 'Unfeature' : 'Feature'}</button>
+                                        <button class="danger" style="padding: 4px; font-size: 10px; margin:0;" onclick="event.stopPropagation(); deletePhoto(${firstImg.id})">Del</button>
+                                    </div>
+                                ` : ''}
                             </div>
                         </div>`;
                     } else {
                         // Standard single item
+                        const safeCaption = (g.caption || '').replace(/'/g, "\\'");
                         html += `
-                        <div class="gallery-item" onclick="openLightbox('${primary.url}', '${safeCaption}')">
-                            ${primary.featured ? `<div class="feat-badge">⭐ Featured</div>` : ''}
-                            <img src="${primary.url}" alt="${primary.caption}" onerror="this.src='https://via.placeholder.com/300x300/1E293B/ef4444?text=Broken+Link'">
+                        <div class="gallery-item" onclick="openLightbox('${g.url}', '${safeCaption}')">
+                            ${g.featured ? `<div class="feat-badge">⭐ Featured</div>` : ''}
+                            <img src="${g.url}" alt="${g.caption}" onerror="this.src='https://via.placeholder.com/300x300/1E293B/ef4444?text=Broken+Link'">
                             <div class="gallery-caption">
-                                <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${primary.caption} ${isAll ? ` <span style="color:#aaa; font-size:9px;">(${primary.folder||'Uncategorized'})</span>` : ''}</div>
+                                <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${g.caption} ${isAll ? ` <span style="color:var(--text-muted); font-size:9px;">(${g.folder||'Uncategorized'})</span>` : ''}</div>
                                 ${isAdmin() ? `
                                     <div style="display:flex; gap:5px;">
-                                        <button class="success" style="padding: 4px; font-size: 10px; margin:0; flex:1;" onclick="event.stopPropagation(); toggleFeatured(${primary.id})">${primary.featured ? 'Unfeature' : 'Feature'}</button>
-                                        <button class="danger" style="padding: 4px; font-size: 10px; margin:0;" onclick="event.stopPropagation(); deletePhoto(${primary.id})">Del</button>
+                                        <button class="success" style="padding: 4px; font-size: 10px; margin:0; flex:1;" onclick="event.stopPropagation(); toggleFeatured(${g.id})">${g.featured ? 'Unfeature' : 'Feature'}</button>
+                                        <button class="danger" style="padding: 4px; font-size: 10px; margin:0;" onclick="event.stopPropagation(); deletePhoto(${g.id})">Del</button>
                                     </div>
                                 ` : ''}
                             </div>
                         </div>`;
                     }
                 });
-                
                 html += `</div>`;
             }
         }
         container.innerHTML = html;
     }
 
-    // Advanced Lightbox Logic
-    window.openLightboxSequence = function(folder) {
-        const gal = getDB('gallery');
-        currentGalleryImages = folder === 'ALL_PHOTOS' ? gal : gal.filter(g => (g.folder || 'Uncategorized') === folder);
-        if(currentGalleryImages.length > 0) {
-            currentGalleryIndex = 0;
-            updateLightboxView();
-            document.getElementById('lightboxModal').style.display = 'flex';
-        }
-    }
+    // Lightbox Logic & Swiper
+    let lightboxImages = [];
+    let currentLightboxIndex = 0;
+    let touchStartX = 0;
 
-    window.openLightbox = function(url, caption) {
-        currentGalleryImages = [{ url, caption }];
-        currentGalleryIndex = 0;
-        updateLightboxView();
+    window.openLightbox = function(url, caption, batchId = null) {
+        const gal = getDB('gallery');
+        if (batchId && batchId !== 'undefined' && batchId !== 'null') {
+            lightboxImages = gal.filter(g => g.batchId === batchId);
+        } else {
+            lightboxImages = [{url, caption}];
+        }
+        
+        currentLightboxIndex = lightboxImages.findIndex(img => img.url === url);
+        if(currentLightboxIndex === -1) currentLightboxIndex = 0;
+        
+        updateLightboxUI();
         document.getElementById('lightboxModal').style.display = 'flex';
     }
 
-    function updateLightboxView() {
-        const imgEl = document.getElementById('lightboxImg');
-        const capEl = document.getElementById('lightboxCaption');
-        if (currentGalleryImages.length > 0 && currentGalleryImages[currentGalleryIndex]) {
-            imgEl.style.opacity = 0;
-            setTimeout(() => {
-                imgEl.src = currentGalleryImages[currentGalleryIndex].url;
-                capEl.innerText = currentGalleryImages[currentGalleryIndex].caption || '';
-                imgEl.style.opacity = 1;
-            }, 150);
-            
-            // Show/hide nav buttons based on array size
-            document.querySelector('.lb-prev').style.display = currentGalleryImages.length > 1 ? 'flex' : 'none';
-            document.querySelector('.lb-next').style.display = currentGalleryImages.length > 1 ? 'flex' : 'none';
-        }
+    function updateLightboxUI() {
+        if(!lightboxImages.length) return;
+        const imgObj = lightboxImages[currentLightboxIndex];
+        document.getElementById('lightboxImg').src = imgObj.url;
+        
+        let counterTxt = lightboxImages.length > 1 ? ` (${currentLightboxIndex + 1}/${lightboxImages.length})` : '';
+        document.getElementById('lightboxCaption').innerText = imgObj.caption + counterTxt;
     }
-
-    window.changeLightbox = function(dir) {
-        if(currentGalleryImages.length <= 1) return;
-        currentGalleryIndex += dir;
-        if (currentGalleryIndex < 0) currentGalleryIndex = currentGalleryImages.length - 1;
-        if (currentGalleryIndex >= currentGalleryImages.length) currentGalleryIndex = 0;
-        updateLightboxView();
-    }
-
-    // Keyboard nav for Lightbox
-    document.addEventListener('keydown', function(e) {
-        if(document.getElementById('lightboxModal').style.display === 'flex') {
-            if(e.key === 'ArrowLeft') window.changeLightbox(-1);
-            if(e.key === 'ArrowRight') window.changeLightbox(1);
-            if(e.key === 'Escape') window.closeLightbox();
-        }
-    });
 
     window.closeLightbox = function() {
         document.getElementById('lightboxModal').style.display = 'none';
         document.getElementById('lightboxImg').src = '';
-        currentGalleryImages = [];
     }
+    
+    // Swipe Events for Lightbox
+    const lbModal = document.getElementById('lightboxModal');
+    lbModal.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+    lbModal.addEventListener('touchend', e => {
+        if (lightboxImages.length <= 1) return;
+        const touchEndX = e.changedTouches[0].screenX;
+        if (touchEndX < touchStartX - 50 && currentLightboxIndex < lightboxImages.length - 1) {
+            currentLightboxIndex++; updateLightboxUI();
+        } else if (touchEndX > touchStartX + 50 && currentLightboxIndex > 0) {
+            currentLightboxIndex--; updateLightboxUI();
+        }
+    });
 
     window.openGalleryFolder = function(fName) { currentGalleryFolder = fName; loadModule('Gallery', true); }
     window.closeGalleryFolder = function() { currentGalleryFolder = null; loadModule('Gallery', true); }
@@ -2552,12 +2707,11 @@
         const urlInput = document.getElementById('galUrl');
         const caption = document.getElementById('galCap').value || 'Untitled';
         const folder = document.getElementById('galFolder').value.trim() || 'Uncategorized';
-        const batchId = 'batch_' + new Date().getTime(); // Grouping mechanism
         
         const gal = getDB('gallery');
 
         if (urlInput && urlInput.value.trim() !== '') {
-            gal.push({ id: generateId(), url: urlInput.value.trim(), caption: caption, folder: folder, featured: false, batchId: batchId });
+            gal.push({ id: generateId(), url: urlInput.value.trim(), caption: caption, folder: folder, featured: false, batchId: null });
             currentGalleryFolder = folder;
             setDB('gallery', gal); 
             addNotification(`🖼️ New Photo Added: ${caption}`);
@@ -2567,10 +2721,12 @@
 
         if(fileInput && fileInput.files.length > 0) {
             try {
+                const batchId = 'batch_' + Date.now();
+                document.getElementById('syncStatus').style.display = "block";
+                
                 for(let i=0; i < fileInput.files.length; i++) {
                     const file = fileInput.files[i];
-                    document.getElementById('syncStatus').style.display = "block";
-                    document.getElementById('syncStatus').innerText = `⏳ Uploading ${i+1}/${fileInput.files.length}...`;
+                    document.getElementById('syncStatus').innerText = `⏳ Uploading (${i+1}/${fileInput.files.length})...`;
                     
                     const formData = new FormData();
                     formData.append("file", file);
@@ -2583,8 +2739,8 @@
                     const data = await response.json();
                     if (!data.secure_url) throw new Error(data.error?.message || "Cloudinary API Rejected");
                     
-                    // Same caption, same batch ID keeps them grouped
-                    gal.push({ id: generateId(), url: data.secure_url, caption: caption, folder: folder, featured: false, batchId: batchId });
+                    let finalCaption = fileInput.files.length > 1 ? `${caption} (${i+1})` : caption;
+                    gal.push({ id: generateId(), url: data.secure_url, caption: finalCaption, folder: folder, featured: false, batchId: fileInput.files.length > 1 ? batchId : null });
                 }
                 
                 currentGalleryFolder = folder;
@@ -2606,6 +2762,8 @@
             let gal = getDB('gallery');
             const photo = gal.find(g => g.id === id);
             const targetFolder = photo ? (photo.folder || 'Uncategorized') : null;
+            
+            // If it's part of a batch and admin clicks delete, we'll just delete the single photo (or you can modify to filter by batchId if you prefer)
             gal = gal.filter(g => g.id !== id);
             
             if (targetFolder && currentGalleryFolder !== 'ALL_PHOTOS' && !gal.some(g => (g.folder || 'Uncategorized') === targetFolder)) {
