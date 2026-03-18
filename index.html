@@ -24,8 +24,6 @@
             --glass-bg: rgba(255,255,255,0.05);
             --glass-border: rgba(255,255,255,0.1);
             --nav-bg: rgba(15, 23, 42, 0.85);
-            --input-bg: rgba(0,0,0,0.3);
-            --card-shadow: 0 8px 32px rgba(0,0,0,0.3);
             
             /* Member Colors */
             --c-chua: #3b82f6; 
@@ -38,25 +36,19 @@
 
         /* Light Theme Override */
         body.light-theme {
-            --bg-1: #f1f5f9; 
-            --bg-2: #e2e8f0;
+            --bg-1: #f8fafc; --bg-2: #e2e8f0;
             --text: #0f172a;
-            --glass-bg: rgba(255,255,255,0.9);
-            --glass-border: rgba(0,0,0,0.1);
-            --nav-bg: rgba(241, 245, 249, 0.9);
-            --input-bg: #fff;
-            --card-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            --secondary: #0284c7;
-            --accent: #6d28d9;
+            --glass-bg: rgba(255,255,255,0.85);
+            --glass-border: rgba(0,0,0,0.15);
+            --nav-bg: rgba(248, 250, 252, 0.85);
         }
-        body.light-theme .neon { text-shadow: none; font-weight: 800; color: var(--secondary); }
-        body.light-theme input, body.light-theme select, body.light-theme textarea { color: #000; border: 1px solid #cbd5e1; }
+        body.light-theme .neon { text-shadow: none; color: var(--secondary); font-weight: 800; }
+        body.light-theme input, body.light-theme select, body.light-theme textarea { background: rgba(255,255,255,0.9); color: #000; border: 1px solid #cbd5e1; }
         body.light-theme .timeline-table td, body.light-theme .timeline-table th { border-color: rgba(0,0,0,0.05); }
-        body.light-theme .unique-member-card { background: linear-gradient(145deg, #fff 0%, #f8fafc 100%); }
-        body.light-theme .chat-messages { background: #fff; border-radius: 8px; border: 1px solid var(--glass-border);}
-        body.light-theme .comment-box { background: #f8fafc; border-color: #cbd5e1; }
-        body.light-theme .comment-box .comment-body { color: #334155; }
-        body.light-theme .collapsible-header:hover { background: rgba(0,0,0,0.05); }
+        body.light-theme .unique-member-card { background: linear-gradient(145deg, rgba(255,255,255,1) 0%, rgba(241,245,249,1) 100%); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        body.light-theme .chat-messages { background: #fff; border-radius: 8px; }
+        body.light-theme .comment-box { background: #f1f5f9; border-color: #cbd5e1; color: #000; }
+        body.light-theme .comment-box .comment-body { color: #333; }
 
         body {
             margin: 0; font-family: 'Inter', system-ui, sans-serif;
@@ -74,10 +66,10 @@
         .glass {
             background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border); border-radius: 12px;
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
-        .neon { color: var(--secondary); text-shadow: 0 0 8px var(--secondary); transition: color 0.3s, text-shadow 0.3s;}
-        .accent { color: var(--accent); transition: color 0.3s;}
+        .neon { color: var(--secondary); text-shadow: 0 0 8px var(--secondary); }
+        .accent { color: var(--accent); }
         
         .dadevs-logo { width: 50px; height: 50px; flex-shrink: 0; transition: transform 0.3s ease; }
         .dadevs-logo:hover { transform: scale(1.05) rotate(5deg); }
@@ -99,13 +91,12 @@
         .auth-tab.active { color: var(--secondary); border-bottom-color: var(--secondary); text-shadow: 0 0 8px var(--secondary); }
 
         input, select, textarea {
-            width: 100%; padding: 12px; margin: 8px 0; background: var(--input-bg);
+            width: 100%; padding: 12px; margin: 8px 0; background: rgba(0,0,0,0.3);
             border: 1px solid var(--glass-border); color: var(--text);
-            border-radius: 8px; box-sizing: border-box; outline: none; font-family: inherit; font-size: 14px; transition: border-color 0.3s, background 0.3s, color 0.3s;
+            border-radius: 8px; box-sizing: border-box; outline: none; font-family: inherit; font-size: 14px; transition: border-color 0.3s;
         }
-        input:disabled, textarea:disabled { background: rgba(0,0,0,0.1); color: #888; cursor: not-allowed; border-color: var(--glass-border); }
+        input:disabled, textarea:disabled { background: rgba(0,0,0,0.5); color: #666; cursor: not-allowed; border-color: rgba(255,255,255,0.05); }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-        body.light-theme input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0); }
         input:focus:not(:disabled), select:focus, textarea:focus { border-color: var(--secondary); box-shadow: 0 0 8px var(--secondary); }
         
         button {
@@ -147,13 +138,11 @@
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; position: sticky; top:0; background: linear-gradient(180deg, var(--bg-1) 80%, transparent); z-index:50;}
         .header-actions { display: flex; align-items: center; gap: 10px; }
         .header-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text); padding: 5px 12px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; transition: 0.3s; margin:0; font-weight: bold;}
-        .header-btn:hover { background: var(--secondary); color: #fff; transform: translateY(-2px); border-color: var(--secondary); }
-        body.light-theme .header-btn:hover { color: #000; }
+        .header-btn:hover { background: var(--secondary); color: #000; transform: translateY(-2px); border-color: var(--secondary); }
         .header-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #555; }
 
         .notif-bell { position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: var(--glass-bg); border: 1px solid var(--glass-border); transition: 0.2s; color: var(--text); }
-        .notif-bell:hover { background: var(--secondary); color: #fff; transform: translateY(-2px); border-color: var(--secondary); }
-        body.light-theme .notif-bell:hover { color:#000; }
+        .notif-bell:hover { background: var(--secondary); color: #000; transform: translateY(-2px); border-color: var(--secondary); }
         .notif-dot { position: absolute; top: -2px; right: -2px; background: #ef4444; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 5px #ef4444; display: none; }
         .notif-dropdown { position: absolute; top: 48px; right: 0; width: 320px; background: var(--bg-2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; z-index: 2500; display: none; box-shadow: 0 10px 40px rgba(0,0,0,0.8); max-height: 400px; overflow-y:auto;}
         
@@ -175,10 +164,9 @@
         .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; } 
         .grid-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; } 
         
-        .contact-link { display: flex; justify-content: center; align-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text); text-decoration: none; font-size: 14px; transition: 0.3s; }
-        .contact-link:hover { background: var(--secondary); color: #fff; transform: translateY(-4px); border-color: var(--secondary); box-shadow: 0 4px 12px rgba(34, 211, 238, 0.4); }
-        body.light-theme .contact-link:hover { color:#000; }
-
+        .contact-link { display: flex; justify-content: center; align-items: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .contact-link:hover { background: var(--secondary); color: #000; transform: translateY(-4px); border-color: var(--secondary); box-shadow: 0 4px 12px rgba(34, 211, 238, 0.4); }
+        
         .avatar-container { position: relative; display: inline-flex; justify-content: center; align-items: center; flex-shrink: 0; }
         .native-avatar { border-radius: 50%; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 3px solid var(--glass-border); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.5); flex-shrink: 0; }
         .native-avatar svg { fill: currentColor; }
@@ -191,15 +179,15 @@
 
         .unique-member-card {
             border: 1px solid var(--glass-border); border-radius: 16px; 
-            background: var(--glass-bg);
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.2) 100%);
             position: relative; overflow: visible; margin-top: 30px; text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease; display:flex; flex-direction:column;
         }
         .unique-member-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); border-color: var(--secondary); }
 
         .kanban-board { display: flex; gap: 20px; min-height: 400px; overflow-x: auto; padding-bottom: 20px; scroll-snap-type: x mandatory;}
-        .kanban-col { flex: 1; min-width: 280px; display: flex; flex-direction: column; background: rgba(0,0,0,0.1); border-radius: 12px; padding: 15px; border: 1px solid var(--glass-border); scroll-snap-align: center;}
-        .task-card { background: var(--glass-bg); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--glass-border); transition: 0.2s; cursor: grab; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        .kanban-col { flex: 1; min-width: 280px; display: flex; flex-direction: column; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; border: 1px solid var(--glass-border); scroll-snap-align: center;}
+        .task-card { background: var(--glass-bg); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--glass-border); transition: 0.2s; cursor: grab; position: relative;}
         .task-card:hover { border-color: var(--secondary); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .delete-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ef4444; cursor: pointer; padding: 0; width: auto; font-size: 12px; transition: transform 0.2s;}
         .delete-btn:hover { transform: scale(1.2); background: none; box-shadow: none; color: #ff0000; }
@@ -207,35 +195,27 @@
         .admin-panel { padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
         .admin-panel .flex-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
-        /* Timeline Table */
-        .phase-header { background: rgba(34, 211, 238, 0.1); padding: 12px 15px; border-radius: 8px; font-weight: bold; color: var(--secondary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border: 1px solid rgba(34, 211, 238, 0.3); transition: 0.2s; }
-        .phase-header:hover { background: rgba(34, 211, 238, 0.2); transform: translateX(2px); }
+        /* Timeline Table (Desktop) */
+        .phase-header { background: rgba(34, 211, 238, 0.15); padding: 12px 15px; border-radius: 8px; font-weight: bold; color: var(--secondary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border: 1px solid rgba(34, 211, 238, 0.3); transition: 0.2s; }
+        .phase-header:hover { background: rgba(34, 211, 238, 0.25); transform: translateX(2px); }
         .timeline-table { width: 100%; border-collapse: collapse; min-width: 900px; }
         /* PREVENT WORD CUTTING */
         .timeline-table th, .timeline-table td { padding: 12px 10px; font-size: 13px; vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); white-space: nowrap; }
         .timeline-table th { font-size: 11px; color: #aaa; text-transform: uppercase; border-bottom: 1px solid var(--glass-border); }
         
-        .gantt-track { background: rgba(0,0,0,0.2); height: 24px; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); width: 100%; min-width: 150px; }
+        .gantt-track { background: rgba(0,0,0,0.4); height: 24px; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); width: 100%; min-width: 150px; }
         .gantt-bar { position: absolute; height: 100%; border-radius: 12px; display: flex; align-items: center; font-size: 11px; font-weight: bold; color: #fff; box-sizing: border-box; overflow: hidden; transition: 0.3s; }
         
         /* Gallery UI */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .gallery-item { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); aspect-ratio: 1 / 1; transition: 0.3s; background: rgba(0,0,0,0.3); cursor: pointer;}
+        .gallery-item { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); aspect-ratio: 1 / 1; transition: 0.3s; background: rgba(0,0,0,0.5); cursor: pointer;}
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
         .gallery-item:hover img { transform: scale(1.08); }
         .gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 15px 10px 10px 10px; font-size: 12px; transition: 0.3s; color: #fff;}
-        .gallery-caption.featured-cap { display: none; } 
+        .gallery-caption.featured-cap { display: none; } /* Hidden on dashboard, visible in lightbox */
         .folder-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.75); display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; transition: 0.3s; backdrop-filter: blur(2px);}
         .gallery-item:hover .folder-overlay { background: rgba(15, 23, 42, 0.5); }
         .feat-badge { position: absolute; top:5px; left:5px; background: #f59e0b; color: #000; font-size:10px; font-weight:bold; padding: 2px 6px; border-radius: 10px; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.5);}
-
-        /* Smart Grouped Gallery Cards */
-        .gallery-group-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: 0.3s; }
-        .gallery-group-card:hover { border-color: var(--secondary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .gg-images { display: flex; height: 160px; }
-        .gg-img { flex: 1; height: 100%; object-fit: cover; border-right: 1px solid var(--glass-border); }
-        .gg-img:last-child { border-right: none; }
-        .gg-info { padding: 12px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.1); }
 
         /* Custom Alert & Modal Logic (Smart UI) */
         #customDialogOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 1000000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
@@ -245,32 +225,28 @@
         .dialog-msg { margin-bottom: 25px; font-size: 15px; color: var(--text); line-height: 1.5; font-weight: 500; white-space: pre-wrap;}
         .dialog-btns { display: flex; gap: 10px; justify-content: center; }
 
-        /* Lightbox Swiper */
-        #lightboxModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 100000; display: none; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(10px); }
-        #lightboxImg { max-width: 85vw; max-height: 75vh; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); object-fit: contain; transition: opacity 0.2s;}
+        /* Lightbox Image Viewer */
+        #lightboxModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 100000; display: none; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(8px); }
+        #lightboxImg { max-width: 90vw; max-height: 80vh; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.7); object-fit: contain; }
         #lightboxCaption { margin-top: 20px; color: #fff; font-size: 16px; font-weight: bold; text-align: center; text-shadow: 0 2px 4px rgba(0,0,0,0.8); max-width: 80vw;}
-        .close-lightbox { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: none; color: #fff; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content:center; align-items:center; font-weight: bold; font-size: 20px; transition: 0.2s; z-index: 10;}
+        .close-lightbox { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: none; color: #fff; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; justify-content:center; align-items:center; font-weight: bold; font-size: 18px; transition: 0.2s;}
         .close-lightbox:hover { background: #ef4444; transform: rotate(90deg); }
-        .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: white; border: none; font-size: 24px; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; z-index: 10; }
-        .lb-nav:hover { background: var(--secondary); color: #000; }
-        .lb-prev { left: 20px; }
-        .lb-next { right: 20px; }
         
-        .res-search { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: var(--text); border-radius: 8px; margin-bottom: 15px; outline: none; transition: 0.3s;}
+        .res-search { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); color: var(--text); border-radius: 8px; margin-bottom: 15px; outline: none; transition: 0.3s;}
         .res-search:focus { border-color: var(--secondary); box-shadow: 0 0 10px rgba(34, 211, 238, 0.2); }
         .tag-chip { background: rgba(34, 211, 238, 0.1); color: var(--secondary); padding: 6px 14px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; border: 1px solid rgba(34, 211, 238, 0.3); transition: 0.2s; white-space: nowrap; user-select: none; }
-        .tag-chip:hover, .tag-chip.active { background: var(--secondary); color: #fff; transform: translateY(-2px); }
+        .tag-chip:hover, .tag-chip.active { background: var(--secondary); color: #000; transform: translateY(-2px); }
         
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; margin-top: 15px; }
         .cal-header { font-weight: bold; color: var(--secondary); font-size: 12px; padding-bottom: 10px; }
-        .cal-day { background: rgba(0,0,0,0.1); padding: 10px; border-radius: 6px; border: 1px solid var(--glass-border); min-height: 50px; position: relative; display: flex; flex-direction: column; align-items: center; transition: 0.2s; cursor:pointer;}
-        .cal-day.has-events { border-color: var(--accent); background: rgba(139, 92, 246, 0.15); box-shadow: inset 0 0 8px rgba(139, 92, 246, 0.3);}
+        .cal-day { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; border: 1px solid var(--glass-border); min-height: 50px; position: relative; display: flex; flex-direction: column; align-items: center; transition: 0.2s; cursor:pointer;}
+        .cal-day.has-events { border-color: var(--accent); background: rgba(139, 92, 246, 0.1); }
         .cal-day:hover:not(.empty) { background: rgba(255,255,255,0.05); border-color: var(--secondary); transform: translateY(-2px);}
         .cal-day.empty { background: transparent; border: none; cursor:default; }
         .cal-day.today { border-color: var(--secondary); background: rgba(34, 211, 238, 0.15); box-shadow: inset 0 0 10px rgba(34,211,238,0.2);}
         .cal-event-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; }
         
-        .comment-box { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; padding: 12px; margin-bottom: 10px; transition: 0.2s;}
+        .comment-box { background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 8px; padding: 12px; margin-bottom: 10px; transition: 0.2s;}
         .comment-box:hover { border-color: rgba(255,255,255,0.2); }
         .comment-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 12px; color: #aaa; }
         .comment-author { font-weight: bold; color: var(--secondary); }
@@ -279,8 +255,8 @@
         /* User Modal Overlay */
         #userModal { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.8); z-index: 10000; display: none; justify-content:center; align-items:center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px);}
         .modal-content { background: var(--bg-1); border: 1px solid var(--glass-border); border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 20px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.8);}
-        .close-modal { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: var(--text); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; justify-content:center; align-items:center; font-weight: bold; transition: 0.2s;}
-        .close-modal:hover { background: #ef4444; color:#fff; transform: rotate(90deg); }
+        .close-modal { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; justify-content:center; align-items:center; font-weight: bold; transition: 0.2s;}
+        .close-modal:hover { background: #ef4444; transform: rotate(90deg); }
 
         .collapsible-header { cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; transition: 0.2s; user-select: none;}
         .collapsible-header:hover { background: rgba(255,255,255,0.1); }
@@ -297,7 +273,7 @@
         
         @media (max-width: 768px) {
             /* General Sizing Fixes */
-            h2.neon { font-size: 18px !important; }
+            h2.neon { font-size: 20px !important; }
             h3 { font-size: 15px !important; margin-top: 0 !important; }
             .card { padding: 15px; margin-bottom: 12px; }
             .grid-2, .grid-5, .grid-3, .grid-auto { grid-template-columns: 1fr; gap: 12px; }
@@ -338,12 +314,11 @@
             /* Calendar & Gallery Adjustments */
             .cal-day { min-height: 40px; padding: 5px; }
             .cal-header { font-size: 10px; }
-            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
 
             /* Resources Actions Smart Alignment */
-            .resource-item { align-items: flex-start !important; }
-            .resource-item-actions { justify-content: flex-start !important; margin-top: 10px; width: 100%; flex-wrap: wrap; }
-            .resource-item-actions button { padding: 6px 12px !important; font-size: 11px !important; flex: 1 1 auto; white-space: nowrap; min-width: max-content; text-align:center;}
+            .resource-item-actions { justify-content: flex-start !important; margin-top: 10px; width: 100%; }
+            .resource-item-actions button { padding: 6px 10px !important; font-size: 10px !important; }
 
             /* Profile specific */
             .profile-controls { justify-content: center; width: 100%; margin-top: 10px; }
@@ -361,8 +336,26 @@
         <div class="dialog-content" id="customDialogContent">
             <div class="dialog-icon" id="customDialogIcon">⚠️</div>
             <div class="dialog-msg" id="customDialogMsg"></div>
-            <div class="dialog-btns" id="customDialogBtns"></div>
+            <div class="dialog-btns" id="customDialogBtns">
+                </div>
         </div>
+    </div>
+
+    <div id="updateOverlay">
+        <svg class="dadevs-logo" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="neonGradUpdate" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#22D3EE" />
+                    <stop offset="100%" stop-color="#8B5CF6" />
+                </linearGradient>
+            </defs>
+            <path d="M100 15L175 58V142L100 185L25 142V58L100 15Z" stroke="url(#neonGradUpdate)" stroke-width="8"/>
+            <path d="M100 40V160" stroke="#FFF" stroke-width="12" stroke-linecap="round"/>
+            <path d="M100 40C145 40 155 70 155 100C155 130 145 160 100 160" stroke="url(#neonGradUpdate)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M70 100L45 75M70 100L45 125" stroke="#FFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h2 class="neon" style="margin:0 0 10px 0; font-size: 24px;">Applying Update...</h2>
+        <p style="color:#aaa; font-size: 14px; margin:0;">Please wait.</p>
     </div>
 
     <div id="authScreen" class="glass">
@@ -403,8 +396,7 @@
         </div>
 
         <div id="formRegister" style="display:none;">
-            <input id="r_full" placeholder="Full Name (e.g. John Doe)">
-            <input id="r_user" placeholder="Username (Used globally)">
+            <input id="r_user" placeholder="Username / Full Name">
             <input id="r_pass" type="password" placeholder="Password">
             <input id="r_secret" type="password" placeholder="Admin Confirmation Code (Leave blank if normal member)" style="border-color: #ef4444;">
             <button onclick="processRegister()">REGISTER ACCOUNT</button>
@@ -416,7 +408,8 @@
     </div>
 
     <div id="app">
-        <div id="bottomNav"></div>
+        <div id="bottomNav">
+            </div>
 
         <div id="main">
             <div class="header-top" id="mainHeader">
@@ -443,7 +436,7 @@
                         <div id="notifDropdown" class="notif-dropdown glass">
                             <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--glass-border); padding-bottom:5px; margin-bottom: 10px;">
                                 <h4 style="margin:0;">Notifications</h4>
-                                <button class="danger" style="width:auto; padding:4px 8px; font-size:10px; margin:0; border-radius:10px;" onclick="clearNotifs()" id="clearNotifsBtn" style="display:none;">Clear All</button>
+                                <button class="danger" style="width:auto; padding:2px 8px; font-size:10px; margin:0;" onclick="clearNotifs()" id="clearNotifsBtn" style="display:none;">Clear All</button>
                             </div>
                             <div id="notifList" style="font-size:12px; color:var(--text); max-height:250px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;">
                                 <p style="margin:0; text-align:center; color:#aaa;">No new notifications</p>
@@ -464,27 +457,27 @@
             <div class="chat-header">
                 <h3 style="margin:0; color:var(--secondary);">Team Discussion</h3>
                 <div style="display:flex; gap:10px;">
-                    <button id="clearChatBtn" class="danger" style="width:auto; padding: 4px 8px; font-size:10px; margin:0; display:none; border-radius:10px;" onclick="clearChat()">Clear</button>
+                    <button id="clearChatBtn" class="danger" style="width:auto; padding: 4px 8px; font-size:10px; margin:0; display:none;" onclick="clearChat()">Clear</button>
                     <button class="icon-btn" onclick="toggleChat()" style="background:transparent; border:none; color:var(--text); cursor:pointer; font-size: 16px; padding: 4px 8px;">✖</button>
                 </div>
             </div>
-            <div class="chat-messages" id="chatMessagesArea"></div>
+            <div class="chat-messages" id="chatMessagesArea">
+                </div>
             <div class="chat-input-area">
                 <textarea id="globalCommentTxt" placeholder="Type @username to mention..." style="height: 60px; margin:0 0 10px 0; font-size:13px; resize:none;"></textarea>
                 <button onclick="postGlobalComment()" style="margin:0; padding:10px;">Send Message</button>
             </div>
         </div>
+
     </div>
 
     <div id="userModal" onclick="if(event.target === this) closeUserModal()">
         <div class="modal-content glass" id="userModalContent"></div>
     </div>
 
-    <div id="lightboxModal">
+    <div id="lightboxModal" onclick="if(event.target === this) closeLightbox()">
         <button class="close-lightbox" onclick="closeLightbox()">✖</button>
-        <button class="lb-nav lb-prev" onclick="changeLightbox(-1)">&#8249;</button>
         <img id="lightboxImg" src="" alt="Gallery Image">
-        <button class="lb-nav lb-next" onclick="changeLightbox(1)">&#8250;</button>
         <div id="lightboxCaption"></div>
     </div>
 
@@ -535,9 +528,26 @@
     }
 
     // ==========================================
+    // AUTO-UPDATE SYSTEM (FOR VERCEL PWA)
+    // ==========================================
+    const APP_VERSION = "v56"; 
+
+    window.addEventListener('load', () => {
+        fetch(window.location.href, { cache: "no-store", headers: { 'Cache-Control': 'no-cache' } })
+            .then(res => res.text())
+            .then(liveHTML => {
+                if (!liveHTML.includes(`const APP_VERSION = "${APP_VERSION}";`)) {
+                    document.getElementById('updateOverlay').style.display = 'flex';
+                    setTimeout(() => window.location.reload(true), 1500);
+                }
+            })
+            .catch(err => console.log("User offline."));
+    });
+
+    // ==========================================
     // CLOUD SYNC CONFIGURATION
     // ==========================================
-    const ENABLE_CLOUD_SYNC = true; 
+    const ENABLE_CLOUD_SYNC = false; // Disabled to prevent any interruptions to user transactions. Fully local and snappy.
     const JSONBIN_BIN_ID = "69b53404aa77b81da9e359ea";
     const JSONBIN_MASTER_KEY = "$2a$10$Tro6Ud5UHq2VqKQnp8Kxo.1MFLWorIUvmpahlY7t9jqDPWr0Xg2em";
     
@@ -574,43 +584,31 @@
     let viewDate = new Date();
     
     let currentGalleryFolder = null; 
-    let currentGalleryImages = []; 
-    let currentGalleryIndex = 0;
-
     let editingTimelineId = null;
     let resSearchTerm = '';
     let resActiveTag = null;
     let collapsedPhases = {}; 
     
-    window.adminViewMode = 'admin'; 
+    window.adminViewMode = 'admin'; // For admin toggle
 
-    // Stable DB Key to prevent data loss on minor updates
-    const DB_KEY = 'dadevs_db_master';
+    // DB Init
+    const DB_KEY = 'dadevs_db_v51';
     let appDB = { 
         tasks: [], funds: [], calendar: [], timeline: [], resources: [], gallery: [], sprints: [], comments: [], members: [], notifications: []
     };
     
-    // Strict Default Color Logic
     function getMemberColor(id) {
-        if (memberColors[id]) return memberColors[id]; // Force default
+        if (memberColors[id]) return memberColors[id];
         const m = getDB('members').find(x => x.id === id);
         if (m && m.accent) return m.accent;
         return 'var(--secondary)';
     }
 
-    async function initDB() {
-        // Data Migration Protocol
-        if (!localStorage.getItem(DB_KEY)) {
-            const legacyKeys = ['dadevs_db_v56', 'dadevs_db_v55', 'dadevs_db_v52', 'dadevs_db_v51', 'dadevs_db_v50', 'dadevs_db_v49', 'dadevs_db_v48'];
-            for (let oldKey of legacyKeys) {
-                let oldData = localStorage.getItem(oldKey);
-                if (oldData) {
-                    localStorage.setItem(DB_KEY, oldData);
-                    break;
-                }
-            }
+    async function initDB(manualSync = false) {
+        if (localStorage.getItem('dd_version') !== 'v51') {
+            localStorage.setItem('dd_version', 'v51');
         }
-
+        
         const local = localStorage.getItem(DB_KEY); if (local) appDB = JSON.parse(local);
 
         if(!appDB.comments) appDB.comments = [];
@@ -620,14 +618,14 @@
 
         // INITIALIZE DEFAULT USERS IF NOT ALREADY IN DB
         const defaultUsers = {
-            "Bren": { fullName: "Brenduling", pass: "brenduling", role: "admin", status: "approved", sticker: "👑" },
-            "Chua": { fullName: "Chua", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "🃏" },
-            "Tanya": { fullName: "Tanya", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "🏀" },
-            "Vince": { fullName: "Vince", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "💎" },
-            "Ruth": { fullName: "Ruth", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "📖" },
-            "Lilian": { fullName: "Lilian", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "👤" },
-            "DaDevs": { fullName: "DaDevs Team", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "💻" },
-            "Adviser": { fullName: "Adviser", pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "👨‍🏫" }
+            "Bren": { pass: "brenduling", role: "admin", status: "approved", sticker: "👑" },
+            "Chua": { pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "🃏" },
+            "Tanya": { pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "🏀" },
+            "Vince": { pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "💎" },
+            "Ruth": { pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "📖" },
+            "Lilian": { pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "👤" },
+            "DaDevs": { pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "💻" },
+            "Adviser": { pass: "dadevs0.1", role: "viewer", status: "approved", sticker: "👨‍🏫" }
         };
 
         let dbUpdated = false;
@@ -637,7 +635,6 @@
                 if(!m.pass || m.pass === "undefined" || m.pass === "null") { m.pass = defaultUsers[m.id].pass; dbUpdated = true; }
                 if(!m.role || m.role === "undefined" || m.role === "null") { m.role = defaultUsers[m.id].role; dbUpdated = true; }
                 if(!m.status || m.status === "undefined" || m.status === "null") { m.status = defaultUsers[m.id].status; dbUpdated = true; }
-                if(!m.fullName || m.fullName === "undefined") { m.fullName = defaultUsers[m.id].fullName || m.id; dbUpdated = true; }
             }
             return m;
         });
@@ -645,7 +642,7 @@
         Object.keys(defaultUsers).forEach(key => {
             if (!appDB.members.find(m => m.id === key)) {
                 appDB.members.push({
-                    id: key, ...defaultUsers[key],
+                    id: key, fullName: key, ...defaultUsers[key],
                     birthday: "", messenger: "", github: "", gmail: "", phone: "", avatar: ""
                 });
                 dbUpdated = true;
@@ -653,6 +650,7 @@
         });
 
         if (dbUpdated) {
+            localStorage.setItem(DB_KEY, JSON.stringify(appDB));
             saveDB(); 
         }
 
@@ -667,13 +665,6 @@
 
     async function saveDB() {
         localStorage.setItem(DB_KEY, JSON.stringify(appDB));
-        if (ENABLE_CLOUD_SYNC) {
-            try {
-                fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
-                    method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_MASTER_KEY }, body: JSON.stringify(appDB)
-                }).catch(e => console.error("Sync silent fail"));
-            } catch(e) {}
-        }
     }
 
     const getDB = (table) => appDB[table] || [];
@@ -681,32 +672,6 @@
     const generateId = () => Math.floor(Math.random() * 1000000);
     const isAdmin = () => currentUser && currentUser.role.toLowerCase().includes('admin') && window.adminViewMode === 'admin';
     const isApproved = () => currentUser && currentUser.status === 'approved';
-
-    // --- TRUE SILENT BACKGROUND SYNC ---
-    let autoSyncTimer;
-    function startAutoSync() {
-        if (ENABLE_CLOUD_SYNC) {
-            if(autoSyncTimer) clearInterval(autoSyncTimer);
-            autoSyncTimer = setInterval(async () => { 
-                try {
-                    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest?t=${new Date().getTime()}`, { 
-                        method: 'GET', headers: { 'X-Master-Key': JSONBIN_MASTER_KEY, 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }, cache: 'no-store' 
-                    });
-                    const data = await res.json();
-                    if (data.record) {
-                        appDB = { ...appDB, ...data.record };
-                        localStorage.setItem(DB_KEY, JSON.stringify(appDB));
-                        
-                        // Only update Chat if it's currently open (non-disruptive)
-                        if(document.getElementById('chatPanel').classList.contains('open')) {
-                            renderUniversalComments();
-                        }
-                        updateNotifUI();
-                    }
-                } catch(e) {} // Fail silently in background
-            }, 8000);
-        }
-    }
 
     // --- CHAT & NOTIFICATIONS ---
     window.toggleChat = function() {
@@ -747,13 +712,13 @@
 
         const comments = getDB('comments');
         comments.push({
-            id: generateId(), text: txt, author: currentUser.id, // Fixed to use username globally
+            id: generateId(), text: txt, author: currentUser.fullName, 
             date: new Date().toLocaleString()
         });
         setDB('comments', comments);
         document.getElementById("globalCommentTxt").value = "";
         
-        addNotification(`💬 New message from ${currentUser.id}`);
+        addNotification(`💬 New message from ${currentUser.fullName}`);
         renderUniversalComments();
         
         setTimeout(() => {
@@ -863,18 +828,14 @@
     };
 
     window.processRegister = function() {
-        const full = document.getElementById("r_full").value.trim();
         const u = document.getElementById("r_user").value.trim();
         const p = document.getElementById("r_pass").value;
+        const role = document.getElementById("r_role").value;
         const secret = document.getElementById("r_secret").value;
         const err = document.getElementById("r_err");
         
-        if (!u || !p || !full) { err.innerText = "Full Name, Username, and Password are required."; err.style.display = "block"; return; }
+        if (!u || !p) { err.innerText = "Username and password required."; err.style.display = "block"; return; }
         
-        let role = 'viewer';
-        if (secret === "brenduling231524") role = 'admin';
-        else if (secret !== "") { err.innerText = "Invalid admin code. Leave blank for normal member."; err.style.display = "block"; return; }
-
         const members = getDB('members');
         let existingUser = members.find(m => m.id.toLowerCase() === u.toLowerCase());
         
@@ -882,8 +843,10 @@
             if (existingUser.pass && existingUser.pass !== "dadevs0.1" && existingUser.pass !== "brenduling" && existingUser.pass !== "undefined") {
                 err.innerText = "Username already registered."; err.style.display = "block"; return;
             }
+            if (role === 'admin' && secret !== "brenduling231524") {
+                err.innerText = "Invalid admin confirmation code."; err.style.display = "block"; return;
+            }
             
-            existingUser.fullName = full;
             existingUser.pass = p;
             existingUser.role = role;
             if(role === 'admin') existingUser.status = 'approved';
@@ -891,8 +854,11 @@
             
             setDB('members', members);
         } else {
+            if (role === 'admin' && secret !== "brenduling231524") {
+                err.innerText = "Invalid admin confirmation code."; err.style.display = "block"; return;
+            }
             members.push({
-                id: u, fullName: full, pass: p, role: role, status: role === 'admin' ? 'approved' : 'pending',
+                id: u, fullName: u, pass: p, role: role, status: role === 'admin' ? 'approved' : 'pending',
                 birthday: "", messenger: "", github: "", gmail: "", phone: "", sticker: "👤", avatar: ""
             });
             setDB('members', members);
@@ -938,7 +904,6 @@
             
             renderNav(); 
             loadModule("Dashboard");
-            startAutoSync();
         } else {
             if(session) localStorage.removeItem("session_user");
             document.getElementById("authScreen").style.display = "block"; 
@@ -967,10 +932,6 @@
         window.adminViewMode = window.adminViewMode === 'admin' ? 'viewer' : 'admin';
         loadModule(currentModule);
     };
-
-    window.toggleTheme = function() {
-        document.body.classList.toggle('light-theme');
-    }
 
     window.loadModule = function(m, silent = false) {
         currentModule = m; 
@@ -1042,7 +1003,6 @@
         
         const timeline = getDB('timeline');
         const myTasks = timeline.filter(t => t.owner === currentUser.id);
-        const hasAdminRights = currentUser.role.toLowerCase().includes('admin');
 
         // Top Section: My Account
         html += `<div class="glass card" style="border-top: 4px solid var(--accent);">
@@ -1056,18 +1016,18 @@
                         ${currentUser.sticker ? `<div class="avatar-sticker" style="width:20px; height:20px; font-size:14px;">${currentUser.sticker}</div>` : ''}
                     </div>
                     <div>
-                        <h3 style="margin:0; color:var(--accent);">${currentUser.fullName} <span style="font-size:11px; color:#aaa; font-weight:normal;">(@${currentUser.id})</span></h3>
+                        <h3 style="margin:0; color:var(--accent);">${currentUser.fullName}</h3>
                         <div style="font-size: 11px; color: var(--text); opacity: 0.7; font-weight:bold;">Role: ${currentUser.role.toUpperCase()}</div>
-                        ${hasAdminRights ? `
+                        ${isAdmin() ? `
                             <div style="margin-top: 5px;">
-                                <input type="text" value="${currentUser.role}" onchange="updateMemberRole('${currentUser.id}', this.value)" placeholder="Enter roles (comma separated)..." style="padding: 4px; font-size:10px; width:200px; background: var(--input-bg); color: var(--text); border: 1px solid var(--glass-border); border-radius: 4px;">
+                                <input type="text" value="${currentUser.role}" onchange="updateMemberRole('${currentUser.id}', this.value)" placeholder="Enter roles (comma separated)..." style="padding: 4px; font-size:10px; width:150px; background: rgba(0,0,0,0.3); color: var(--text); border: 1px solid var(--glass-border); border-radius: 4px;">
                             </div>
                         ` : ''}
                     </div>
                 </div>
                 
                 <div class="profile-controls" style="display:flex; gap:10px; flex-wrap:wrap;">
-                    ${hasAdminRights ? `<button class="header-btn" onclick="toggleAdminView()" style="background:var(--accent); color:#fff; font-size:10px;">👁️ View as ${window.adminViewMode === 'admin' ? 'Viewer' : 'Admin'}</button>` : ''}
+                    ${currentUser.role.toLowerCase().includes('admin') ? `<button class="header-btn" onclick="toggleAdminView()" style="background:var(--accent); color:#fff; font-size:10px;">👁️ View as ${window.adminViewMode === 'admin' ? 'Viewer' : 'Admin'}</button>` : ''}
                     <button class="header-btn" onclick="toggleTheme()" style="background:var(--secondary); color:#000;">🌓 Theme</button>
                     <button class="header-btn" onclick="toggleSettings()" style="background:var(--primary); color:#fff;">⚙️ Settings</button>
                     <button class="danger" style="width:auto; padding:8px 12px; margin:0;" onclick="logout()">Logout</button>
@@ -1083,9 +1043,9 @@
                         const isLate = isDone && new Date(t.end) > new Date(t.scheduled);
                         const borderCol = isDone ? (isLate ? '#ef4444' : '#10b981') : 'var(--glass-border)';
                         return `
-                        <div style="background: rgba(0,0,0,0.1); padding: 8px 12px; border-radius: 6px; border-left: 3px solid ${borderCol}; display:flex; justify-content:space-between; align-items:center;">
+                        <div style="background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 6px; border-left: 3px solid ${borderCol}; display:flex; justify-content:space-between; align-items:center;">
                             <div>
-                                <div style="font-weight:bold; font-size:12px; color:${isDone ? 'var(--text)' : 'var(--text)'};">${t.title} <span style="font-size:9px; color:var(--secondary);">(${t.taskId})</span></div>
+                                <div style="font-weight:bold; font-size:12px; color:${isDone ? '#fff' : '#fff'};">${t.title} <span style="font-size:9px; color:var(--secondary);">(${t.taskId})</span></div>
                                 <div style="font-size:10px; color:#aaa;">Target: ${t.scheduled}</div>
                             </div>
                             <div style="font-size:12px; font-weight:bold; color:${isDone ? (isLate ? '#ef4444' : '#10b981') : 'var(--accent)'};">${t.progress || 0}%</div>
@@ -1095,7 +1055,7 @@
             </div>
             
             <div id="settingsPanel" style="display:none; margin-top:20px; border-top:1px solid var(--glass-border); padding-top:15px;">
-                <div style="background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--glass-border);">
+                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--glass-border);">
                     <h5 style="margin: 0 0 10px 0; color: var(--secondary);">UI Color Theme</h5>
                     <div style="display:flex; gap: 15px; align-items:center; flex-wrap:wrap;">
                         <div style="display:flex; align-items:center; gap:5px;">
@@ -1153,8 +1113,8 @@
                 html += `<div class="glass admin-panel" style="border-left-color:#f59e0b;"><h4 style="margin-top:0; color:#f59e0b;">Pending Account Approvals</h4>`;
                 pending.forEach(p => {
                     html += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.1); padding:10px; border-radius:8px; margin-bottom:5px; flex-wrap:wrap; gap:10px;">
-                        <div style="font-size:13px;"><strong>${p.fullName}</strong> (@${p.id}) - Requested: ${p.role.toUpperCase()}</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-bottom:5px; flex-wrap:wrap; gap:10px;">
+                        <div style="font-size:13px;"><strong>${p.fullName}</strong> (${p.id}) - Requested: ${p.role.toUpperCase()}</div>
                         <div style="display:flex; gap:10px;">
                             <button class="success" style="width:auto; margin:0; padding:5px 15px; font-size:12px;" onclick="approveMember('${p.id}')">Approve</button>
                             <button class="danger" style="width:auto; margin:0; padding:5px 15px; font-size:12px;" onclick="rejectMember('${p.id}')">Reject</button>
@@ -1186,9 +1146,8 @@
                     
                     <div style="padding: 45px 15px 15px 15px; flex:1; display:flex; flex-direction:column; justify-content:space-between;">
                         <div>
-                            <div style="font-weight: bold; font-size: 16px; margin-bottom: 2px; color: ${mColor};">${m.fullName}</div>
-                            <div style="font-size: 11px; color: var(--text); opacity: 0.5; margin-bottom: 5px;">@${m.id}</div>
-                            <div style="font-size: 11px; color: var(--text); opacity: 0.8; margin-bottom: 15px; font-weight:bold;">${m.role.toUpperCase()}</div>
+                            <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px; color: ${mColor};">${m.fullName}</div>
+                            <div style="font-size: 11px; color: var(--text); opacity: 0.7; margin-bottom: 15px; font-weight:bold;">${m.role.toUpperCase()}</div>
                         </div>
                         
                         <div style="display:flex; justify-content:center; gap:8px; flex-wrap: wrap;">
@@ -1232,6 +1191,8 @@
         let avatar = members[idx].avatar;
 
         if(fileInput && fileInput.files.length > 0) {
+            document.getElementById('syncStatus').style.display = "block";
+            document.getElementById('syncStatus').innerText = "⏳ Uploading Avatar...";
             try {
                 const file = fileInput.files[0];
                 const formData = new FormData();
@@ -1245,6 +1206,7 @@
                 avatar = data.secure_url; 
             } catch(e) {
                 customAlert("Avatar Upload Failed: " + e.message);
+                document.getElementById('syncStatus').innerText = "🔴 Failed";
                 return; 
             }
         }
@@ -1282,20 +1244,13 @@
     };
     
     window.updateMemberRole = function(id, newRole) {
-        if(!isAdmin() && id !== currentUser.id) return;
-        
         let members = getDB('members');
         const idx = members.findIndex(m => m.id === id);
         if(idx > -1) {
             members[idx].role = newRole;
             setDB('members', members);
             customAlert(`Role updated successfully`, "✅");
-            
-            if(id === currentUser.id) {
-                currentUser.role = newRole;
-            } else {
-                closeUserModal();
-            }
+            if(id !== currentUser.id) closeUserModal();
             loadModule('Profile', true);
         }
     };
@@ -1319,16 +1274,15 @@
                 <div class="avatar-container" style="margin: 0 auto 15px auto;">
                     ${m.avatar 
                         ? `<img src="${m.avatar}" class="avatar-img" style="width:100px; height:100px; border-color:${mColor};">` 
-                        : `<div class="native-avatar" style="width:100px; height:100px; background:${mColor}; border-color:${mColor};">${userSVG}</div>`
+                        : `<div class="native-avatar" style="width:100px; height:100px; background:${mColor};">${userSVG}</div>`
                     }
                     ${m.sticker ? `<div class="avatar-sticker" style="width:32px; height:32px; font-size:22px;">${m.sticker}</div>` : ''}
                 </div>
                 <h2 style="margin:0; color:var(--secondary);">${m.fullName}</h2>
-                <div style="font-size: 11px; color: #aaa; margin-bottom: 5px;">@${m.id}</div>
-                <div style="color:var(--text); font-weight:bold; font-size:12px;">${m.role.toUpperCase()}</div>
+                <div style="color:#aaa; font-size:12px;">${m.role.toUpperCase()}</div>
                 ${isAdmin() ? `
                     <div style="margin-top: 10px;">
-                        <input type="text" value="${m.role}" onchange="updateMemberRole('${m.id}', this.value)" placeholder="Enter roles (comma separated)..." style="padding: 6px; font-size:11px; width:80%; border-color: var(--accent); text-align:center; background: var(--input-bg); color: var(--text);">
+                        <input type="text" value="${m.role}" onchange="updateMemberRole('${m.id}', this.value)" placeholder="Enter roles (comma separated)..." style="padding: 6px; font-size:11px; width:80%; border-color: var(--accent); text-align:center;">
                     </div>
                 ` : ''}
                 ${m.birthday ? `<div style="font-size: 11px; color: #aaa; margin-top:5px;">🎂 Born: ${m.birthday}</div>` : ''}
@@ -1341,7 +1295,7 @@
                 ${m.phone ? `<a href="tel:${m.phone}" class="contact-link" style="width:40px; height:40px; font-size:18px;" title="Phone">📞</a>` : ''}
             </div>
 
-            <div style="background:rgba(0,0,0,0.1); padding:15px; border-radius:8px; border:1px solid var(--glass-border); margin-bottom:15px;">
+            <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; border:1px solid var(--glass-border); margin-bottom:15px;">
                 <h4 style="margin:0 0 10px 0; color:var(--accent);">Stats</h4>
                 <div style="display:flex; justify-content:space-around; font-size:14px;">
                     <div style="text-align:center;"><div style="color:#aaa; font-size:11px;">Contributions</div><strong>₱${mFunds}</strong></div>
@@ -1349,7 +1303,7 @@
                 </div>
             </div>
 
-            <div style="background:rgba(0,0,0,0.1); padding:15px; border-radius:8px; border:1px solid var(--glass-border); max-height:200px; overflow-y:auto;">
+            <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; border:1px solid var(--glass-border); max-height:200px; overflow-y:auto;">
                 <h4 style="margin:0 0 10px 0; color:var(--accent);">Assigned Tasks</h4>
                 `;
         
@@ -1407,24 +1361,13 @@
         if (featured.length === 0) {
             html += `<div class="glass card" style="text-align:center; padding: 20px; color:#aaa;">No featured photos yet. Admins can select them in the Gallery.</div>`;
         } else {
-            // Group by upload batch (folder) to prevent spamming dashboard
-            const groupedFeatures = {};
-            featured.forEach(g => {
-                const key = g.batchId || g.id;
-                if(!groupedFeatures[key]) groupedFeatures[key] = [];
-                groupedFeatures[key].push(g);
-            });
-            
             html += `<div class="gallery-grid">`;
-            Object.keys(groupedFeatures).slice(0, 5).forEach(batch => {
-                const group = groupedFeatures[batch];
-                const primaryImage = group[0];
-                const safeCaption = (primaryImage.caption || '').replace(/'/g, "\\'");
-                
+            featured.forEach(g => {
+                const safeCaption = (g.caption || '').replace(/'/g, "\\'");
                 html += `
-                <div class="gallery-item" onclick="openLightboxSequence('${batch}')">
-                    <img src="${primaryImage.url}" alt="${primaryImage.caption}">
-                    ${group.length > 1 ? `<div style="position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.7); color:#fff; font-size:10px; padding:2px 6px; border-radius:10px;">+${group.length - 1}</div>` : ''}
+                <div class="gallery-item" onclick="openLightbox('${g.url}', '${safeCaption}')">
+                    <img src="${g.url}" alt="${g.caption}">
+                    <div class="gallery-caption featured-cap">${g.caption}</div>
                 </div>`;
             });
             html += `</div>`;
@@ -1482,7 +1425,7 @@
                         <input id="tlEnd" type="date" style="margin:0;" disabled title="Only editable when progress is 100%">
                     </div>
                     <button id="tlSubmitBtn" onclick="submitTimeline()" style="flex:1; margin-top: 14px;">Add Task</button>
-                    <button id="tlCancelBtn" onclick="cancelEditTimeline()" style="flex:0.5; margin-top: 14px; display:none; background:rgba(255,255,255,0.1); color:var(--text);">Cancel</button>
+                    <button id="tlCancelBtn" onclick="cancelEditTimeline()" style="flex:0.5; margin-top: 14px; display:none; background:rgba(255,255,255,0.1);">Cancel</button>
                 </div>
             </div>`;
         }
@@ -1511,18 +1454,17 @@
                         <span>📋 ${phaseName} (${phaseTasks.length} Tasks)</span>
                         <span style="font-size: 10px;">▼ Expand / Collapse</span>
                     </div>
-                    <div style="overflow-x:auto;">
                     <table class="timeline-table">
                         <thead>
                             <tr>
-                                <th style="width: 10%;">ID</th>
+                                <th style="width: 10%;" class="hide-mobile">ID</th>
                                 <th style="width: 25%;">Task</th>
                                 <th style="width: 5%; text-align:center;">Assigned</th>
-                                <th style="width: 10%;">Start</th>
+                                <th style="width: 10%;" class="hide-mobile">Start</th>
                                 <th style="width: 10%;">Target</th>
-                                <th style="width: 10%;">Actual</th>
+                                <th style="width: 10%;" class="hide-mobile">Actual</th>
                                 <th style="width: 5%;">Prog.</th>
-                                <th style="width: 25%; min-width: 150px;">Gantt</th>
+                                <th style="width: 25%; min-width: 100px;" class="hide-mobile">Gantt</th>
                                 ${isAdmin() ? '<th style="width: 10%;">Act</th>' : ''}
                             </tr>
                         </thead>
@@ -1562,18 +1504,18 @@
 
                     html += `
                         <tr>
-                            <td data-label="ID" style="color:var(--accent); font-weight:bold;">${t.taskId}</td>
+                            <td data-label="ID" class="hide-mobile" style="color:var(--accent); font-weight:bold;">${t.taskId}</td>
                             <td data-label="Task" style="font-weight:500;">${t.title}</td>
                             <td data-label="Owner" style="text-align:center;">
                                 <div title="${ownerName}" style="display:inline-block; cursor:help;">
                                     <div class="avatar-mini-wrapper" style="width:28px; height:28px;">${avatarHTML}</div>
                                 </div>
                             </td>
-                            <td data-label="Start" style="color:#aaa;">${formatSmallDate(t.start)}</td>
+                            <td data-label="Start" class="hide-mobile" style="color:#aaa;">${formatSmallDate(t.start)}</td>
                             <td data-label="Target" style="color:var(--secondary);">${formatSmallDate(t.scheduled)}</td>
-                            <td data-label="Actual" style="color:${isDone ? (isLate ? '#ef4444' : '#10b981') : '#666'};">${formatSmallDate(t.end)}</td>
+                            <td data-label="Actual" class="hide-mobile" style="color:${isDone ? (isLate ? '#ef4444' : '#10b981') : '#666'};">${formatSmallDate(t.end)}</td>
                             <td data-label="Prog." style="font-weight:bold;">${prog}%</td>
-                            <td data-label="Gantt" style="border:none;">
+                            <td data-label="Gantt" class="hide-mobile" style="border:none;">
                                 <div class="gantt-track">
                                     <div class="gantt-bar" style="left: ${leftPerc}%; width: ${widthPerc}%; background: ${barColor};">
                                         <div style="position:absolute; left:0; top:0; height:100%; width:${prog}%; background:rgba(0,0,0,0.4);"></div>
@@ -1623,9 +1565,9 @@
                     const borderCol = isDone ? (isLate ? '#ef4444' : '#10b981') : 'var(--glass-border)';
                     
                     html += `
-                        <div style="background: rgba(0,0,0,0.1); padding: 10px; border-radius: 6px; border: 1px solid ${borderCol};">
+                        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; border: 1px solid ${borderCol};">
                             <div style="display:flex; justify-content:space-between; margin-bottom: 4px;">
-                                <span style="font-weight:bold; font-size:12px; color:${isDone ? 'var(--text)' : 'var(--text)'};">${t.title}</span>
+                                <span style="font-weight:bold; font-size:12px; color:${isDone ? '#fff' : '#fff'};">${t.title}</span>
                                 <span style="font-size:10px; color:var(--accent);">${t.taskId}</span>
                             </div>
                             <div style="font-size:10px; color:#aaa;">Target: ${t.scheduled}</div>
@@ -1752,10 +1694,10 @@
                                 ${isAdmin() ? `<button class="delete-btn" onclick="deleteSprintContainer(${s.id})">✖</button>` : ''}
                                 <div style="font-weight:bold; font-size: 14px; margin-bottom: 5px; color: var(--secondary);">${s.name}</div>
                                 <div style="font-size: 11px; color: #aaa; margin-bottom: 8px;">Phase: ${s.phase} &bull; ${s.weeks} Weeks</div>
-                                <div style="font-size: 12px; background: rgba(0,0,0,0.1); padding: 5px; border-radius: 4px; margin-bottom: 5px;">
+                                <div style="font-size: 12px; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px; margin-bottom: 5px;">
                                     <strong>Obj:</strong> ${s.objectives}
                                 </div>
-                                <div style="font-size: 12px; background: rgba(0,0,0,0.1); padding: 5px; border-radius: 4px;">
+                                <div style="font-size: 12px; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px;">
                                     <strong>Del:</strong> ${s.deliverables}
                                 </div>
                                 ${isAdmin() ? `
@@ -1934,7 +1876,7 @@
                 html += `
                 <div style="display:flex; align-items:center; justify-content:space-between; padding: 12px; background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%); border-left: 4px solid ${borderCol}; border-radius: 6px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                     <div style="display:flex; align-items:center; gap: 15px;">
-                        <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.1); display:flex; align-items:center; justify-content:center; font-size: 16px;">${icon}</div>
+                        <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center; font-size: 16px;">${icon}</div>
                         <div>
                             <div style="font-weight: bold; font-size: 14px; color: var(--text);">${e.title}</div>
                             <div style="font-size: 11px; color: #aaa; margin-top: 3px;">${e.date} • ${ownerName}</div>
@@ -2060,7 +2002,7 @@
                 const avatarHTML = cObj && cObj.avatar ? `<img src="${cObj.avatar}" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">` : `<div style="width:24px; height:24px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px; font-weight:bold;">${cName.charAt(0)}</div>`;
 
                 html += `
-                    <div style="display:flex; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.1); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
+                    <div style="display:flex; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.2); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
                         <div style="display:flex; align-items:center; gap: 10px;">
                             ${avatarHTML}
                             <div><div style="font-weight:bold; color:var(--secondary); font-size:14px;">${cName}</div><div style="font-size:10px; color:#aaa;">${f.date}</div></div>
@@ -2085,7 +2027,7 @@
         else {
             expenseList.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(f => {
                 html += `
-                    <div style="display:flex; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.1); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
+                    <div style="display:flex; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.2); border-radius:8px; align-items:center; border:1px solid var(--glass-border);">
                         <div><div style="font-weight:bold; font-size:14px;">${f.desc}</div><div style="font-size:10px; color:#aaa;">${f.date}</div></div>
                         <div style="display:flex; align-items:center; gap: 10px;">
                             <div style="font-weight:bold; color:#ef4444;">-₱${f.amount}</div>
@@ -2173,7 +2115,7 @@
                 <div class="flex-row">
                     <input id="resTags" placeholder="Tags (Comma separated, e.g. Survey, Docs)" style="flex:3; margin:0;">
                     <button id="resSubmitBtn" onclick="addResource()" style="flex:1; margin:0;">Add Resource</button>
-                    <button id="resCancelBtn" onclick="cancelEditResource()" style="flex:0.5; margin:0; display:none; background:rgba(255,255,255,0.1); color:var(--text);">Cancel</button>
+                    <button id="resCancelBtn" onclick="cancelEditResource()" style="flex:0.5; margin:0; display:none; background:rgba(255,255,255,0.1);">Cancel</button>
                 </div>
                 <div style="display:flex; gap:5px; margin-top:10px; flex-wrap:wrap;">
                     <span style="font-size:10px; color:#aaa; margin-right:5px; line-height:20px;">Quick Tags:</span>
@@ -2220,7 +2162,7 @@
                 const tagDisplay = (r.tags || []).map(t => `<span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:9px; margin-right:5px;">${t}</span>`).join('');
                 
                 html += `
-                    <div class="resource-item" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.1); border: 1px solid var(--glass-border); border-radius: 8px; margin-bottom: 10px; border-left: ${isPinned ? '3px solid var(--secondary)' : '1px solid var(--glass-border)'}">
+                    <div class="resource-item" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; margin-bottom: 10px; border-left: ${isPinned ? '3px solid var(--secondary)' : '1px solid var(--glass-border)'}">
                         <div style="display:flex; align-items:center; flex:1; min-width: 200px; margin-bottom: 10px;">
                             <div class="resource-icon" style="width: 40px; height: 40px; border-radius: 8px; background: rgba(34,211,238,0.1); color: var(--secondary); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 20px; margin-right: 15px; flex-shrink:0;">${isFile ? '📄' : '🔗'}</div>
                             <div>
@@ -2364,13 +2306,13 @@
                 <h4 style="margin-top:0; color:var(--accent)">Admin: Add Photo to Gallery</h4>
                 
                 <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 15px;">
-                    <div style="flex:1; min-width: 250px; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px; border: 1px dashed var(--secondary);">
+                    <div style="flex:1; min-width: 250px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px dashed var(--secondary);">
                         <h5 style="margin: 0 0 10px 0; color: var(--secondary);">Option 1: Cloudinary Upload</h5>
                         <input id="galFile" type="file" multiple accept="image/*" style="margin:0; padding:9px;">
                         <div style="font-size: 10px; color: #ffaa00; margin-top: 5px;">Uploads natively via Cloudinary API. Supports phone images cleanly.</div>
                     </div>
                     
-                    <div style="flex:1; min-width: 250px; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px; border: 1px dashed #10b981;">
+                    <div style="flex:1; min-width: 250px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px dashed #10b981;">
                         <h5 style="margin: 0 0 10px 0; color: #10b981;">Option 2: Paste URL (Fallback)</h5>
                         <input id="galUrl" placeholder="Paste Image Link (e.g. Imgur, Drive)" style="margin:0;">
                         <div style="font-size: 10px; color: #aaa; margin-top: 5px;">If file uploads ever block your device, paste a public image link here.</div>
@@ -2434,11 +2376,11 @@
             const displayTitle = isAll ? '🖼️ All Photos' : `📁 ${currentGalleryFolder}`;
             
             html += `
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; background: rgba(0,0,0,0.1); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--glass-border);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--glass-border);">
                 <h3 style="margin:0; display:flex; align-items:center; gap: 10px;">
                     <span style="font-size:24px;">${displayTitle}</span>
                 </h3>
-                <button class="icon-btn" onclick="window.closeGalleryFolder()" style="background: rgba(255,255,255,0.15); color:var(--text);">🔙 Back to Folders</button>
+                <button class="icon-btn" onclick="window.closeGalleryFolder()" style="background: rgba(255,255,255,0.15);">🔙 Back to Folders</button>
             </div>`;
             
             const folderItems = isAll ? gal : gal.filter(g => (g.folder || 'Uncategorized') === currentGalleryFolder);
@@ -2447,137 +2389,38 @@
                 html += `<p style="color:#aaa;">Folder is empty.</p>`;
             } else {
                 html += `<div class="gallery-grid">`;
-                
-                // Group items by batch ID or same caption within the same minute (Approximation for grouped uploads)
-                const groupedItems = {};
                 folderItems.forEach(g => {
-                    // For legacy, group by caption if batchId doesn't exist
-                    const key = g.batchId || g.id; 
-                    if(!groupedItems[key]) groupedItems[key] = [];
-                    groupedItems[key].push(g);
+                    const safeCaption = (g.caption || '').replace(/'/g, "\\'");
+                    html += `
+                    <div class="gallery-item" onclick="openLightbox('${g.url}', '${safeCaption}')">
+                        ${g.featured ? `<div class="feat-badge">⭐ Featured</div>` : ''}
+                        <img src="${g.url}" alt="${g.caption}" onerror="this.src='https://via.placeholder.com/300x300/1E293B/ef4444?text=Broken+Link'">
+                        <div class="gallery-caption">
+                            <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${g.caption} ${isAll ? ` <span style="color:#aaa; font-size:9px;">(${g.folder||'Uncategorized'})</span>` : ''}</div>
+                            ${isAdmin() ? `
+                                <div style="display:flex; gap:5px;">
+                                    <button class="success" style="padding: 4px; font-size: 10px; margin:0; flex:1;" onclick="event.stopPropagation(); toggleFeatured(${g.id})">${g.featured ? 'Unfeature' : 'Feature'}</button>
+                                    <button class="danger" style="padding: 4px; font-size: 10px; margin:0;" onclick="event.stopPropagation(); deletePhoto(${g.id})">Del</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>`;
                 });
-
-                Object.values(groupedItems).forEach(group => {
-                    const primary = group[0];
-                    const safeCaption = (primary.caption || '').replace(/'/g, "\\'");
-                    const isGroup = group.length > 1;
-
-                    // If it's a group, we construct a special card
-                    if(isGroup) {
-                        html += `
-                        <div class="gallery-group-card" onclick="openLightboxSequence('${primary.batchId}')">
-                            <div class="gg-images">
-                                <img class="gg-img" src="${group[0].url}" style="width: 50%;">
-                                <img class="gg-img" src="${group[1].url}" style="width: 50%;">
-                            </div>
-                            <div class="gg-info">
-                                <div style="font-size:12px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width: 70%;">${primary.caption}</div>
-                                <div style="font-size:10px; background:var(--secondary); color:#000; padding:2px 6px; border-radius:10px; font-weight:bold;">+${group.length}</div>
-                            </div>
-                        </div>`;
-                    } else {
-                        // Standard single item
-                        html += `
-                        <div class="gallery-item" onclick="openLightbox('${primary.url}', '${safeCaption}')">
-                            ${primary.featured ? `<div class="feat-badge">⭐ Featured</div>` : ''}
-                            <img src="${primary.url}" alt="${primary.caption}" onerror="this.src='https://via.placeholder.com/300x300/1E293B/ef4444?text=Broken+Link'">
-                            <div class="gallery-caption">
-                                <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${primary.caption} ${isAll ? ` <span style="color:#aaa; font-size:9px;">(${primary.folder||'Uncategorized'})</span>` : ''}</div>
-                                ${isAdmin() ? `
-                                    <div style="display:flex; gap:5px;">
-                                        <button class="success" style="padding: 4px; font-size: 10px; margin:0; flex:1;" onclick="event.stopPropagation(); toggleFeatured(${primary.id})">${primary.featured ? 'Unfeature' : 'Feature'}</button>
-                                        <button class="danger" style="padding: 4px; font-size: 10px; margin:0;" onclick="event.stopPropagation(); deletePhoto(${primary.id})">Del</button>
-                                    </div>
-                                ` : ''}
-                            </div>
-                        </div>`;
-                    }
-                });
-                
                 html += `</div>`;
             }
         }
         container.innerHTML = html;
     }
 
-    // Advanced Lightbox Logic
-    window.openLightboxSequence = function(batchId) {
-        const gal = getDB('gallery');
-        currentGalleryImages = gal.filter(g => g.batchId === batchId || g.folder === batchId || g.id == batchId);
-        if(currentGalleryImages.length === 0) currentGalleryImages = gal; // fallback
-        
-        if(currentGalleryImages.length > 0) {
-            currentGalleryIndex = 0;
-            updateLightboxView();
-            document.getElementById('lightboxModal').style.display = 'flex';
-        }
-    }
-
+    // Lightbox Logic
     window.openLightbox = function(url, caption) {
-        currentGalleryImages = [{ url, caption }];
-        currentGalleryIndex = 0;
-        updateLightboxView();
+        document.getElementById('lightboxImg').src = url;
+        document.getElementById('lightboxCaption').innerText = caption;
         document.getElementById('lightboxModal').style.display = 'flex';
     }
-
-    function updateLightboxView() {
-        const imgEl = document.getElementById('lightboxImg');
-        const capEl = document.getElementById('lightboxCaption');
-        if (currentGalleryImages.length > 0 && currentGalleryImages[currentGalleryIndex]) {
-            imgEl.style.opacity = 0;
-            setTimeout(() => {
-                imgEl.src = currentGalleryImages[currentGalleryIndex].url;
-                
-                let text = currentGalleryImages[currentGalleryIndex].caption || '';
-                if(currentGalleryImages.length > 1) {
-                    text += ` (${currentGalleryIndex + 1} / ${currentGalleryImages.length})`;
-                }
-                capEl.innerText = text;
-                imgEl.style.opacity = 1;
-            }, 150);
-            
-            // Show/hide nav buttons based on array size
-            document.querySelector('.lb-prev').style.display = currentGalleryImages.length > 1 ? 'flex' : 'none';
-            document.querySelector('.lb-next').style.display = currentGalleryImages.length > 1 ? 'flex' : 'none';
-        }
-    }
-
-    window.changeLightbox = function(dir) {
-        if(currentGalleryImages.length <= 1) return;
-        currentGalleryIndex += dir;
-        if (currentGalleryIndex < 0) currentGalleryIndex = currentGalleryImages.length - 1;
-        if (currentGalleryIndex >= currentGalleryImages.length) currentGalleryIndex = 0;
-        updateLightboxView();
-    }
-
-    // Touch Swipe Logic
-    let touchstartX = 0;
-    let touchendX = 0;
-    const lightbox = document.getElementById('lightboxModal');
-    
-    lightbox.addEventListener('touchstart', e => { 
-        touchstartX = e.changedTouches[0].screenX; 
-    });
-    
-    lightbox.addEventListener('touchend', e => {
-        touchendX = e.changedTouches[0].screenX;
-        if (touchstartX - touchendX > 50) window.changeLightbox(1); // swipe left
-        if (touchendX - touchstartX > 50) window.changeLightbox(-1); // swipe right
-    });
-
-    // Keyboard nav for Lightbox
-    document.addEventListener('keydown', function(e) {
-        if(document.getElementById('lightboxModal').style.display === 'flex') {
-            if(e.key === 'ArrowLeft') window.changeLightbox(-1);
-            if(e.key === 'ArrowRight') window.changeLightbox(1);
-            if(e.key === 'Escape') window.closeLightbox();
-        }
-    });
-
     window.closeLightbox = function() {
         document.getElementById('lightboxModal').style.display = 'none';
         document.getElementById('lightboxImg').src = '';
-        currentGalleryImages = [];
     }
 
     window.openGalleryFolder = function(fName) { currentGalleryFolder = fName; loadModule('Gallery', true); }
@@ -2598,12 +2441,11 @@
         const urlInput = document.getElementById('galUrl');
         const caption = document.getElementById('galCap').value || 'Untitled';
         const folder = document.getElementById('galFolder').value.trim() || 'Uncategorized';
-        const batchId = 'batch_' + new Date().getTime(); // Grouping mechanism
         
         const gal = getDB('gallery');
 
         if (urlInput && urlInput.value.trim() !== '') {
-            gal.push({ id: generateId(), url: urlInput.value.trim(), caption: caption, folder: folder, featured: false, batchId: batchId });
+            gal.push({ id: generateId(), url: urlInput.value.trim(), caption: caption, folder: folder, featured: false });
             currentGalleryFolder = folder;
             setDB('gallery', gal); 
             addNotification(`🖼️ New Photo Added: ${caption}`);
@@ -2616,7 +2458,7 @@
                 for(let i=0; i < fileInput.files.length; i++) {
                     const file = fileInput.files[i];
                     document.getElementById('syncStatus').style.display = "block";
-                    document.getElementById('syncStatus').innerText = `⏳ Uploading ${i+1}/${fileInput.files.length}...`;
+                    document.getElementById('syncStatus').innerText = `⏳ Uploading to Cloudinary...`;
                     
                     const formData = new FormData();
                     formData.append("file", file);
@@ -2629,17 +2471,18 @@
                     const data = await response.json();
                     if (!data.secure_url) throw new Error(data.error?.message || "Cloudinary API Rejected");
                     
-                    gal.push({ id: generateId(), url: data.secure_url, caption: caption, folder: folder, featured: false, batchId: batchId });
+                    let finalCaption = fileInput.files.length > 1 ? `${caption} (${i+1})` : caption;
+                    gal.push({ id: generateId(), url: data.secure_url, caption: finalCaption, folder: folder, featured: false });
                 }
                 
                 currentGalleryFolder = folder;
                 setDB('gallery', gal); 
                 addNotification(`🖼️ New Photos Added to ${folder}`);
                 loadModule('Gallery');
-                document.getElementById('syncStatus').style.display = "none";
+                document.getElementById('syncStatus').innerText = "🟢 Sync Complete";
             } catch(e) {
                 customAlert("Cloudinary Upload Failed. Please check if 'dadevs_preset' is set to Unsigned.\n\nFallback: Upload the photo to Discord or Drive and paste the link in Option 2.");
-                document.getElementById('syncStatus').style.display = "none";
+                document.getElementById('syncStatus').innerText = "🔴 Failed";
             }
             return;
         }
