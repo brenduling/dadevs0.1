@@ -14,7 +14,7 @@
     <title>DaDevs 0.1 - Workspace</title>
     <style>
         :root {
-            /* DaDevs 0.1 Deep Space Neon Palette */
+            /* Deep Space Neon Palette */
             --bg-1: #0F172A; 
             --bg-2: #1E293B;
             --primary: #2D2A8C; 
@@ -23,56 +23,53 @@
             --text: #f8fafc;
             --glass-bg: rgba(255,255,255,0.05);
             --glass-border: rgba(255,255,255,0.1);
-            
-            /* Member Colors */
-            --c-chua: #3b82f6; 
-            --c-vince: #8b5cf6; 
-            --c-tanya: #ec4899; 
-            --c-bren: #10b981; 
-            --c-ruth: #f97316; 
-            --c-team: #64748b; 
+            --nav-bg: rgba(15, 23, 42, 0.85);
         }
 
         /* Light Theme Override */
         body.light-theme {
             --bg-1: #f8fafc; --bg-2: #e2e8f0;
-            --text: #0f172a; --secondary: #0284c7; --accent: #7c3aed; --primary: #312e81;
+            --text: #0f172a;
             --glass-bg: rgba(255,255,255,0.85);
             --glass-border: rgba(0,0,0,0.15);
+            --nav-bg: rgba(248, 250, 252, 0.85);
         }
-        body.light-theme .neon { color: var(--primary); text-shadow: none; }
+        body.light-theme .neon { text-shadow: none; color: var(--secondary); font-weight: 800; }
         body.light-theme input, body.light-theme select, body.light-theme textarea { background: rgba(255,255,255,0.9); color: #000; border: 1px solid #cbd5e1; }
         body.light-theme .timeline-table td { border-color: rgba(0,0,0,0.05); }
         body.light-theme .unique-member-card { background: linear-gradient(145deg, rgba(255,255,255,1) 0%, rgba(241,245,249,1) 100%); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        body.light-theme .chat-messages { background: #fff; border-radius: 8px; }
+        body.light-theme .comment-box { background: #f1f5f9; border-color: #cbd5e1; color: #000; }
+        body.light-theme .comment-box .comment-body { color: #333; }
 
         body {
             margin: 0; font-family: 'Inter', system-ui, sans-serif;
             background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
-            color: var(--text); overflow: hidden; height: 100vh; width: 100vw;
+            color: var(--text); overflow: hidden; height: 100dvh; width: 100vw;
             display: flex; justify-content: center; align-items: center;
             transition: background 0.3s, color 0.3s;
         }
         
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.3); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 211, 238, 0.6); }
+        ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 3px; opacity: 0.5;}
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         .glass {
             background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border); border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
-        .neon { color: var(--secondary); text-shadow: 0 0 8px rgba(34,211,238,0.4); }
+        .neon { color: var(--secondary); text-shadow: 0 0 8px var(--secondary); }
         .accent { color: var(--accent); }
         
         .dadevs-logo { width: 50px; height: 50px; flex-shrink: 0; transition: transform 0.3s ease; }
         .dadevs-logo:hover { transform: scale(1.05) rotate(5deg); }
         
-        /* Auto-Update Overlay Screen */
+        /* Auto-Update Overlay */
         #updateOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            background: var(--bg-1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             z-index: 99999; display: none; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; color: var(--text);
         }
@@ -83,7 +80,7 @@
         #authScreen { padding: 40px; text-align: center; width: 340px; max-width: 90%; z-index: 10; transition: opacity 0.5s; display: none; }
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
         .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; transition: 0.3s; font-weight: bold; font-size: 14px; border-bottom: 2px solid transparent; }
-        .auth-tab.active { color: var(--secondary); border-bottom-color: var(--secondary); text-shadow: 0 0 8px rgba(34, 211, 238, 0.3); }
+        .auth-tab.active { color: var(--secondary); border-bottom-color: var(--secondary); text-shadow: 0 0 8px var(--secondary); }
 
         input, select, textarea {
             width: 100%; padding: 12px; margin: 8px 0; background: rgba(0,0,0,0.3);
@@ -92,14 +89,14 @@
         }
         input:disabled, textarea:disabled { background: rgba(0,0,0,0.5); color: #666; cursor: not-allowed; border-color: rgba(255,255,255,0.05); }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-        input:focus:not(:disabled), select:focus, textarea:focus { border-color: var(--secondary); }
+        input:focus:not(:disabled), select:focus, textarea:focus { border-color: var(--secondary); box-shadow: 0 0 8px var(--secondary); }
         
         button {
             width: 100%; padding: 12px; background: var(--accent); color: #fff;
             border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             margin-top: 5px; font-size: 14px;
         }
-        button:hover { background: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
+        button:hover { background: var(--secondary); transform: translateY(-2px); box-shadow: 0 4px 15px var(--secondary); }
         button:active { transform: translateY(0); }
         button.danger { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #ef4444; }
         button.danger:hover { background: #ef4444; color: #fff; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); }
@@ -107,50 +104,59 @@
         button.success:hover { background: #10b981; color: #fff; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
         
         /* App Layout */
-        #app { display: none; width: 100vw; height: 100vh; flex-direction: row; position: relative; }
+        #app { display: none; width: 100vw; height: 100dvh; flex-direction: column; position: relative; }
         
-        /* Sidebar */
-        #sidebar {
-            width: 250px; display: flex; flex-direction: column; border-right: 1px solid var(--glass-border);
-            border-radius: 0; z-index: 1000; background: rgba(15, 23, 42, 0.95); flex-shrink: 0; overflow: hidden;
+        /* Universal Floating Dock */
+        #bottomNav {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 5px; padding: 10px 20px; z-index: 1000;
+            background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px; border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); transition: background 0.3s;
         }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; height: 85px; box-sizing: border-box; border-bottom: 1px solid var(--glass-border); white-space: nowrap; }
-        .nav-links { flex: 1; padding: 15px 10px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 8px; }
-        .nav-item { display: flex; align-items: center; gap: 15px; padding: 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; white-space: nowrap; font-weight: 500; font-size: 14px; }
-        .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
-        .nav-item:hover, .nav-item.active { background: rgba(34, 211, 238, 0.15); color: var(--secondary); transform: translateX(5px); border-left: 3px solid var(--secondary); }
+        .nav-item { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; 
+            padding: 8px 15px; border-radius: 12px; cursor: pointer; transition: 0.2s; color: #888;
+        }
+        .nav-item svg { width: 22px; height: 22px; flex-shrink: 0; transition: 0.2s; stroke: currentColor;}
+        .nav-text { font-size: 10px; font-weight: 600; transition: 0.2s; display: none; }
+        .nav-item:hover, .nav-item.active { background: rgba(255, 255, 255, 0.1); color: var(--secondary); transform: translateY(-3px); }
+        .nav-item:hover svg, .nav-item.active svg { transform: scale(1.1); filter: drop-shadow(0 0 5px var(--secondary)); }
+        .nav-item:hover .nav-text, .nav-item.active .nav-text { display: block; }
 
         /* Main Content */
-        #main { flex: 1; padding: 30px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; transition: 0.3s; min-width: 0; position: relative; box-sizing: border-box; word-wrap: break-word;}
+        #main { flex: 1; padding: 25px; padding-bottom: 110px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; transition: 0.3s; min-width: 0; box-sizing: border-box; word-wrap: break-word; }
         
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px;}
-        .header-actions { display: flex; align-items: center; gap: 15px; }
-        .header-btn { background: rgba(255,255,255,0.1); border: none; color: var(--text); padding: 8px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 12px; transition: 0.3s; margin:0; font-weight: bold;}
-        .header-btn:hover { background: var(--secondary); color: #000; transform: translateY(-2px); }
-        
-        .notif-bell { position: relative; cursor: pointer; font-size: 20px; padding: 5px; transition: transform 0.2s;}
-        .notif-bell:hover { transform: scale(1.1); }
-        .notif-dot { position: absolute; top: 0; right: 0; background: #ef4444; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 5px #ef4444; display: none; }
-        .notif-dropdown { position: absolute; top: 40px; right: 0; width: 250px; background: var(--bg-2); border: 1px solid var(--glass-border); border-radius: 8px; padding: 10px; z-index: 1000; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; position: sticky; top:0; background: linear-gradient(180deg, var(--bg-1) 70%, transparent); z-index:50;}
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .header-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text); padding: 5px 12px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; transition: 0.3s; margin:0; font-weight: bold;}
+        .header-btn:hover { background: var(--secondary); color: #000; transform: translateY(-2px); border-color: var(--secondary); }
+        .header-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #555; }
+
+        .notif-bell { position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--glass-bg); border: 1px solid var(--glass-border); transition: 0.2s; color: var(--text); }
+        .notif-bell:hover { background: var(--secondary); color: #000; transform: translateY(-2px); border-color: var(--secondary); }
+        .notif-dot { position: absolute; top: -2px; right: -2px; background: #ef4444; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 5px #ef4444; display: none; }
+        .notif-dropdown { position: absolute; top: 45px; right: 0; width: 300px; background: var(--bg-2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; z-index: 2500; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); max-height: 400px; overflow-y:auto;}
         
         /* Universal Chat Panel */
         #chatPanel {
-            position: fixed; right: -350px; top: 0; width: 340px; max-width: 100vw; height: 100vh;
+            position: fixed; right: -380px; top: 0; width: 350px; max-width: 100vw; height: 100vh;
             background: var(--bg-1); border-left: 1px solid var(--glass-border);
-            z-index: 2000; transition: right 0.3s ease; display:flex; flex-direction:column;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.5);
+            z-index: 2000; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display:flex; flex-direction:column;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.7);
         }
         #chatPanel.open { right: 0; }
-        .chat-header { padding: 20px; border-bottom: 1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center; }
-        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display:flex; flex-direction:column; gap: 10px; }
-        .chat-input-area { padding: 15px; border-top: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); }
+        .chat-header { padding: 20px; border-bottom: 1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center; background: rgba(0,0,0,0.2);}
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display:flex; flex-direction:column; gap: 10px; scroll-behavior: smooth;}
+        .chat-input-area { padding: 15px; border-top: 1px solid var(--glass-border); background: var(--bg-2); }
+        .mention { color: var(--secondary); font-weight: bold; background: rgba(34, 211, 238, 0.1); padding: 0 4px; border-radius: 4px; }
 
         .card { padding: 20px; margin-bottom: 20px; transition: transform 0.3s; word-break: break-word; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; } 
-        .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; } 
+        .grid-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; } 
         
-        .contact-link { display: flex; justify-content: center; align-items: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; text-decoration: none; font-size: 16px; transition: 0.3s; }
+        .contact-link { display: flex; justify-content: center; align-items: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; text-decoration: none; font-size: 14px; transition: 0.3s; }
         .contact-link:hover { background: var(--secondary); color: #000; transform: translateY(-4px); border-color: var(--secondary); box-shadow: 0 4px 12px rgba(34, 211, 238, 0.4); }
         
         .avatar-container { position: relative; display: inline-flex; justify-content: center; align-items: center; flex-shrink: 0; }
@@ -167,12 +173,12 @@
             border: 1px solid var(--glass-border); border-radius: 16px; 
             background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.2) 100%);
             position: relative; overflow: visible; margin-top: 30px; text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; display:flex; flex-direction:column;
         }
         .unique-member-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); border-color: var(--secondary); }
 
-        .kanban-board { display: flex; gap: 20px; min-height: 400px; overflow-x: auto; padding-bottom: 20px;}
-        .kanban-col { flex: 1; min-width: 280px; display: flex; flex-direction: column; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; border: 1px solid var(--glass-border); }
+        .kanban-board { display: flex; gap: 20px; min-height: 400px; overflow-x: auto; padding-bottom: 20px; scroll-snap-type: x mandatory;}
+        .kanban-col { flex: 1; min-width: 280px; display: flex; flex-direction: column; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; border: 1px solid var(--glass-border); scroll-snap-align: center;}
         .task-card { background: var(--glass-bg); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--glass-border); transition: 0.2s; cursor: grab; position: relative;}
         .task-card:hover { border-color: var(--secondary); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .delete-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ef4444; cursor: pointer; padding: 0; width: auto; font-size: 12px; transition: transform 0.2s;}
@@ -195,9 +201,18 @@
         .gallery-item { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); aspect-ratio: 1 / 1; transition: 0.3s; background: rgba(0,0,0,0.5); cursor: pointer;}
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
         .gallery-item:hover img { transform: scale(1.08); }
-        .gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 15px 10px 10px 10px; font-size: 12px; transition: 0.3s; }
+        .gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 15px 10px 10px 10px; font-size: 12px; transition: 0.3s; color: #fff;}
         .folder-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.75); display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; transition: 0.3s; backdrop-filter: blur(2px);}
         .gallery-item:hover .folder-overlay { background: rgba(15, 23, 42, 0.5); }
+        .feat-badge { position: absolute; top:5px; left:5px; background: #f59e0b; color: #000; font-size:10px; font-weight:bold; padding: 2px 6px; border-radius: 10px; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.5);}
+
+        /* Custom Alert & Modal Logic (Smart UI) */
+        #customDialogOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 1000000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .dialog-content { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 30px 25px; border-radius: 16px; width: 340px; text-align: center; box-shadow: 0 15px 50px rgba(0,0,0,0.6); transform: scale(0.9); opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .dialog-content.active { transform: scale(1); opacity: 1; }
+        .dialog-icon { font-size: 40px; margin-bottom: 15px; display: inline-block; }
+        .dialog-msg { margin-bottom: 25px; font-size: 15px; color: var(--text); line-height: 1.5; font-weight: 500;}
+        .dialog-btns { display: flex; gap: 10px; justify-content: center; }
 
         /* Lightbox Image Viewer */
         #lightboxModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 100000; display: none; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(8px); }
@@ -231,48 +246,79 @@
         .close-modal { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; justify-content:center; align-items:center; font-weight: bold; transition: 0.2s;}
         .close-modal:hover { background: #ef4444; transform: rotate(90deg); }
 
+        .collapsible-header { cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; transition: 0.2s; user-select: none;}
+        .collapsible-header:hover { background: rgba(255,255,255,0.1); }
+        
         /* Mobile Adjustments */
         @media (max-width: 992px) { 
             .grid-3 { grid-template-columns: 1fr; } 
         }
         
         @media (max-width: 768px) {
-            body { position: fixed; width: 100%; height: 100%; overflow: hidden; }
-            #app { flex-direction: column; }
-            
-            /* Bottom Navigation */
-            #sidebar {
-                width: 100%; height: 65px; position: fixed; bottom: 0; left: 0; right: 0;
-                flex-direction: row; border-right: none; border-top: 1px solid var(--glass-border);
-                background: rgba(15, 23, 42, 0.98); z-index: 1000; transition: none;
-            }
-            .sidebar-header, .sidebar-footer { display: none !important; }
-            .nav-links { flex-direction: row; width: 100%; padding: 5px; align-items: center; justify-content: space-around; overflow-x: auto; overflow-y: hidden; }
-            .nav-item { flex-direction: column; padding: 5px 8px; gap: 4px; font-size: 10px; border-radius: 8px; min-width: 60px; justify-content: center; }
-            .nav-item svg { width: 22px; height: 22px; margin: 0; }
-            .nav-item:hover, .nav-item.active { border-left: none; border-bottom: 3px solid var(--secondary); background: transparent; transform: scale(1.05); }
-            .nav-text { display: none !important; }
-            
-            #main { height: calc(100vh - 65px); padding: 15px; padding-bottom: 25px; }
-            .header-top { padding-bottom: 10px; margin-bottom: 15px; }
-            
-            .grid-2, .grid-5, .grid-3 { grid-template-columns: 1fr; gap: 15px; }
-            .card { padding: 15px; }
+            /* General Sizing Fixes */
+            h2.neon { font-size: 20px !important; }
+            h3 { font-size: 15px !important; margin-top: 0 !important; }
+            .card { padding: 15px; margin-bottom: 12px; }
+            .grid-2, .grid-5, .grid-3, .grid-auto { grid-template-columns: 1fr; gap: 12px; }
             .admin-panel .flex-row { flex-direction: column; align-items: stretch; }
             .admin-panel .flex-row > * { width: 100%; margin-bottom: 5px; flex: none !important; }
             
+            /* Buttons & Inputs */
+            .header-btn { padding: 6px 10px; font-size: 11px; }
+            .header-btn svg { width: 14px; height: 14px; }
+            input, select, textarea { padding: 10px; font-size: 13px; }
+            button { padding: 10px; font-size: 13px; }
+
+            /* Bottom Navigation Dock */
+            #bottomNav {
+                width: 100%; bottom: 0; left: 0; transform: none; border-radius: 0;
+                padding: 10px 5px; justify-content: space-around; gap: 0;
+                border-top: 1px solid var(--glass-border); border-bottom: none; border-left: none; border-right: none;
+            }
+            .nav-item { padding: 6px; }
+            .nav-item svg { width: 22px; height: 22px; margin: 0; }
+            .nav-item:hover, .nav-item.active { background: transparent; transform: scale(1.1); border-radius: 0; }
+            .nav-item:hover .nav-text { display: none !important; }
+            .nav-item.active::after { content:''; display:block; width: 5px; height:5px; border-radius:50%; background:var(--secondary); position:absolute; bottom:-2px; }
+            
+            /* Main Content Adjustments */
+            #main { padding: 15px; padding-bottom: 90px; } /* Ensure content isn't hidden behind dock */
+            .header-top { padding-bottom: 10px; margin-bottom: 15px; }
+            
+            /* Timeline & Kanban adjustments */
             .timeline-wrapper { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 10px; }
-            .timeline-table { min-width: 700px; } 
+            .timeline-table { min-width: 650px; } 
+            .timeline-table th, .timeline-table td { padding: 8px 6px; font-size: 11px; }
             
-            .kanban-board { flex-direction: column; min-height: auto; }
-            .kanban-col { min-width: 0; }
+            .kanban-board { flex-direction: row; min-height: auto; scroll-snap-type: x mandatory; padding-bottom: 10px;}
+            .kanban-col { min-width: 85vw; scroll-snap-align: center; margin-right: 15px; }
+            .task-card { padding: 12px; }
             
+            /* Calendar & Gallery Adjustments */
+            .cal-day { min-height: 40px; padding: 5px; }
+            .cal-header { font-size: 10px; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+
+            /* Profile specific */
             .profile-controls { justify-content: center; width: 100%; margin-top: 10px; }
             .profile-controls button { flex: 1; text-align: center; justify-content: center; }
+
+            /* Chat Panel */
+            #chatPanel { width: 100vw; right: -100vw; border-left:none;}
+            #notifDropdown { width: 280px; right: -50px; max-width: 90vw; top: 40px;}
         }
     </style>
 </head>
 <body>
+
+    <div id="customDialogOverlay">
+        <div class="dialog-content" id="customDialogContent">
+            <div class="dialog-icon" id="customDialogIcon">⚠️</div>
+            <div class="dialog-msg" id="customDialogMsg"></div>
+            <div class="dialog-btns" id="customDialogBtns">
+                </div>
+        </div>
+    </div>
 
     <div id="updateOverlay">
         <svg class="dadevs-logo" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -341,49 +387,44 @@
             <p id="r_succ" style="color:#10b981;display:none;margin-top:15px;font-size:12px;">Registration Successful! You can login now.</p>
         </div>
         
-        <div style="margin-top: 25px; font-size: 11px; color: #475569; font-weight: 500; letter-spacing: 0.5px;">powered by brenduling</div>
+        <div style="margin-top: 25px; font-size: 11px; color: #475569; font-weight: 500; letter-spacing: 0.5px; text-transform: lowercase;">powered by brenduling</div>
     </div>
 
     <div id="app">
-        <div id="sidebar" class="glass">
-            <div class="sidebar-header">
-                <div class="brand-text" style="display:flex; align-items:center; gap:8px;">
-                    <svg class="dadevs-logo" style="width:30px; height:30px;" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M100 15L175 58V142L100 185L25 142V58L100 15Z" stroke="url(#neonGrad)" stroke-width="8" filter="url(#glow)"/>
-                        <path d="M100 40V160" stroke="#FFF" stroke-width="12" stroke-linecap="round"/>
-                        <path d="M100 40C145 40 155 70 155 100C155 130 145 160 100 160" stroke="url(#neonGrad)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M70 100L45 75M70 100L45 125" stroke="#FFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <h2 class="neon" style="margin:0; font-size:20px;">DaDevs 0.1</h2>
-                </div>
+        <div id="bottomNav">
             </div>
-            <div class="nav-links" id="navLinks"></div>
-        </div>
 
         <div id="main">
             <div class="header-top" id="mainHeader">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <h2 id="viewTitle" class="neon" style="margin:0; font-size: 24px;">Workspace</h2>
+                <div style="display:flex; flex-direction:column; gap:2px;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <h2 id="viewTitle" class="neon" style="margin:0; font-size: 22px;">Workspace</h2>
+                    </div>
+                    <span style="font-size: 9px; color: var(--secondary); opacity: 0.8; letter-spacing: 0.5px; text-transform: lowercase;">powered by brenduling</span>
                 </div>
                 <div class="header-actions">
                     <div id="syncStatus" style="font-size:10px; font-weight:bold; color:#aaa; display:none;"></div>
                     
                     <div class="notif-bell" onclick="toggleChat()" title="Team Discussions">
-                        💬
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                     </div>
 
                     <div class="notif-bell" onclick="toggleNotifications()" title="Notifications">
-                        🔔 <span id="notifBadge" class="notif-dot"></span>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        <span id="notifBadge" class="notif-dot"></span>
                         <div id="notifDropdown" class="notif-dropdown glass">
-                            <h4 style="margin:0 0 10px 0; border-bottom:1px solid var(--glass-border); padding-bottom:5px;">Notifications</h4>
-                            <div id="notifList" style="font-size:12px; color:#ccc; max-height:150px; overflow-y:auto;">
-                                <p style="margin:0; text-align:center;">No new notifications</p>
+                            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--glass-border); padding-bottom:5px; margin-bottom: 10px;">
+                                <h4 style="margin:0;">Notifications</h4>
+                                <button class="danger" style="width:auto; padding:2px 8px; font-size:10px; margin:0;" onclick="clearNotifs()" id="clearNotifsBtn" style="display:none;">Clear</button>
+                            </div>
+                            <div id="notifList" style="font-size:12px; color:var(--text); max-height:250px; overflow-y:auto;">
+                                <p style="margin:0; text-align:center; color:#aaa;">No new notifications</p>
                             </div>
                         </div>
                     </div>
-                    <button class="header-btn" onclick="loadModule('Profile')">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        <span class="nav-text">Profile</span>
+                    <button class="header-btn" onclick="loadModule('Profile')" id="topProfileBtn" style="padding: 4px 12px 4px 4px; border-radius: 20px;">
+                        <img id="topProfileImg" src="" class="header-avatar">
+                        <span id="topProfileName" class="nav-text" style="display:inline; font-size:12px;">User</span>
                     </button>
                 </div>
             </div>
@@ -394,12 +435,15 @@
         <div id="chatPanel" class="glass">
             <div class="chat-header">
                 <h3 style="margin:0; color:var(--secondary);">Team Discussion</h3>
-                <button class="icon-btn" onclick="toggleChat()" style="background:transparent; border:none; color:#fff; cursor:pointer; font-size: 16px;">✖</button>
+                <div style="display:flex; gap:10px;">
+                    <button id="clearChatBtn" class="danger" style="width:auto; padding: 4px 8px; font-size:10px; margin:0; display:none;" onclick="clearChat()">Clear</button>
+                    <button class="icon-btn" onclick="toggleChat()" style="background:transparent; border:none; color:var(--text); cursor:pointer; font-size: 16px;">✖</button>
+                </div>
             </div>
             <div class="chat-messages" id="chatMessagesArea">
                 </div>
             <div class="chat-input-area">
-                <textarea id="globalCommentTxt" placeholder="Message the team..." style="height: 60px; margin:0 0 10px 0; font-size:13px;"></textarea>
+                <textarea id="globalCommentTxt" placeholder="Type @username to mention..." style="height: 60px; margin:0 0 10px 0; font-size:13px;"></textarea>
                 <button onclick="postGlobalComment()" style="margin:0; padding:10px;">Send Message</button>
             </div>
         </div>
@@ -418,16 +462,60 @@
 
 <script>
     // ==========================================
+    // UI CORE CONTROLLERS (MODALS & ALERTS)
+    // ==========================================
+    window.customAlert = function(message, icon = "⚠️") {
+        const overlay = document.getElementById('customDialogOverlay');
+        const content = document.getElementById('customDialogContent');
+        
+        document.getElementById('customDialogIcon').innerText = icon;
+        document.getElementById('customDialogMsg').innerText = message;
+        document.getElementById('customDialogBtns').innerHTML = `<button class="success" onclick="closeCustomDialog()" style="width: auto; padding: 10px 30px; border-radius: 20px;">Got it</button>`;
+        
+        overlay.style.display = 'flex';
+        setTimeout(() => content.classList.add('active'), 10);
+    }
+
+    window.customConfirm = function(message, onConfirm, icon = "❓") {
+        const overlay = document.getElementById('customDialogOverlay');
+        const content = document.getElementById('customDialogContent');
+        
+        document.getElementById('customDialogIcon').innerText = icon;
+        document.getElementById('customDialogMsg').innerText = message;
+        
+        const btnHtml = `
+            <button id="cdBtnCancel" class="danger" style="width: auto; padding: 10px 25px; margin:0; border-radius: 20px;">Cancel</button>
+            <button id="cdBtnConfirm" class="success" style="width: auto; padding: 10px 25px; margin:0; border-radius: 20px;">Confirm</button>
+        `;
+        document.getElementById('customDialogBtns').innerHTML = btnHtml;
+        
+        document.getElementById('cdBtnCancel').onclick = closeCustomDialog;
+        document.getElementById('cdBtnConfirm').onclick = () => {
+            closeCustomDialog();
+            if(onConfirm) onConfirm();
+        };
+        
+        overlay.style.display = 'flex';
+        setTimeout(() => content.classList.add('active'), 10);
+    }
+
+    window.closeCustomDialog = function() {
+        const overlay = document.getElementById('customDialogOverlay');
+        const content = document.getElementById('customDialogContent');
+        content.classList.remove('active');
+        setTimeout(() => { overlay.style.display = 'none'; }, 300);
+    }
+
+    // ==========================================
     // AUTO-UPDATE SYSTEM (FOR VERCEL PWA)
     // ==========================================
-    const APP_VERSION = "v47"; 
+    const APP_VERSION = "v51"; 
 
     window.addEventListener('load', () => {
         fetch(window.location.href, { cache: "no-store", headers: { 'Cache-Control': 'no-cache' } })
             .then(res => res.text())
             .then(liveHTML => {
                 if (!liveHTML.includes(`const APP_VERSION = "${APP_VERSION}";`)) {
-                    addNotification("System update is available! Refreshing...");
                     document.getElementById('updateOverlay').style.display = 'flex';
                     setTimeout(() => window.location.reload(true), 1500);
                 }
@@ -480,27 +568,15 @@
     let resActiveTag = null;
     let collapsedPhases = {}; 
 
-    // Theme Management
-    let isLightMode = localStorage.getItem('theme') === 'light';
-    if (isLightMode) document.body.classList.add('light-theme');
-
-    window.toggleTheme = function() {
-        const isLight = document.body.classList.toggle('light-theme');
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    }
-
-    // Notification Management
-    let localNotifs = [];
-
     // DB Init
-    const DB_KEY = 'dadevs_db_v47';
+    const DB_KEY = 'dadevs_db_v51';
     let appDB = { 
-        tasks: [], funds: [], calendar: [], timeline: [], resources: [], gallery: [], sprints: [], comments: [], members: []
+        tasks: [], funds: [], calendar: [], timeline: [], resources: [], gallery: [], sprints: [], comments: [], members: [], notifications: []
     };
 
     async function initDB(manualSync = false) {
-        if (localStorage.getItem('dd_version') !== 'v47') {
-            localStorage.setItem('dd_version', 'v47');
+        if (localStorage.getItem('dd_version') !== 'v51') {
+            localStorage.setItem('dd_version', 'v51');
         }
         
         const statusEl = document.getElementById('syncStatus');
@@ -517,7 +593,7 @@
                     appDB = { ...appDB, ...data.record };
                 }
                 setStatus("🟢 Online");
-                if (manualSync) { loadModule(currentModule, true); renderUniversalComments(); alert("System Synced Successfully!"); }
+                if (manualSync) { loadModule(currentModule, true); renderUniversalComments(); customAlert("System Synced Successfully!", "✅"); }
             } catch(e) { 
                 setStatus("🔴 Offline (Cache)"); 
                 const local = localStorage.getItem(DB_KEY); if (local) appDB = JSON.parse(local);
@@ -530,6 +606,7 @@
         if(!appDB.comments) appDB.comments = [];
         if(!appDB.sprints) appDB.sprints = [];
         if(!appDB.members) appDB.members = [];
+        if(!appDB.notifications) appDB.notifications = [];
 
         // INITIALIZE DEFAULT USERS IF NOT ALREADY IN DB
         const defaultUsers = {
@@ -567,6 +644,12 @@
         if (dbUpdated) {
             localStorage.setItem(DB_KEY, JSON.stringify(appDB));
             saveDB(); 
+        }
+
+        // Apply Custom Themes
+        if(currentUser) {
+            if(currentUser.accent) document.documentElement.style.setProperty('--accent', currentUser.accent);
+            if(currentUser.secondary) document.documentElement.style.setProperty('--secondary', currentUser.secondary);
         }
 
         updateNotifUI();
@@ -639,8 +722,12 @@
     }
 
     window.postGlobalComment = function() {
-        const txt = document.getElementById("globalCommentTxt").value.trim();
+        let txt = document.getElementById("globalCommentTxt").value.trim();
         if (!txt) return;
+        
+        // Mentions highlight
+        txt = txt.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
+
         const comments = getDB('comments');
         comments.push({
             id: generateId(), text: txt, author: currentUser.fullName, 
@@ -649,7 +736,9 @@
         setDB('comments', comments);
         document.getElementById("globalCommentTxt").value = "";
         
+        addNotification(`💬 New message from ${currentUser.fullName}`);
         renderUniversalComments();
+        
         setTimeout(() => {
             const area = document.getElementById("chatMessagesArea");
             area.scrollTop = area.scrollHeight;
@@ -662,18 +751,33 @@
         renderUniversalComments();
     };
 
+    window.clearChat = function() {
+        if(!isAdmin()) return;
+        customConfirm("Are you sure you want to clear ALL chat history?", () => {
+            setDB('comments', []);
+            renderUniversalComments();
+        });
+    }
 
     function toggleNotifications() {
         const dd = document.getElementById('notifDropdown');
         dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
         document.getElementById('notifBadge').style.display = 'none';
-        if (dd.style.display === 'none') localNotifs = []; 
         updateNotifUI();
     }
     
-    function addNotification(msg) {
-        localNotifs.unshift(msg);
+    window.addNotification = function(msg) {
+        const notifs = getDB('notifications');
+        notifs.unshift({ id: generateId(), msg: msg, time: new Date().toLocaleTimeString() });
+        if(notifs.length > 50) notifs.pop(); // Keep last 50
+        setDB('notifications', notifs);
         document.getElementById('notifBadge').style.display = 'block';
+        updateNotifUI();
+    }
+
+    window.clearNotifs = function() {
+        if(!isAdmin()) return;
+        setDB('notifications', []);
         updateNotifUI();
     }
 
@@ -681,18 +785,24 @@
         const list = document.getElementById('notifList');
         if(!list) return;
         
-        let msgs = [...localNotifs];
+        const notifs = getDB('notifications');
+        let msgs = [...notifs];
         
         if (isAdmin()) {
             const pendingCount = getDB('members').filter(m => m.status === 'pending').length;
-            if (pendingCount > 0) msgs.unshift(`🔴 You have ${pendingCount} pending account requests to review.`);
+            if (pendingCount > 0) msgs.unshift({msg: `🔴 You have ${pendingCount} pending account requests.`, time: 'Now'});
         }
         
         if (msgs.length === 0) {
-            list.innerHTML = `<p style="margin:0; text-align:center;">No new notifications</p>`;
+            list.innerHTML = `<p style="margin:0; text-align:center; color:#aaa;">No new notifications</p>`;
         } else {
-            list.innerHTML = msgs.map(m => `<div style="padding:8px; border-bottom:1px solid var(--glass-border);">${m}</div>`).join('');
-            document.getElementById('notifBadge').style.display = 'block';
+            list.innerHTML = msgs.map(m => `
+                <div style="padding:8px; border-bottom:1px solid var(--glass-border); line-height:1.4;">
+                    <div style="font-size:12px;">${m.msg}</div>
+                    <div style="font-size:9px; color:#888; margin-top:2px;">${m.time}</div>
+                </div>
+            `).join('');
+            if(notifs.length > 0) document.getElementById('notifBadge').style.display = 'block';
         }
     }
 
@@ -715,9 +825,7 @@
         if (u.toLowerCase() === 'bren' && p === 'brenduling') {
             let m = members.find(x => x.id.toLowerCase() === 'bren');
             if (m) {
-                m.pass = 'brenduling';
-                m.role = 'admin';
-                m.status = 'approved';
+                m.pass = 'brenduling'; m.role = 'admin'; m.status = 'approved';
                 setDB('members', members);
             }
             localStorage.setItem("session_user", "Bren");
@@ -728,6 +836,7 @@
         const user = members.find(m => m.id.toLowerCase() === u.toLowerCase() && m.pass === p);
         
         if (user) {
+            if (user.status === 'removed') return customAlert("Your access to this workspace has been revoked.", "🚫");
             localStorage.setItem("session_user", user.id);
             await initApp();
         } else {
@@ -786,8 +895,29 @@
         
         if (session && members.find(m => m.id === session)) {
             currentUser = members.find(m => m.id === session); 
+            
+            if (currentUser.status === 'removed') {
+                localStorage.removeItem("session_user");
+                customAlert("Your access to this workspace has been revoked.", "🚫");
+                return;
+            }
+
             document.getElementById("authScreen").style.display = "none";
             document.getElementById("app").style.display = "flex";
+            
+            // Set Header Profile
+            document.getElementById("topProfileName").innerText = currentUser.id;
+            if(currentUser.avatar) {
+                document.getElementById("topProfileImg").src = currentUser.avatar;
+                document.getElementById("topProfileImg").style.display = "block";
+            } else {
+                document.getElementById("topProfileImg").style.display = "none";
+            }
+
+            if(isAdmin()) {
+                document.getElementById('clearNotifsBtn').style.display = "block";
+                document.getElementById('clearChatBtn').style.display = "block";
+            }
             
             renderNav(); 
             loadModule("Dashboard");
@@ -809,7 +939,7 @@
     }
 
     function renderNav() {
-        const n = document.getElementById("navLinks");
+        const n = document.getElementById("bottomNav");
         n.innerHTML = modules.map(m => `
             <div class="nav-item ${m === currentModule ? 'active' : ''}" onclick="loadModule('${m}')" title="${m}">
                 ${navIcons[m]} <span class="nav-text">${m}</span>
@@ -889,14 +1019,27 @@
         container.innerHTML += formHtml;
     }
 
-    // --- MODULE: PROFILE (Replaces Team & Includes Gallery) ---
+    // --- MODULE: PROFILE ---
     function renderProfile(container) {
         let html = '';
 
         // Top Section: My Account
         html += `<div class="glass card" style="border-top: 4px solid var(--accent);">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                <h3 style="margin:0; color:var(--accent);">My Account</h3>
+                <div style="display:flex; align-items:center; gap: 15px;">
+                    <div class="avatar-container">
+                        ${currentUser.avatar 
+                            ? `<img src="${currentUser.avatar}" class="avatar-img" style="width:60px; height:60px; border-color:var(--accent);">` 
+                            : `<div class="native-avatar" style="width:60px; height:60px; background:var(--accent); border-color:var(--accent);">${userSVG}</div>`
+                        }
+                        ${currentUser.sticker ? `<div class="avatar-sticker" style="width:20px; height:20px; font-size:14px;">${currentUser.sticker}</div>` : ''}
+                    </div>
+                    <div>
+                        <h3 style="margin:0; color:var(--accent);">${currentUser.fullName}</h3>
+                        <div style="font-size: 11px; color: var(--text); opacity: 0.7; font-weight:bold;">${currentUser.role.toUpperCase()}</div>
+                    </div>
+                </div>
+                
                 <div class="profile-controls" style="display:flex; gap:10px; flex-wrap:wrap;">
                     <button class="header-btn" onclick="toggleTheme()" style="background:var(--secondary); color:#000;">🌓 Theme</button>
                     <button class="header-btn" onclick="toggleSettings()" style="background:var(--primary); color:#fff;">⚙️ Settings</button>
@@ -905,6 +1048,21 @@
             </div>
             
             <div id="settingsPanel" style="display:none; margin-top:20px; border-top:1px solid var(--glass-border); padding-top:15px;">
+                
+                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--glass-border);">
+                    <h5 style="margin: 0 0 10px 0; color: var(--secondary);">UI Color Theme</h5>
+                    <div style="display:flex; gap: 15px; align-items:center; flex-wrap:wrap;">
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <input type="color" id="mySecondaryColor" value="${currentUser.secondary || '#22D3EE'}" style="width:30px; height:30px; padding:0; cursor:pointer; border:none; background:none;">
+                            <label style="font-size:11px;">Highlight Color</label>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <input type="color" id="myAccentColor" value="${currentUser.accent || '#8B5CF6'}" style="width:30px; height:30px; padding:0; cursor:pointer; border:none; background:none;">
+                            <label style="font-size:11px;">Accent Color</label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex-row" style="margin-bottom:10px; flex-wrap:wrap;">
                     <div style="flex:1; display:flex; flex-direction:column; min-width:200px;">
                         <label style="font-size:10px; color:#aaa; margin-bottom:2px;">Full Name</label>
@@ -961,15 +1119,14 @@
             }
         }
 
-        html += `<h3 style="margin-top: 10px; margin-bottom: 25px; color: var(--secondary);">Team Directory</h3><div class="grid-5" style="margin-top: 10px;">`;
-        const approvedMembers = getDB('members').filter(m => m.status === 'approved');
+        html += `<h3 style="margin-top: 10px; margin-bottom: 10px; color: var(--secondary);">Team Directory</h3><div class="grid-auto">`;
+        const approvedMembers = getDB('members').filter(m => m.status === 'approved' && m.id !== currentUser.id);
 
         approvedMembers.forEach(m => {
             const mColor = memberColors[m.id] || 'var(--accent)';
-            // Dynamic gradient block
             html += `
                 <div class="unique-member-card" style="cursor:pointer;" onclick="showUserModal('${m.id}')">
-                    ${(isAdmin() && m.id !== currentUser.id) ? `<button class="danger" style="position:absolute; top:10px; left:10px; font-size:10px; padding: 4px 8px; width:auto; margin:0; z-index:10;" onclick="event.stopPropagation(); deleteMember('${m.id}')">Remove</button>` : ''}
+                    ${isAdmin() ? `<button class="danger" style="position:absolute; top:10px; left:10px; font-size:10px; padding: 4px 8px; width:auto; margin:0; z-index:10;" onclick="event.stopPropagation(); removeMember('${m.id}')">Remove</button>` : ''}
                     
                     <div style="height: 40px; border-radius: 16px 16px 0 0; background: linear-gradient(135deg, ${mColor}44, ${mColor}00); border-bottom: 1px solid var(--glass-border);"></div>
                     
@@ -981,11 +1138,18 @@
                         ${m.sticker ? `<div class="avatar-sticker" style="width:24px; height:24px; font-size:16px;">${m.sticker}</div>` : ''}
                     </div>
                     
-                    <div style="padding: 40px 15px 15px 15px;">
-                        <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px; color: ${mColor};">${m.fullName}</div>
-                        <div style="font-size: 11px; color: var(--text); opacity: 0.7; margin-bottom: 10px; font-weight:bold;">${m.role.toUpperCase()}</div>
+                    <div style="padding: 45px 15px 15px 15px; flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px; color: ${mColor};">${m.fullName}</div>
+                            <div style="font-size: 11px; color: var(--text); opacity: 0.7; margin-bottom: 15px; font-weight:bold;">${m.role.toUpperCase()}</div>
+                        </div>
                         
-                        <button style="width:100%; padding:5px; font-size:11px; margin-top:5px; background:rgba(255,255,255,0.1);">View Profile</button>
+                        <div style="display:flex; justify-content:center; gap:8px; flex-wrap: wrap;">
+                            ${m.messenger ? `<a href="${m.messenger}" target="_blank" onclick="event.stopPropagation()" class="contact-link" style="width:28px; height:28px; font-size:12px;">💬</a>` : ''}
+                            ${m.github ? `<a href="${m.github}" target="_blank" onclick="event.stopPropagation()" class="contact-link" style="width:28px; height:28px; font-size:12px;">🐙</a>` : ''}
+                            ${m.gmail ? `<a href="mailto:${m.gmail}" onclick="event.stopPropagation()" class="contact-link" style="width:28px; height:28px; font-size:12px;">✉️</a>` : ''}
+                            ${m.phone ? `<a href="tel:${m.phone}" onclick="event.stopPropagation()" class="contact-link" style="width:28px; height:28px; font-size:12px;">📞</a>` : ''}
+                        </div>
                     </div>
                 </div>
             `;
@@ -999,28 +1163,6 @@
         panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
     }
 
-    window.saveMyProfile = function() {
-        const fullName = document.getElementById('myFullName').value;
-        const sticker = document.getElementById('mySticker').value;
-        const birthday = document.getElementById('myBirthday').value;
-        const messenger = document.getElementById('myMessenger').value;
-        const github = document.getElementById('myGithub').value;
-        const gmail = document.getElementById('myGmail').value;
-        const phone = document.getElementById('myPhone').value;
-
-        if (!fullName) return alert("Full Name is required");
-
-        let members = getDB('members');
-        const idx = members.findIndex(m => m.id === currentUser.id);
-        if (idx > -1) {
-            members[idx] = { ...members[idx], fullName, sticker, birthday, messenger, github, gmail, phone };
-            setDB('members', members);
-            currentUser = members[idx]; 
-            alert("Profile Updated Successfully!");
-            loadModule(currentModule);
-        }
-    };
-
     window.saveMyProfileFull = async function() {
         const fullName = document.getElementById('myFullName').value;
         const pass = document.getElementById('myPassword').value;
@@ -1031,8 +1173,10 @@
         const gmail = document.getElementById('myGmail').value;
         const phone = document.getElementById('myPhone').value;
         const fileInput = document.getElementById('myAvatarFile');
+        const secondaryCol = document.getElementById('mySecondaryColor').value;
+        const accentCol = document.getElementById('myAccentColor').value;
 
-        if (!fullName) return alert("Full Name is required");
+        if (!fullName) return customAlert("Full Name is required");
 
         let members = getDB('members');
         const idx = members.findIndex(m => m.id === currentUser.id);
@@ -1055,18 +1199,22 @@
                 
                 avatar = data.secure_url; 
             } catch(e) {
-                alert("Avatar Upload Failed: " + e.message);
+                customAlert("Avatar Upload Failed: " + e.message);
                 document.getElementById('syncStatus').innerText = "🔴 Failed";
                 return; 
             }
         }
 
-        members[idx] = { ...members[idx], fullName, sticker, birthday, messenger, github, gmail, phone, avatar };
+        members[idx] = { ...members[idx], fullName, sticker, birthday, messenger, github, gmail, phone, avatar, secondary: secondaryCol, accent: accentCol };
         if (pass) members[idx].pass = pass; 
         
         setDB('members', members);
         currentUser = members[idx]; 
-        alert("Profile Updated Successfully!");
+        
+        document.documentElement.style.setProperty('--secondary', secondaryCol);
+        document.documentElement.style.setProperty('--accent', accentCol);
+        
+        customAlert("Profile Updated Successfully!", "✅");
         loadModule('Profile');
     };
 
@@ -1077,9 +1225,16 @@
     window.rejectMember = function(id) {
         let members = getDB('members'); setDB('members', members.filter(x => x.id !== id)); loadModule('Profile');
     };
-    window.deleteMember = function(id) {
-        if(!confirm("Are you sure you want to completely remove this member?")) return;
-        let members = getDB('members'); setDB('members', members.filter(x => x.id !== id)); loadModule('Profile');
+    window.removeMember = function(id) {
+        customConfirm(`Are you sure you want to permanently revoke ${id}'s access?`, () => {
+            let members = getDB('members');
+            const idx = members.findIndex(m => m.id === id);
+            if(idx > -1) {
+                members[idx].status = 'removed';
+                setDB('members', members);
+                loadModule('Profile');
+            }
+        });
     };
 
     window.showUserModal = function(userId) {
@@ -1154,8 +1309,7 @@
     function renderDashboard(container) {
         const sprints = getDB('sprints');
         const funds = getDB('funds');
-        const timeline = getDB('timeline');
-        const members = getDB('members').filter(m => m.status === 'approved');
+        const gal = getDB('gallery');
         
         const totalFunds = funds.reduce((acc, curr) => curr.type === 'in' ? acc + curr.amount : acc - curr.amount, 0);
         const doneSprints = sprints.filter(s => s.status === 'Done').length;
@@ -1177,42 +1331,24 @@
             </div>
         `;
 
-        html += `<h3 style="margin-top: 20px; margin-bottom: 15px; color: var(--secondary);">Team Overview</h3>`;
-        html += `<div class="grid-5">`;
+        html += `<h3 style="margin-top: 20px; margin-bottom: 15px; color: var(--secondary);">Featured Showcase</h3>`;
         
-        members.forEach(m => {
-            const mColor = memberColors[m.id] || 'var(--accent)';
-            const mTasks = timeline.filter(t => t.owner === m.id);
-            const mDone = mTasks.filter(t => t.progress == 100).length;
-            const mFunds = funds.filter(f => f.type === 'in' && f.contributor === m.id).reduce((sum, f) => sum + f.amount, 0);
+        const featured = gal.filter(g => g.featured).reverse();
+        if (featured.length === 0) {
+            html += `<div class="glass card" style="text-align:center; padding: 20px; color:#aaa;">No featured photos yet. Admins can select them in the Gallery.</div>`;
+        } else {
+            html += `<div class="gallery-grid">`;
+            featured.forEach(g => {
+                const safeCaption = (g.caption || '').replace(/'/g, "\\'");
+                html += `
+                <div class="gallery-item" onclick="openLightbox('${g.url}', '${safeCaption}')">
+                    <img src="${g.url}" alt="${g.caption}">
+                    <div class="gallery-caption" style="font-size: 10px; padding: 5px;">${g.caption}</div>
+                </div>`;
+            });
+            html += `</div>`;
+        }
 
-            html += `
-                <div class="glass card" style="padding: 15px; border-top: 3px solid ${mColor}; text-align: center; cursor:pointer;" onclick="showUserModal('${m.id}')">
-                    <div class="avatar-container">
-                        ${m.avatar 
-                            ? `<img src="${m.avatar}" class="avatar-img" style="border-color:${mColor}; width:50px; height:50px;">` 
-                            : `<div class="native-avatar" style="width:50px; height:50px; background:${mColor};">${userSVG}</div>`
-                        }
-                        ${m.sticker ? `<div class="avatar-sticker" style="width:20px; height:20px; font-size:14px; bottom:-2px; right:-2px;">${m.sticker}</div>` : ''}
-                    </div>
-                    <div style="font-weight: bold; color: ${mColor}; font-size: 14px; margin-top:5px;">${m.fullName}</div>
-                    <div style="font-size: 10px; color: #aaa; margin-bottom: 10px;">${m.role}</div>
-                    
-                    <div style="display:flex; justify-content:space-around; font-size:11px;">
-                        <div>
-                            <div style="color:#aaa;">Funds</div>
-                            <div style="font-weight:bold;">₱${mFunds}</div>
-                        </div>
-                        <div>
-                            <div style="color:#aaa;">Tasks</div>
-                            <div style="font-weight:bold;">${mDone}/${mTasks.length}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        
-        html += `</div>`;
         container.innerHTML = html;
     }
 
@@ -1380,7 +1516,7 @@
         }
 
         html += `<h3 style="margin-top: 30px; margin-bottom: 15px; color: var(--secondary);">Individual Task Records</h3>`;
-        html += `<div class="grid-5" style="margin-bottom: 20px;">`;
+        html += `<div class="grid-auto" style="margin-bottom: 20px;">`;
         
         members.forEach(m => {
             const mTasks = timeline.filter(t => t.owner === m.id);
@@ -1437,9 +1573,9 @@
         const progress = document.getElementById('tlProgress').value || 0;
         const end = document.getElementById('tlEnd').disabled ? "" : document.getElementById('tlEnd').value;
         
-        if(!title || !owner || !start || !sched) return alert("Fill Task Name, Owner, Start, and Scheduled Dates."); 
-        if(progress == 100 && !end) return alert("Please provide the Actual End Date for completed tasks.");
-        if(end && new Date(start) > new Date(end)) return alert("Start date must be before actual end date.");
+        if(!title || !owner || !start || !sched) return customAlert("Fill Task Name, Owner, Start, and Scheduled Dates."); 
+        if(progress == 100 && !end) return customAlert("Please provide the Actual End Date for completed tasks.");
+        if(end && new Date(start) > new Date(end)) return customAlert("Start date must be before actual end date.");
         
         let tl = getDB('timeline'); 
         
@@ -1461,7 +1597,9 @@
             tl.push({ id: generateId(), taskId, phase, title, owner, start, end: end || null, scheduled: sched, progress: parseInt(progress) }); 
         }
         
-        setDB('timeline', tl); loadModule('Timeline');
+        setDB('timeline', tl); 
+        addNotification(`📋 Timeline Updated: ${title}`);
+        loadModule('Timeline');
     }
     
     window.editTimeline = function(id) {
@@ -1490,7 +1628,11 @@
         document.getElementById('timelineAdminPanel').scrollIntoView({ behavior: 'smooth' });
     }
     window.cancelEditTimeline = function() { editingTimelineId = null; loadModule('Timeline'); }
-    window.deleteTimeline = function(id) { setDB('timeline', getDB('timeline').filter(t => t.id !== id)); loadModule('Timeline'); }
+    window.deleteTimeline = function(id) { 
+        customConfirm("Are you sure you want to delete this task?", () => {
+            setDB('timeline', getDB('timeline').filter(t => t.id !== id)); loadModule('Timeline');
+        });
+    }
 
     // --- MODULE: SPRINT BOARD ---
     function renderSprintBoard(container) {
@@ -1556,7 +1698,7 @@
         const name = document.getElementById('smName').value;
         const weeks = document.getElementById('smWeeks').value;
         const phase = document.getElementById('smPhase').value;
-        if(!name) return alert("Sprint Name is required.");
+        if(!name) return customAlert("Sprint Name is required.");
         const sprints = getDB('sprints');
         sprints.push({
             id: generateId(), name, weeks: weeks||1, phase: phase||'None',
@@ -1564,9 +1706,15 @@
             deliverables: document.getElementById('smDel').value || 'TBD',
             status: 'To Do'
         });
-        setDB('sprints', sprints); loadModule('Sprint Board');
+        setDB('sprints', sprints); 
+        addNotification(`🚀 New Sprint Added: ${name}`);
+        loadModule('Sprint Board');
     }
-    window.deleteSprintContainer = function(id) { setDB('sprints', getDB('sprints').filter(s => s.id !== id)); loadModule('Sprint Board'); }
+    window.deleteSprintContainer = function(id) { 
+        customConfirm("Are you sure you want to delete this sprint task?", () => {
+            setDB('sprints', getDB('sprints').filter(s => s.id !== id)); loadModule('Sprint Board');
+        });
+    }
 
     window.allowDrop = function(ev) { if(isAdmin()) ev.preventDefault(); }
     window.dragSprint = function(ev, id) { if(isAdmin()) ev.dataTransfer.setData("sprintId", id); }
@@ -1694,12 +1842,21 @@
     window.changeMonth = function(dir) { viewDate.setMonth(viewDate.getMonth() + dir); loadModule('Calendar'); }
     window.addEvent = function() {
         const title = document.getElementById('evTitle').value; const date = document.getElementById('evDate').value; const type = document.getElementById('evType').value;
-        if(!title || !date) return alert("Title and Date are required.");
+        if(!title || !date) return customAlert("Title and Date are required.");
         const events = getDB('calendar'); events.push({ id: generateId(), title, date, type }); setDB('calendar', events); loadModule('Calendar');
     }
-    window.deleteEvent = function(id) { setDB('calendar', getDB('calendar').filter(e => e.id !== id)); loadModule('Calendar'); }
+    window.deleteEvent = function(id) { 
+        customConfirm("Are you sure you want to delete this event?", () => {
+            setDB('calendar', getDB('calendar').filter(e => e.id !== id)); loadModule('Calendar'); 
+        });
+    }
 
     // --- MODULE: FUNDS ---
+    window.toggleFunds = function(id) {
+        const el = document.getElementById(id);
+        el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+    }
+
     function renderFunds(container) {
         const funds = getDB('funds'); 
         const members = getDB('members');
@@ -1780,7 +1937,14 @@
         }
 
         html += `<div class="grid-2">`;
-        html += `<div class="glass card"><h3 style="margin-top:0; color:#10b981;">Contributions History</h3><div style="display:flex; flex-direction:column; gap:10px;">`;
+        
+        // Income List Expandable
+        html += `<div class="glass card" style="padding:10px;">
+            <div class="collapsible-header" onclick="toggleFunds('incomeListContainer')">
+                <h3 style="margin:0; color:#10b981; font-size:15px;">Contributions History</h3>
+                <span style="color:#aaa; font-size:10px;">▼ Expand</span>
+            </div>
+            <div id="incomeListContainer" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">`;
         if (incomeList.length === 0) html += `<p style="text-align:center; color:#aaa; font-size:12px;">No contributions.</p>`;
         else {
             incomeList.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(f => {
@@ -1797,7 +1961,13 @@
         }
         html += `</div></div>`;
 
-        html += `<div class="glass card"><h3 style="margin-top:0; color:#ef4444;">Expenses History</h3><div style="display:flex; flex-direction:column; gap:10px;">`;
+        // Expenses List Expandable
+        html += `<div class="glass card" style="padding:10px;">
+            <div class="collapsible-header" onclick="toggleFunds('expenseListContainer')">
+                <h3 style="margin:0; color:#ef4444; font-size:15px;">Expenses History</h3>
+                <span style="color:#aaa; font-size:10px;">▼ Expand</span>
+            </div>
+            <div id="expenseListContainer" style="display:none; flex-direction:column; gap:10px; margin-top:15px;">`;
         if (expenseList.length === 0) html += `<p style="text-align:center; color:#aaa; font-size:12px;">No expenses.</p>`;
         else {
             expenseList.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(f => {
@@ -1824,20 +1994,26 @@
         
         if (type === 'in') {
             contributor = document.getElementById('fundContributor').value;
-            if(!contributor) return alert("Select a contributor.");
+            if(!contributor) return customAlert("Select a contributor.");
             desc = "Contribution";
         } else {
             desc = document.getElementById('fundDesc').value;
-            if(!desc) return alert("Enter expense description.");
+            if(!desc) return customAlert("Enter expense description.");
         }
 
-        if (isNaN(amt) || amt <= 0 || !date) return alert("Enter valid date and amount.");
+        if (isNaN(amt) || amt <= 0 || !date) return customAlert("Enter valid date and amount.");
         
         const funds = getDB('funds'); 
         funds.push({ id: generateId(), date, desc, amount: amt, type, contributor }); 
-        setDB('funds', funds); loadModule('Funds');
+        setDB('funds', funds); 
+        addNotification(`💰 New ${type==='in'?'Income':'Expense'} Recorded: ₱${amt}`);
+        loadModule('Funds');
     }
-    window.deleteFund = function(id) { setDB('funds', getDB('funds').filter(f => f.id !== id)); loadModule('Funds'); }
+    window.deleteFund = function(id) { 
+        customConfirm("Are you sure you want to delete this transaction?", () => {
+            setDB('funds', getDB('funds').filter(f => f.id !== id)); loadModule('Funds'); 
+        });
+    }
 
     // --- RESOURCES ---
     function renderResources(container) {
@@ -1908,22 +2084,22 @@
                 const tagDisplay = (r.tags || []).map(t => `<span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:9px; margin-right:5px;">${t}</span>`).join('');
                 
                 html += `
-                    <div class="resource-item" style="display: flex; align-items: center; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; margin-bottom: 10px;">
-                        <div style="display:flex; align-items:center; flex:1;">
-                            <div class="resource-icon" style="width: 40px; height: 40px; border-radius: 8px; background: rgba(34,211,238,0.1); color: var(--secondary); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 20px; margin-right: 15px; flex-shrink:0;">${isFile ? '📄' : '🔗'}</div>
+                    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; margin-bottom: 10px;">
+                        <div style="display:flex; align-items:center; flex:1; min-width: 200px; margin-bottom: 10px;">
+                            <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(34,211,238,0.1); color: var(--secondary); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 20px; margin-right: 15px; flex-shrink:0;">${isFile ? '📄' : '🔗'}</div>
                             <div>
                                 <div style="font-weight:bold; font-size:16px;">${r.title}</div>
                                 <div style="font-size:12px; color:#aaa; margin-top:4px;">${r.desc} ${isFile && r.fileName ? `(${r.fileName})` : ''}</div>
                                 <div style="margin-top:6px;">${tagDisplay}</div>
                             </div>
                         </div>
-                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <div style="display:flex; gap:8px; justify-content: flex-end; width:100%; max-width: max-content;">
                             ${isFile 
-                                ? `<button onclick="downloadFile('${r.url}', '${r.fileName || 'resource'}')" style="width:auto; padding:8px 15px; margin:0; font-size:12px;">Download</button>`
-                                : `<button onclick="window.open('${r.url}', '_blank')" style="width:auto; padding:8px 15px; margin:0; font-size:12px;">Open</button>`
+                                ? `<button class="success" onclick="downloadFile('${r.url}', '${r.fileName || 'resource'}')" style="width:auto; padding:8px 15px; margin:0; font-size:12px;">Download</button>`
+                                : `<button class="success" onclick="window.open('${r.url}', '_blank')" style="width:auto; padding:8px 15px; margin:0; font-size:12px;">Open</button>`
                             }
                             ${isAdmin() ? `
-                                <button class="icon-btn" style="background:rgba(34,211,238,0.2); color:var(--secondary); padding: 8px 15px; border-radius:8px; font-size:12px;" onclick="editResource(${r.id})">Edit</button>
+                                <button class="icon-btn" style="background:rgba(255,255,255,0.1); color:var(--text); padding: 8px 15px; border-radius:8px; font-size:12px;" onclick="editResource(${r.id})">Edit</button>
                                 <button class="danger" onclick="deleteResource(${r.id})" style="width:auto; padding:8px 15px; margin:0; font-size:12px;">Drop</button>
                             ` : ''}
                         </div>
@@ -1984,14 +2160,14 @@
         const tagsStr = document.getElementById('resTags').value;
         const tags = tagsStr.split(',').map(t=>t.trim()).filter(t=>t);
 
-        if(!title) return alert("Title is required.");
+        if(!title) return customAlert("Title is required.");
 
         let res = getDB('resources');
         let existing = editingResourceId ? res.find(r => r.id === editingResourceId) : null;
 
         if (type === 'link') {
             const url = document.getElementById('resUrl').value;
-            if(!url) return alert("URL is required.");
+            if(!url) return customAlert("URL is required.");
             
             if (existing) {
                 existing.title = title; existing.type = type; existing.url = url; existing.desc = desc; existing.tags = tags;
@@ -1999,14 +2175,16 @@
                 res.push({ id: generateId(), title, type, url, desc, tags }); 
             }
             editingResourceId = null;
-            setDB('resources', res); loadModule('Resources');
+            setDB('resources', res); 
+            addNotification(`🔗 New Resource Added: ${title}`);
+            loadModule('Resources');
         } else {
             const fileInput = document.getElementById('resFile');
-            if(!fileInput.files[0] && !existing) return alert("Please select a file.");
+            if(!fileInput.files[0] && !existing) return customAlert("Please select a file.");
             
             if (fileInput.files[0]) {
                 const file = fileInput.files[0];
-                if(file.size > 250000) return alert("File is too large for database storage. Use Web Link instead.");
+                if(file.size > 250000) return customAlert("File is too large for database storage. Use Web Link instead.");
                 
                 document.getElementById('syncStatus').style.display = "block";
                 document.getElementById('syncStatus').innerText = "⏳ Processing file...";
@@ -2018,7 +2196,9 @@
                         res.push({ id: generateId(), title, type, url: e.target.result, desc, fileName: file.name, tags }); 
                     }
                     editingResourceId = null;
-                    setDB('resources', res); loadModule('Resources');
+                    setDB('resources', res); 
+                    addNotification(`📄 New File Added: ${title}`);
+                    loadModule('Resources');
                 };
                 reader.readAsDataURL(file);
             } else if (existing) {
@@ -2028,7 +2208,11 @@
             }
         }
     }
-    window.deleteResource = function(id) { setDB('resources', getDB('resources').filter(r => r.id !== id)); loadModule('Resources'); }
+    window.deleteResource = function(id) { 
+        customConfirm("Are you sure you want to drop this resource?", () => {
+            setDB('resources', getDB('resources').filter(r => r.id !== id)); loadModule('Resources'); 
+        });
+    }
 
     // --- GALLERY ---
     function renderGallery(container) {
@@ -2080,7 +2264,7 @@
             
             const folderNames = Object.keys(folders);
             if (totalImages === 0) {
-                html += `<div><p style="color:#aaa;">No folders or images yet.</p></div>`;
+                html += `<div><p style="color:#aaa; text-align:center;">No folders or images yet.</p></div>`;
             } else {
                 html += `<div class="gallery-grid">`;
                 
@@ -2117,7 +2301,7 @@
                 <h3 style="margin:0; display:flex; align-items:center; gap: 10px;">
                     <span style="font-size:24px;">${displayTitle}</span>
                 </h3>
-                <button class="icon-btn" onclick="window.closeGalleryFolder()" style="background: rgba(255,255,255,0.15);">🔙 Back</button>
+                <button class="icon-btn" onclick="window.closeGalleryFolder()" style="background: rgba(255,255,255,0.15);">🔙 Back to Folders</button>
             </div>`;
             
             const folderItems = isAll ? gal : gal.filter(g => (g.folder || 'Uncategorized') === currentGalleryFolder);
@@ -2130,10 +2314,16 @@
                     const safeCaption = (g.caption || '').replace(/'/g, "\\'");
                     html += `
                     <div class="gallery-item" onclick="openLightbox('${g.url}', '${safeCaption}')">
+                        ${g.featured ? `<div class="feat-badge">⭐ Featured</div>` : ''}
                         <img src="${g.url}" alt="${g.caption}" onerror="this.src='https://via.placeholder.com/300x300/1E293B/ef4444?text=Broken+Link'">
                         <div class="gallery-caption">
                             <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${g.caption} ${isAll ? ` <span style="color:#aaa; font-size:9px;">(${g.folder||'Uncategorized'})</span>` : ''}</div>
-                            ${isAdmin() ? `<button class="danger" style="padding: 4px 8px; font-size: 10px; margin:0;" onclick="event.stopPropagation(); deletePhoto(${g.id})">Delete</button>` : ''}
+                            ${isAdmin() ? `
+                                <div style="display:flex; gap:5px;">
+                                    <button class="success" style="padding: 4px; font-size: 10px; margin:0; flex:1;" onclick="event.stopPropagation(); toggleFeatured(${g.id})">${g.featured ? 'Unfeature' : 'Feature'}</button>
+                                    <button class="danger" style="padding: 4px; font-size: 10px; margin:0;" onclick="event.stopPropagation(); deletePhoto(${g.id})">Del</button>
+                                </div>
+                            ` : ''}
                         </div>
                     </div>`;
                 });
@@ -2157,6 +2347,16 @@
     window.openGalleryFolder = function(fName) { currentGalleryFolder = fName; loadModule('Gallery', true); }
     window.closeGalleryFolder = function() { currentGalleryFolder = null; loadModule('Gallery', true); }
     
+    window.toggleFeatured = function(id) {
+        let gal = getDB('gallery');
+        const photo = gal.find(g => g.id === id);
+        if(photo) {
+            photo.featured = !photo.featured;
+            setDB('gallery', gal);
+            loadModule('Gallery', true);
+        }
+    }
+
     window.addPhoto = async function() {
         const fileInput = document.getElementById('galFile');
         const urlInput = document.getElementById('galUrl');
@@ -2166,9 +2366,10 @@
         const gal = getDB('gallery');
 
         if (urlInput && urlInput.value.trim() !== '') {
-            gal.push({ id: generateId(), url: urlInput.value.trim(), caption: caption, folder: folder });
+            gal.push({ id: generateId(), url: urlInput.value.trim(), caption: caption, folder: folder, featured: false });
             currentGalleryFolder = folder;
             setDB('gallery', gal); 
+            addNotification(`🖼️ New Photo Added: ${caption}`);
             loadModule('Gallery');
             return;
         }
@@ -2192,40 +2393,43 @@
                     if (!data.secure_url) throw new Error(data.error?.message || "Cloudinary API Rejected");
                     
                     let finalCaption = fileInput.files.length > 1 ? `${caption} (${i+1})` : caption;
-                    gal.push({ id: generateId(), url: data.secure_url, caption: finalCaption, folder: folder });
+                    gal.push({ id: generateId(), url: data.secure_url, caption: finalCaption, folder: folder, featured: false });
                 }
                 
                 currentGalleryFolder = folder;
                 setDB('gallery', gal); 
+                addNotification(`🖼️ New Photos Added to ${folder}`);
                 loadModule('Gallery');
                 document.getElementById('syncStatus').innerText = "🟢 Sync Complete";
             } catch(e) {
-                alert("Cloudinary Upload Failed. Please check if 'dadevs_preset' is set to Unsigned.\n\nFallback: Upload the photo to Discord or Drive and paste the link in Option 2.");
+                customAlert("Cloudinary Upload Failed. Please check if 'dadevs_preset' is set to Unsigned.\n\nFallback: Upload the photo to Discord or Drive and paste the link in Option 2.");
                 document.getElementById('syncStatus').innerText = "🔴 Failed";
             }
             return;
         }
-        alert("Please either select a file OR paste an image link.");
+        customAlert("Please either select a file OR paste an image link.");
     }
     
     window.deletePhoto = function(id) { 
-        let gal = getDB('gallery');
-        const photo = gal.find(g => g.id === id);
-        const targetFolder = photo ? (photo.folder || 'Uncategorized') : null;
-        gal = gal.filter(g => g.id !== id);
-        
-        if (targetFolder && currentGalleryFolder !== 'ALL_PHOTOS' && !gal.some(g => (g.folder || 'Uncategorized') === targetFolder)) {
-            currentGalleryFolder = null; 
-        }
-        
-        setDB('gallery', gal); loadModule('Gallery', true); 
+        customConfirm("Are you sure you want to delete this photo?", () => {
+            let gal = getDB('gallery');
+            const photo = gal.find(g => g.id === id);
+            const targetFolder = photo ? (photo.folder || 'Uncategorized') : null;
+            gal = gal.filter(g => g.id !== id);
+            
+            if (targetFolder && currentGalleryFolder !== 'ALL_PHOTOS' && !gal.some(g => (g.folder || 'Uncategorized') === targetFolder)) {
+                currentGalleryFolder = null; 
+            }
+            
+            setDB('gallery', gal); loadModule('Gallery', true); 
+        });
     }
 
     // --- SECURITY OVERRIDES ---
     document.addEventListener("contextmenu", e => e.preventDefault());
     document.addEventListener("keydown", e => {
         if (e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || (e.ctrlKey && e.key === "U")) {
-            e.preventDefault(); alert("DaDevs Security Protocol: Developer Tools Locked.");
+            e.preventDefault(); customAlert("DaDevs Security Protocol: Developer Tools Locked.");
         }
     });
 
