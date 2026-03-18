@@ -343,7 +343,7 @@
             /* Resources Actions Smart Alignment */
             .resource-item { align-items: flex-start !important; }
             .resource-item-actions { justify-content: flex-start !important; margin-top: 10px; width: 100%; flex-wrap: wrap; }
-            .resource-item-actions button { padding: 6px 12px !important; font-size: 11px !important; flex: 1; min-width: 30%; text-align:center;}
+            .resource-item-actions button { padding: 6px 12px !important; font-size: 11px !important; flex: 1 1 auto; white-space: nowrap; min-width: max-content; text-align:center;}
 
             /* Profile specific */
             .profile-controls { justify-content: center; width: 100%; margin-top: 10px; }
@@ -480,7 +480,7 @@
         <div class="modal-content glass" id="userModalContent"></div>
     </div>
 
-    <div id="lightboxModal" onclick="if(event.target === this) closeLightbox()">
+    <div id="lightboxModal">
         <button class="close-lightbox" onclick="closeLightbox()">✖</button>
         <button class="lb-nav lb-prev" onclick="changeLightbox(-1)">&#8249;</button>
         <img id="lightboxImg" src="" alt="Gallery Image">
@@ -535,24 +535,7 @@
     }
 
     // ==========================================
-    // AUTO-UPDATE SYSTEM (FOR VERCEL PWA)
-    // ==========================================
-    const APP_VERSION = "v57"; 
-
-    window.addEventListener('load', () => {
-        fetch(window.location.href, { cache: "no-store", headers: { 'Cache-Control': 'no-cache' } })
-            .then(res => res.text())
-            .then(liveHTML => {
-                if (!liveHTML.includes(`const APP_VERSION = "${APP_VERSION}";`)) {
-                    document.getElementById('updateOverlay').style.display = 'flex';
-                    setTimeout(() => window.location.reload(true), 1500);
-                }
-            })
-            .catch(err => console.log("User offline."));
-    });
-
-    // ==========================================
-    // DATA LAYER & SYNC CONFIGURATION
+    // CLOUD SYNC CONFIGURATION
     // ==========================================
     const ENABLE_CLOUD_SYNC = true; 
     const JSONBIN_BIN_ID = "69b53404aa77b81da9e359ea";
@@ -616,7 +599,7 @@
     }
 
     async function initDB() {
-        // Data Migration Protocol (Recovers data from previous versions if master is empty)
+        // Data Migration Protocol
         if (!localStorage.getItem(DB_KEY)) {
             const legacyKeys = ['dadevs_db_v56', 'dadevs_db_v55', 'dadevs_db_v52', 'dadevs_db_v51', 'dadevs_db_v50', 'dadevs_db_v49', 'dadevs_db_v48'];
             for (let oldKey of legacyKeys) {
@@ -684,6 +667,13 @@
 
     async function saveDB() {
         localStorage.setItem(DB_KEY, JSON.stringify(appDB));
+        if (ENABLE_CLOUD_SYNC) {
+            try {
+                fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                    method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_MASTER_KEY }, body: JSON.stringify(appDB)
+                }).catch(e => console.error("Sync silent fail"));
+            } catch(e) {}
+        }
     }
 
     const getDB = (table) => appDB[table] || [];
@@ -1420,19 +1410,19 @@
             // Group by upload batch (folder) to prevent spamming dashboard
             const groupedFeatures = {};
             featured.forEach(g => {
-                if(!groupedFeatures[g.folder]) groupedFeatures[g.folder] = [];
-                groupedFeatures[g.folder].push(g);
+                const key = g.batchId || g.id;
+                if(!groupedFeatures[key]) groupedFeatures[key] = [];
+                groupedFeatures[key].push(g);
             });
             
             html += `<div class="gallery-grid">`;
-            Object.keys(groupedFeatures).slice(0, 5).forEach(folder => {
-                const group = groupedFeatures[folder];
+            Object.keys(groupedFeatures).slice(0, 5).forEach(batch => {
+                const group = groupedFeatures[batch];
                 const primaryImage = group[0];
                 const safeCaption = (primaryImage.caption || '').replace(/'/g, "\\'");
                 
-                // Just use the first image's ID to trigger lightbox sequence
                 html += `
-                <div class="gallery-item" onclick="openLightboxSequence('${folder}')">
+                <div class="gallery-item" onclick="openLightboxSequence('${batch}')">
                     <img src="${primaryImage.url}" alt="${primaryImage.caption}">
                     ${group.length > 1 ? `<div style="position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.7); color:#fff; font-size:10px; padding:2px 6px; border-radius:10px;">+${group.length - 1}</div>` : ''}
                 </div>`;
@@ -2462,7 +2452,7 @@
                 const groupedItems = {};
                 folderItems.forEach(g => {
                     // For legacy, group by caption if batchId doesn't exist
-                    const key = g.batchId || g.caption || g.id; 
+                    const key = g.batchId || g.id; 
                     if(!groupedItems[key]) groupedItems[key] = [];
                     groupedItems[key].push(g);
                 });
@@ -2475,7 +2465,7 @@
                     // If it's a group, we construct a special card
                     if(isGroup) {
                         html += `
-                        <div class="gallery-group-card" onclick="openLightboxSequence('${primary.folder}')">
+                        <div class="gallery-group-card" onclick="openLightboxSequence('${primary.batchId}')">
                             <div class="gg-images">
                                 <img class="gg-img" src="${group[0].url}" style="width: 50%;">
                                 <img class="gg-img" src="${group[1].url}" style="width: 50%;">
@@ -2511,9 +2501,11 @@
     }
 
     // Advanced Lightbox Logic
-    window.openLightboxSequence = function(folder) {
+    window.openLightboxSequence = function(batchId) {
         const gal = getDB('gallery');
-        currentGalleryImages = folder === 'ALL_PHOTOS' ? gal : gal.filter(g => (g.folder || 'Uncategorized') === folder);
+        currentGalleryImages = gal.filter(g => g.batchId === batchId || g.folder === batchId || g.id == batchId);
+        if(currentGalleryImages.length === 0) currentGalleryImages = gal; // fallback
+        
         if(currentGalleryImages.length > 0) {
             currentGalleryIndex = 0;
             updateLightboxView();
@@ -2535,7 +2527,12 @@
             imgEl.style.opacity = 0;
             setTimeout(() => {
                 imgEl.src = currentGalleryImages[currentGalleryIndex].url;
-                capEl.innerText = currentGalleryImages[currentGalleryIndex].caption || '';
+                
+                let text = currentGalleryImages[currentGalleryIndex].caption || '';
+                if(currentGalleryImages.length > 1) {
+                    text += ` (${currentGalleryIndex + 1} / ${currentGalleryImages.length})`;
+                }
+                capEl.innerText = text;
                 imgEl.style.opacity = 1;
             }, 150);
             
@@ -2552,6 +2549,21 @@
         if (currentGalleryIndex >= currentGalleryImages.length) currentGalleryIndex = 0;
         updateLightboxView();
     }
+
+    // Touch Swipe Logic
+    let touchstartX = 0;
+    let touchendX = 0;
+    const lightbox = document.getElementById('lightboxModal');
+    
+    lightbox.addEventListener('touchstart', e => { 
+        touchstartX = e.changedTouches[0].screenX; 
+    });
+    
+    lightbox.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        if (touchstartX - touchendX > 50) window.changeLightbox(1); // swipe left
+        if (touchendX - touchstartX > 50) window.changeLightbox(-1); // swipe right
+    });
 
     // Keyboard nav for Lightbox
     document.addEventListener('keydown', function(e) {
@@ -2617,7 +2629,6 @@
                     const data = await response.json();
                     if (!data.secure_url) throw new Error(data.error?.message || "Cloudinary API Rejected");
                     
-                    // Same caption, same batch ID keeps them grouped
                     gal.push({ id: generateId(), url: data.secure_url, caption: caption, folder: folder, featured: false, batchId: batchId });
                 }
                 
@@ -2625,10 +2636,10 @@
                 setDB('gallery', gal); 
                 addNotification(`🖼️ New Photos Added to ${folder}`);
                 loadModule('Gallery');
-                document.getElementById('syncStatus').innerText = "🟢 Sync Complete";
+                document.getElementById('syncStatus').style.display = "none";
             } catch(e) {
                 customAlert("Cloudinary Upload Failed. Please check if 'dadevs_preset' is set to Unsigned.\n\nFallback: Upload the photo to Discord or Drive and paste the link in Option 2.");
-                document.getElementById('syncStatus').innerText = "🔴 Failed";
+                document.getElementById('syncStatus').style.display = "none";
             }
             return;
         }
