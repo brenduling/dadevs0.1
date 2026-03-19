@@ -27,7 +27,7 @@
             --glass-border: rgba(255,255,255,0.1);
             --nav-bg: rgba(15, 23, 42, 0.85);
             
-            /* Global Member Colors */
+            /* Legacy Fallback Colors */
             --c-bren: #ef4444; 
             --c-chua: #f59e0b; 
             --c-tanya: #10b981; 
@@ -89,6 +89,21 @@
         @keyframes pulseLogo { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
         #updateOverlay .dadevs-logo { animation: pulseLogo 1.5s infinite ease-in-out; width: 80px; height: 80px; margin-bottom: 20px; }
 
+        /* Global Progress Loader Overlay */
+        #globalLoader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            z-index: 999999; display: none; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .loader-spinner {
+            width: 45px; height: 45px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
         /* Auth Screen */
         #authScreen { padding: 30px; text-align: center; width: 320px; max-width: 90%; z-index: 10; transition: opacity 0.5s; display: none; }
         .auth-tabs { display: flex; margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); }
@@ -145,8 +160,8 @@
         .header-actions { display: flex; align-items: center; gap: 8px; }
         
         /* Sleek Headers */
-        .header-btn { background: transparent !important; border: none !important; box-shadow: none !important; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 12px; transition: 0.3s; margin:0; font-weight: bold;}
-        #topProfileBtn { padding: 0; background: transparent !important; border: none !important; margin-left: 2px; outline: none; cursor: pointer;}
+        .header-btn { background: transparent !important; border: none !important; box-shadow: none !important; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 12px; transition: 0.3s; margin:0; font-weight: bold; color: var(--text);}
+        #topProfileBtn { padding: 0; background: transparent !important; border: none !important; margin-left: 5px; outline: none; cursor: pointer;}
         #topProfileBtn:hover { transform: scale(1.08); filter: drop-shadow(0 0 8px var(--secondary)); }
 
         .notif-bell { position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: transparent !important; border: none !important; box-shadow: none !important; overflow: visible; transition: 0.2s; color: var(--text); }
@@ -346,6 +361,14 @@
 </head>
 <body>
 
+    <div id="globalLoader">
+        <div class="loader-spinner"></div>
+        <div id="loaderText" style="margin-top:15px; font-weight:bold; color:var(--secondary);">Processing...</div>
+        <div style="width:200px; height:6px; background:rgba(255,255,255,0.2); border-radius:3px; margin-top:10px; overflow:hidden;">
+            <div id="loaderProgress" style="width:0%; height:100%; background:var(--secondary); transition:width 0.3s ease;"></div>
+        </div>
+    </div>
+
     <div id="customDialogOverlay">
         <div class="dialog-content" id="customDialogContent">
             <div class="dialog-icon" id="customDialogIcon">⚠️</div>
@@ -542,10 +565,23 @@
         setTimeout(() => { overlay.style.display = 'none'; }, 300);
     }
 
+    // Loader Controllers
+    window.showLoader = function(msg) {
+        document.getElementById('loaderText').innerText = msg || "Processing...";
+        document.getElementById('loaderProgress').style.width = '0%';
+        document.getElementById('globalLoader').style.display = 'flex';
+    };
+    window.updateLoader = function(perc) {
+        document.getElementById('loaderProgress').style.width = perc + '%';
+    };
+    window.hideLoader = function() {
+        document.getElementById('globalLoader').style.display = 'none';
+    };
+
     // ==========================================
     // AUTO-UPDATE SYSTEM (FOR VERCEL PWA)
     // ==========================================
-    const APP_VERSION = "v76"; 
+    const APP_VERSION = "v78"; 
 
     window.addEventListener('load', () => {
         fetch(window.location.href, { cache: "no-store", headers: { 'Cache-Control': 'no-cache' } })
@@ -590,13 +626,14 @@
         "Gallery": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`
     };
 
-    const targetMembers = ["Chua", "Vince", "Tanya", "Bren", "Ruth"];
     const predefinedColors = { "Chua": "var(--c-chua)", "Vince": "var(--c-vince)", "Tanya": "var(--c-tanya)", "Bren": "var(--c-bren)", "Ruth": "var(--c-ruth)", "Team": "var(--c-team)" };
     const defaultResTags = ["Sheets", "Title Defense", "Survey", "Docs"];
 
     // GLOBAL MEMBER COLOR GENERATOR
     function getMemberColor(id) {
         if (!id) return 'var(--accent)';
+        const m = appDB.members ? appDB.members.find(x => x.id === id) : null;
+        if (m && m.accent) return m.accent; // Respect user customized color
         if (predefinedColors[id]) return predefinedColors[id];
         
         let hash = 0;
@@ -615,7 +652,7 @@
     let editingTimelineId = null;
     let resSearchTerm = '';
     let resActiveTag = null;
-    let collapsedPhases = {}; 
+    let activeTimelinePhase = null; // New state for timeline dropdown
     let isDraggingCard = false;
 
     // DB Init
@@ -658,11 +695,11 @@
                 const data = await res.json();
                 
                 if (data.record) {
-                    // Empty Cloud Shield (Smart Merge)
-                    const cloudSize = (data.record.timeline?.length || 0) + (data.record.gallery?.length || 0) + (data.record.funds?.length || 0);
+                    // Stronger Cloud Shield to prevent overwriting with blanks
+                    const cloudSize = (data.record.timeline?.length || 0) + (data.record.gallery?.length || 0) + (data.record.funds?.length || 0) + (data.record.comments?.length || 0) + (data.record.sprints?.length || 0);
                     const localDataRaw = localStorage.getItem(DB_KEY);
                     const local = localDataRaw ? JSON.parse(localDataRaw) : {};
-                    const localSize = (local.timeline?.length || 0) + (local.gallery?.length || 0) + (local.funds?.length || 0);
+                    const localSize = (local.timeline?.length || 0) + (local.gallery?.length || 0) + (local.funds?.length || 0) + (local.comments?.length || 0) + (local.sprints?.length || 0);
 
                     if (cloudSize === 0 && localSize > 0) {
                         console.warn("Cloud payload empty! Shield activated. Forcing PUT to restore cloud data.");
@@ -697,13 +734,14 @@
             "Ruth": { pass: "dadevs0.1", role: "Member", systemRole: "viewer", status: "approved", sticker: "📖" },
             "Lilian": { pass: "dadevs0.1", role: "Member", systemRole: "viewer", status: "approved", sticker: "👤" },
             "DaDevs": { pass: "dadevs0.1", role: "Member", systemRole: "viewer", status: "approved", sticker: "💻" },
-            "Adviser": { pass: "dadevs0.1", role: "Member", systemRole: "viewer", status: "approved", sticker: "👨‍🏫" }
+            "Adviser": { pass: "dadevs0.1", role: "Adviser", systemRole: "viewer", status: "approved", sticker: "👨‍🏫" }
         };
 
         let dbUpdated = false;
 
         appDB.members = appDB.members.map(m => {
-            if (!m.systemRole) {
+            // Assign system role safely ONLY if it's missing. Never overwrite it dynamically here.
+            if (!m.systemRole || m.systemRole === "undefined") {
                 m.systemRole = (m.role && m.role.toLowerCase().includes('admin')) ? 'admin' : 'viewer';
                 dbUpdated = true;
             }
@@ -764,7 +802,7 @@
     const isAdmin = () => {
         if (!currentUser) return false;
         if (sessionStorage.getItem('viewAsViewer') === 'true') return false;
-        return currentUser.systemRole === 'admin' || currentUser.role.toLowerCase().includes('admin') || currentUser.id.toLowerCase() === 'bren';
+        return currentUser.systemRole === 'admin' || currentUser.id.toLowerCase() === 'bren';
     };
     
     const isApproved = () => currentUser && currentUser.status === 'approved';
@@ -807,6 +845,7 @@
                     const modalsOpen = 
                         document.getElementById('lightboxModal').style.display === 'flex' ||
                         document.getElementById('customDialogOverlay').style.display === 'flex' ||
+                        document.getElementById('globalLoader').style.display === 'flex' ||
                         document.getElementById('userModal').style.display === 'flex';
 
                     if (!isTyping && !isDraggingCard && !modalsOpen) {
@@ -1055,7 +1094,13 @@
         setTimeout(() => setAuthMode('login'), 2000);
     };
 
-    window.logout = function() { localStorage.removeItem("session_user"); sessionStorage.removeItem('viewAsViewer'); location.reload(); }
+    window.logout = function() { 
+        customConfirm("Are you sure you want to log out of DaDevs Workspace?", () => {
+            localStorage.removeItem("session_user"); 
+            sessionStorage.removeItem('viewAsViewer'); 
+            location.reload(); 
+        });
+    }
 
     async function initApp() {
         await initDB(); 
@@ -1211,24 +1256,25 @@
         let html = '';
 
         // Top Section: My Account
+        const myColor = getMemberColor(currentUser.id);
         html += `<div class="glass card" style="border-top: 4px solid var(--accent);">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                 <div style="display:flex; align-items:center; gap: 15px;">
                     <div class="avatar-container">
                         ${currentUser.avatar 
-                            ? `<img src="${currentUser.avatar}" class="avatar-img" style="width:60px; height:60px; border-color:var(--accent);">` 
-                            : `<div class="native-avatar" style="width:60px; height:60px; background:var(--accent); border-color:var(--accent);">${userSVG}</div>`
+                            ? `<img src="${currentUser.avatar}" class="avatar-img" style="width:60px; height:60px; border-color:${myColor};">` 
+                            : `<div class="native-avatar" style="width:60px; height:60px; background:${myColor}; border-color:${myColor};">${userSVG}</div>`
                         }
                         ${currentUser.sticker ? `<div class="avatar-sticker" style="width:20px; height:20px; font-size:14px;">${currentUser.sticker}</div>` : ''}
                     </div>
                     <div>
-                        <h3 style="margin:0; color:var(--accent);">${currentUser.fullName}</h3>
+                        <h3 style="margin:0; color:${myColor};">${currentUser.fullName}</h3>
                         <div style="font-size: 11px; color: var(--text); opacity: 0.7; font-weight:bold;">${currentUser.role.toUpperCase()}</div>
                     </div>
                 </div>
                 
                 <div class="profile-controls" style="display:flex; gap:10px; flex-wrap:wrap;">
-                    ${currentUser.systemRole === 'admin' ? 
+                    ${(currentUser.systemRole === 'admin' || currentUser.id.toLowerCase() === 'bren') ? 
                         `<button class="header-btn" onclick="toggleViewerMode()" style="background:rgba(255,255,255,0.1) !important; color:var(--text); border:1px solid var(--glass-border) !important;">
                             ${sessionStorage.getItem('viewAsViewer') === 'true' ? '👨‍💻 Admin Mode' : '👁️ View as Viewer'}
                         </button>` : ''
@@ -1250,7 +1296,7 @@
                         </div>
                         <div style="display:flex; align-items:center; gap:5px;">
                             <input type="color" id="myAccentColor" value="${currentUser.accent || '#8B5CF6'}" style="width:30px; height:30px; padding:0; cursor:pointer; border:none; background:none;">
-                            <label style="font-size:11px;">Accent Color</label>
+                            <label style="font-size:11px;">Your Avatar Color</label>
                         </div>
                     </div>
                 </div>
@@ -1272,7 +1318,7 @@
                 
                 <div class="flex-row" style="margin-bottom:10px; flex-wrap:wrap;">
                     <div style="flex:1; display:flex; flex-direction:column;">
-                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">Upload New Profile Picture (Cloudinary)</label>
+                        <label style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">Upload New Profile Picture</label>
                         <input id="myAvatarFile" type="file" accept="image/*" style="margin:0; padding:9px;">
                     </div>
                     <div style="flex:0.5; display:flex; flex-direction:column;">
@@ -1378,8 +1424,7 @@
         let avatar = currentUser.avatar;
 
         if(fileInput && fileInput.files.length > 0) {
-            document.getElementById('syncStatus').style.display = "block";
-            document.getElementById('syncStatus').innerText = "⏳ Uploading Avatar...";
+            showLoader("Uploading Avatar...");
             try {
                 const file = fileInput.files[0];
                 const formData = new FormData();
@@ -1392,11 +1437,12 @@
                 
                 avatar = data.secure_url; 
             } catch(e) {
+                hideLoader();
                 customAlert("Avatar Upload Failed: " + e.message);
-                document.getElementById('syncStatus').innerText = "🔴 Failed";
                 return; 
             }
         }
+        hideLoader();
 
         currentUser.fullName = fullName;
         currentUser.sticker = sticker;
@@ -1470,6 +1516,7 @@
 
         const timeline = getDB('timeline');
         const funds = getDB('funds');
+        const mColor = getMemberColor(m.id);
         
         const mTasks = timeline.filter(t => t.owner === m.id);
         const mDone = mTasks.filter(t => t.progress == 100).length;
@@ -1480,12 +1527,12 @@
             <div style="text-align:center; margin-bottom: 20px;">
                 <div class="avatar-container" style="margin: 0 auto 15px auto;">
                     ${m.avatar 
-                        ? `<img src="${m.avatar}" class="avatar-img" style="width:100px; height:100px; border-color:var(--accent);">` 
-                        : `<div class="native-avatar" style="width:100px; height:100px; background:var(--accent);">${userSVG}</div>`
+                        ? `<img src="${m.avatar}" class="avatar-img" style="width:100px; height:100px; border-color:${mColor};">` 
+                        : `<div class="native-avatar" style="width:100px; height:100px; background:${mColor}; border-color:${mColor};">${userSVG}</div>`
                     }
                     ${m.sticker ? `<div class="avatar-sticker" style="width:32px; height:32px; font-size:22px;">${m.sticker}</div>` : ''}
                 </div>
-                <h2 style="margin:0; color:var(--secondary);">${m.fullName}</h2>
+                <h2 style="margin:0; color:${mColor};">${m.fullName}</h2>
                 ${isAdmin() 
                     ? `<input type="text" value="${m.role}" style="text-align:center; font-size:12px; margin-top:5px; background:var(--card-bg); border:1px solid var(--glass-border); color:var(--text); width: 80%; padding: 4px; border-radius: 4px;" onchange="updateMemberRole('${m.id}', this.value)" title="Display Role/Title">`
                     : `<div style="color:var(--text-muted); font-size:12px; margin-top:5px;">${m.role.toUpperCase()}</div>`
@@ -1582,9 +1629,9 @@
     }
 
     // --- MODULE: TIMELINE ---
-    window.togglePhase = function(phaseName, elementId) {
-        collapsedPhases[phaseName] = !collapsedPhases[phaseName];
-        loadModule('Timeline', true); // Re-render to update the chevron text and table display
+    window.changeTimelinePhase = function(phaseName) {
+        activeTimelinePhase = phaseName;
+        loadModule('Timeline', true);
     }
 
     function renderTimeline(container) {
@@ -1593,7 +1640,8 @@
         let html = '';
         
         if (isAdmin()) {
-            const memberOpts = members.map(m => `<option value="${m.id}">${m.fullName}</option>`).join('');
+            const assignableMembers = members.filter(m => m.role.toLowerCase() !== 'adviser');
+            const memberOpts = assignableMembers.map(m => `<option value="${m.id}">${m.fullName}</option>`).join('');
             const uniquePhases = [...new Set(timeline.map(t => t.phase || 'Phase 1'))];
             const phaseListHtml = uniquePhases.map(f => `<option value="${f}">`).join('');
 
@@ -1629,12 +1677,25 @@
                         <input id="tlEnd" type="date" style="margin:0;" disabled title="Only editable when progress is 100%">
                     </div>
                     <button id="tlSubmitBtn" onclick="submitTimeline()" style="flex:1; margin-top: 14px;">Add Task</button>
-                    <button id="tlCancelBtn" onclick="cancelEditTimeline()" style="flex:0.5; margin-top: 14px; display:none; background:rgba(255,255,255,0.1);">Cancel</button>
+                    <button id="tlCancelBtn" onclick="cancelEditTimeline()" style="flex:0.5; margin:top: 14px; display:none; background:rgba(255,255,255,0.1);">Cancel</button>
                 </div>
             </div>`;
         }
         
-        html += `<div class="glass card" style="padding-bottom: 5px;"><h3 style="margin-top:0; margin-bottom: 20px;">Project Schedule & Timeline</h3>`;
+        const phases = [...new Set(timeline.map(t => t.phase || 'Unphased'))];
+        if (!activeTimelinePhase && phases.length > 0) activeTimelinePhase = phases[phases.length - 1];
+
+        html += `
+        <div class="glass card" style="padding-bottom: 5px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap:wrap; gap:10px;">
+                <h3 style="margin:0;">Project Schedule & Timeline</h3>
+                ${phases.length > 1 ? `
+                <select onchange="changeTimelinePhase(this.value)" style="width:auto; min-width:150px; margin:0; padding:8px;">
+                    ${phases.map(p => `<option value="${p}" ${p === activeTimelinePhase ? 'selected' : ''}>${p}</option>`).join('')}
+                </select>
+                ` : ''}
+            </div>`;
+
         if (timeline.length === 0) { 
             html += `<p style="color:var(--text-muted); font-size: 13px;">No timeline data generated by Admin yet.</p></div>`; 
         } else {
@@ -1642,113 +1703,101 @@
             const minDate = Math.min(...dates); let maxDate = Math.max(...dates); let totalSpan = maxDate - minDate;
             if (totalSpan === 0) totalSpan = 86400000; totalSpan = totalSpan * 1.05;
 
-            const phases = [...new Set(timeline.map(t => t.phase || 'Unphased'))];
+            const phaseTasks = timeline.filter(t => (t.phase || 'Unphased') === activeTimelinePhase);
 
             html += `<div class="timeline-wrapper">`;
             
-            phases.forEach((phaseName, pIdx) => {
-                const phaseTasks = timeline.filter(t => (t.phase || 'Unphased') === phaseName);
+            html += `
+            <div class="phase-container" style="margin-bottom: 15px;">
+                <div style="overflow-x: auto; margin-bottom: 15px;">
+                    <table class="timeline-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 8%;">ID</th>
+                                <th style="width: 25%;">Task</th>
+                                <th style="width: 5%; text-align:center;">Owner</th>
+                                <th style="width: 10%;">Start</th>
+                                <th style="width: 10%;">Sched</th>
+                                <th style="width: 10%;">Actual</th>
+                                <th style="width: 5%;">Prog</th>
+                                <th style="width: 22%; min-width: 150px;">Gantt</th>
+                                ${isAdmin() ? '<th style="width: 5%;">Act</th>' : ''}
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            phaseTasks.forEach(t => {
+                const startT = new Date(t.start).getTime(); 
+                const schedT = new Date(t.scheduled).getTime();
+                const endT = t.end ? new Date(t.end).getTime() : schedT; 
                 
-                const isCollapsed = collapsedPhases[phaseName] || false;
-                const tableDisplayState = isCollapsed ? 'none' : 'table';
+                const leftPerc = ((startT - minDate) / totalSpan) * 100; 
+                let widthPerc = ((endT - startT) / totalSpan) * 100;
+                const schedPerc = ((schedT - minDate) / totalSpan) * 100;
+                if (widthPerc < 2) widthPerc = 2; 
                 
+                const prog = t.progress || 0;
+                const isDone = prog == 100;
+                const isLate = isDone && endT > schedT;
+                const owner = t.owner || 'Team';
+                const oColor = getMemberColor(owner);
+                
+                const ownerObj = members.find(m=>m.id===owner);
+                const ownerName = ownerObj?.id || owner;
+                
+                let avatarHTML = '';
+                if(ownerObj && ownerObj.avatar) {
+                    avatarHTML = `<img src="${ownerObj.avatar}" class="avatar-mini" style="border-color:${oColor}">`;
+                } else {
+                    avatarHTML = `<div class="native-avatar avatar-mini" style="background:${oColor}; border:none;">${userSVGMini}</div>`;
+                }
+
+                let barColor = "linear-gradient(90deg, var(--primary), var(--secondary))"; 
+                if (isDone) barColor = isLate ? "linear-gradient(90deg, #ef4444, #b91c1c)" : "linear-gradient(90deg, #10b981, #059669)";
+                
+                const formatSmallDate = (dStr) => dStr ? dStr.substring(5) : '---';
+
                 html += `
-                <div class="phase-container" style="margin-bottom: 15px;">
-                    <div class="phase-header" onclick="togglePhase('${phaseName.replace(/'/g, "\\'")}', 'phase_${pIdx}')">
-                        <span>📋 ${phaseName} (${phaseTasks.length} Tasks)</span>
-                        <span style="font-size: 12px; color: var(--secondary);">${isCollapsed ? '▼ Show Tasks' : '▲ Hide Tasks'}</span>
-                    </div>
-                    
-                    <div style="overflow-x: auto; margin-bottom: 15px;">
-                        <table class="timeline-table" style="display: ${tableDisplayState};">
-                            <thead>
-                                <tr>
-                                    <th style="width: 8%;">ID</th>
-                                    <th style="width: 25%;">Task</th>
-                                    <th style="width: 5%; text-align:center;">Owner</th>
-                                    <th style="width: 10%;">Start</th>
-                                    <th style="width: 10%;">Sched</th>
-                                    <th style="width: 10%;">Actual</th>
-                                    <th style="width: 5%;">Prog</th>
-                                    <th style="width: 22%; min-width: 150px;">Gantt</th>
-                                    ${isAdmin() ? '<th style="width: 5%;">Act</th>' : ''}
-                                </tr>
-                            </thead>
-                            <tbody>
+                    <tr>
+                        <td style="color:var(--accent); font-weight:bold;">${t.taskId}</td>
+                        <td class="wrap-text" style="font-weight:500;">${t.title}</td>
+                        <td style="text-align:center;">
+                            <div title="${ownerName}" style="display:inline-block; cursor:help;">
+                                <div class="avatar-mini-wrapper" style="width:28px; height:28px;">${avatarHTML}</div>
+                            </div>
+                        </td>
+                        <td style="color:var(--text-muted);">${formatSmallDate(t.start)}</td>
+                        <td style="color:var(--secondary);">${formatSmallDate(t.scheduled)}</td>
+                        <td style="color:${isDone ? (isLate ? '#ef4444' : '#10b981') : '#666'};">${formatSmallDate(t.end)}</td>
+                        <td style="font-weight:bold;">${prog}%</td>
+                        <td style="border:none;">
+                            <div class="gantt-track">
+                                <div class="gantt-bar" style="left: ${leftPerc}%; width: ${widthPerc}%; background: ${barColor};">
+                                    <div style="position:absolute; left:0; top:0; height:100%; width:${prog}%; background:rgba(0,0,0,0.4);"></div>
+                                </div>
+                                <div style="position:absolute; left:${schedPerc}%; top:0; height:100%; width:3px; background:var(--accent); z-index:2; box-shadow:0 0 8px var(--accent);"></div>
+                            </div>
+                        </td>
+                        ${isAdmin() ? `
+                        <td>
+                            <div style="display:flex; gap:5px;">
+                                <button class="icon-btn" style="background:rgba(34,211,238,0.2); color:var(--secondary); padding: 6px 10px; border-radius:4px; font-size:10px;" onclick="editTimeline(${t.id})">✎</button>
+                                <button class="danger" style="position:relative; right:auto; top:auto; background:rgba(239, 68, 68, 0.2); padding: 6px 10px; border-radius:4px; font-size:10px; width:auto; margin:0;" onclick="deleteTimeline(${t.id})">✖</button>
+                            </div>
+                        </td>
+                        ` : ''}
+                    </tr>
                 `;
-
-                phaseTasks.forEach(t => {
-                    const startT = new Date(t.start).getTime(); 
-                    const schedT = new Date(t.scheduled).getTime();
-                    const endT = t.end ? new Date(t.end).getTime() : schedT; 
-                    
-                    const leftPerc = ((startT - minDate) / totalSpan) * 100; 
-                    let widthPerc = ((endT - startT) / totalSpan) * 100;
-                    const schedPerc = ((schedT - minDate) / totalSpan) * 100;
-                    if (widthPerc < 2) widthPerc = 2; 
-                    
-                    const prog = t.progress || 0;
-                    const isDone = prog == 100;
-                    const isLate = isDone && endT > schedT;
-                    const owner = t.owner || 'Team';
-                    const oColor = getMemberColor(owner);
-                    
-                    const ownerObj = members.find(m=>m.id===owner);
-                    const ownerName = ownerObj?.id || owner;
-                    
-                    let avatarHTML = '';
-                    if(ownerObj && ownerObj.avatar) {
-                        avatarHTML = `<img src="${ownerObj.avatar}" class="avatar-mini" style="border-color:${oColor}">`;
-                    } else {
-                        avatarHTML = `<div class="native-avatar avatar-mini" style="background:${oColor}; border:none;">${userSVGMini}</div>`;
-                    }
-
-                    let barColor = "linear-gradient(90deg, var(--primary), var(--secondary))"; 
-                    if (isDone) barColor = isLate ? "linear-gradient(90deg, #ef4444, #b91c1c)" : "linear-gradient(90deg, #10b981, #059669)";
-                    
-                    const formatSmallDate = (dStr) => dStr ? dStr.substring(5) : '---';
-
-                    html += `
-                        <tr>
-                            <td style="color:var(--accent); font-weight:bold;">${t.taskId}</td>
-                            <td class="wrap-text" style="font-weight:500;">${t.title}</td>
-                            <td style="text-align:center;">
-                                <div title="${ownerName}" style="display:inline-block; cursor:help;">
-                                    <div class="avatar-mini-wrapper" style="width:28px; height:28px;">${avatarHTML}</div>
-                                </div>
-                            </td>
-                            <td style="color:var(--text-muted);">${formatSmallDate(t.start)}</td>
-                            <td style="color:var(--secondary);">${formatSmallDate(t.scheduled)}</td>
-                            <td style="color:${isDone ? (isLate ? '#ef4444' : '#10b981') : '#666'};">${formatSmallDate(t.end)}</td>
-                            <td style="font-weight:bold;">${prog}%</td>
-                            <td style="border:none;">
-                                <div class="gantt-track">
-                                    <div class="gantt-bar" style="left: ${leftPerc}%; width: ${widthPerc}%; background: ${barColor};">
-                                        <div style="position:absolute; left:0; top:0; height:100%; width:${prog}%; background:rgba(0,0,0,0.4);"></div>
-                                    </div>
-                                    <div style="position:absolute; left:${schedPerc}%; top:0; height:100%; width:3px; background:var(--accent); z-index:2; box-shadow:0 0 8px var(--accent);"></div>
-                                </div>
-                            </td>
-                            ${isAdmin() ? `
-                            <td>
-                                <div style="display:flex; gap:5px;">
-                                    <button class="icon-btn" style="background:rgba(34,211,238,0.2); color:var(--secondary); padding: 6px 10px; border-radius:4px; font-size:10px;" onclick="editTimeline(${t.id})">✎</button>
-                                    <button class="danger" style="position:relative; right:auto; top:auto; background:rgba(239, 68, 68, 0.2); padding: 6px 10px; border-radius:4px; font-size:10px; width:auto; margin:0;" onclick="deleteTimeline(${t.id})">✖</button>
-                                </div>
-                            </td>
-                            ` : ''}
-                        </tr>
-                    `;
-                });
-                html += `</tbody></table></div></div>`;
             });
-            html += `</div></div>`; 
+            html += `</tbody></table></div></div></div></div>`; 
         }
 
         html += `<h3 style="margin-top: 30px; margin-bottom: 15px; color: var(--secondary);">Individual Task Records</h3>`;
         html += `<div style="display:flex; flex-direction:column; gap:15px; margin-bottom: 20px;">`;
         
         members.forEach(m => {
+            if(m.role.toLowerCase() === 'adviser') return;
             const mTasks = timeline.filter(t => t.owner === m.id);
             const mColor = getMemberColor(m.id);
             
@@ -1829,6 +1878,7 @@
         
         setDB('timeline', tl); 
         addNotification(`📋 Timeline Updated: ${title}`);
+        activeTimelinePhase = phase; // switch to the newly edited phase
         loadModule('Timeline');
     }
     
@@ -1963,6 +2013,8 @@
     }
 
     // --- MODULE: CALENDAR ---
+    const eventColors = { 'meeting': '#3b82f6', 'overnight': '#8b5cf6', 'defense': '#ef4444', 'other': '#10b981' };
+
     window.showDayEvents = function(dateStr) {
         const manualEvents = getDB('calendar'); 
         const timeline = getDB('timeline');
@@ -1988,7 +2040,9 @@
         dayEvents.forEach(e => {
             let color = 'var(--text)';
             if(e.type === 'timeline-task') color = getMemberColor(e.owner);
-            if(e.type === 'birthday') color = '#f59e0b';
+            else if(e.type === 'birthday') color = '#f59e0b';
+            else color = eventColors[e.type] || '#22D3EE';
+            
             msgHtml += `
             <div style="padding: 12px; border-left: 4px solid ${color}; background: var(--card-bg); margin-bottom: 8px; border-radius: 6px;">
                 <div style="font-weight:bold; font-size:14px; color: ${color};">${e.title}</div>
@@ -2032,8 +2086,10 @@
                     <input id="evTitle" placeholder="Event Title" style="flex:2;">
                     <input id="evDate" type="date" style="flex:1;">
                     <select id="evType" style="flex:1;">
-                        <option value="meeting">Meeting</option><option value="overnight">Overnight</option>
-                        <option value="defense">Defense</option><option value="other">Other</option>
+                        <option value="meeting" style="color:#3b82f6;">🔵 Meeting</option>
+                        <option value="overnight" style="color:#8b5cf6;">🟣 Overnight</option>
+                        <option value="defense" style="color:#ef4444;">🔴 Defense</option>
+                        <option value="other" style="color:#10b981;">🟢 Other</option>
                     </select>
                     <button onclick="addEvent()" style="flex:1; margin:0;">Schedule</button>
                 </div>
@@ -2075,6 +2131,11 @@
                 if (e.type === 'timeline-task') {
                     let color = getMemberColor(e.owner);
                     style = `background: ${color}; box-shadow: 0 0 5px ${color};`;
+                } else if (e.type === 'birthday') {
+                    style = `background: #f59e0b; box-shadow: 0 0 5px #f59e0b;`;
+                } else {
+                    let color = eventColors[e.type] || '#22D3EE';
+                    style = `background: ${color}; box-shadow: 0 0 5px ${color};`;
                 }
                 dots += `<div class="cal-event-dot event-${e.type}" style="${style}" title="${e.title}"></div>`; 
             });
@@ -2087,17 +2148,13 @@
         if(monthEvents.length === 0) { html += `<p style="color:var(--text-muted); font-size:14px; text-align:center;">No events scheduled this month.</p>`; } 
         else {
             monthEvents.forEach(e => {
-                let style = '';
-                if (e.type === 'timeline-task') {
-                    let color = getMemberColor(e.owner);
-                    style = `background: ${color}; box-shadow: 0 0 5px ${color};`;
-                }
                 const isTimeline = e.type === 'timeline-task';
                 const isBday = e.type === 'birthday';
                 
                 let borderCol = 'transparent';
                 if(isTimeline) borderCol = getMemberColor(e.owner);
-                if(isBday) borderCol = '#f59e0b';
+                else if(isBday) borderCol = '#f59e0b';
+                else borderCol = eventColors[e.type] || '#22D3EE';
                 
                 const eDay = parseInt(e.date.split('-')[2]);
 
@@ -2174,7 +2231,7 @@
             
         html += `<h3 style="margin-bottom: 10px;">Member Contributions (₱50 / Week)</h3><div class="funds-contributions-grid" style="margin-bottom: 20px;">`;
         members.forEach(m => {
-            if(!targetMembers.includes(m.id)) return;
+            if(m.role.toLowerCase() === 'adviser') return;
             const mTotal = memberTotals[m.id]; const weeks = Math.floor(mTotal / 50);
             const mColor = getMemberColor(m.id);
             html += `
@@ -2189,7 +2246,8 @@
 
         if (isAdmin()) {
             const todayStr = new Date().toISOString().split('T')[0];
-            const memberOpts = members.map(m => `<option value="${m.id}">${m.fullName}</option>`).join('');
+            const assignableMembers = members.filter(m => m.role.toLowerCase() !== 'adviser');
+            const memberOpts = assignableMembers.map(m => `<option value="${m.id}">${m.fullName}</option>`).join('');
             
             html += `
             <div class="glass admin-panel">
@@ -2348,11 +2406,12 @@
             <div style="display:flex; flex-direction:column; gap:8px;">
         `;
 
+        // PINNED FIRST, THEN OTHERS
         let filteredRes = res.filter(r => {
             const matchesSearch = !resSearchTerm || r.title.toLowerCase().includes(resSearchTerm) || r.desc.toLowerCase().includes(resSearchTerm);
             const matchesTag = !resActiveTag || (r.tags && r.tags.includes(resActiveTag));
             return matchesSearch && matchesTag;
-        });
+        }).sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
 
         if (filteredRes.length === 0) {
             html += `<p style="color:var(--text-muted); text-align:center;">No resources found.</p>`;
@@ -2361,12 +2420,15 @@
                 const isFile = r.type === 'file';
                 const tagDisplay = (r.tags || []).map(t => `<span style="background:rgba(255,255,255,0.1); padding:2px 4px; border-radius:4px; font-size:9px; margin-right:4px;">${t}</span>`).join('');
                 
+                const pinBadge = r.pinned ? `<span style="background:#f59e0b; color:#000; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:bold; margin-right:5px;">📌 PINNED</span>` : '';
+                const borderStyle = r.pinned ? 'border: 1px solid #f59e0b;' : 'border: 1px solid var(--glass-border);';
+
                 html += `
-                    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 10px; background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 8px;">
+                    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 10px; background: var(--card-bg); border-radius: 8px; ${borderStyle}">
                         <div style="display:flex; align-items:center; flex:1; min-width: 200px;">
                             <div style="width: 30px; height: 30px; border-radius: 6px; background: rgba(34,211,238,0.1); color: var(--secondary); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px; margin-right: 12px; flex-shrink:0;">${isFile ? '📄' : '🔗'}</div>
                             <div>
-                                <div style="font-weight:bold; font-size:13px; color:var(--text);">${r.title}</div>
+                                <div style="font-weight:bold; font-size:13px; color:var(--text);">${pinBadge}${r.title}</div>
                                 <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${r.desc} ${isFile && r.fileName ? `(${r.fileName})` : ''}</div>
                                 <div style="margin-top:4px;">${tagDisplay}</div>
                             </div>
@@ -2377,6 +2439,7 @@
                                 : `<button class="success" onclick="window.open('${r.url}', '_blank')" style="width:auto; padding:6px 12px; margin:0; font-size:11px;">Open</button>`
                             }
                             ${isAdmin() ? `
+                                <button class="icon-btn" style="background:rgba(245, 158, 11, 0.2); color:#f59e0b; padding: 6px 12px; border-radius:8px; font-size:11px;" onclick="togglePinResource(${r.id})">${r.pinned ? 'Unpin' : 'Pin'}</button>
                                 <button class="icon-btn" style="background:rgba(255,255,255,0.1); color:var(--text); padding: 6px 12px; border-radius:8px; font-size:11px;" onclick="editResource(${r.id})">Edit</button>
                                 <button class="danger" onclick="deleteResource(${r.id})" style="width:auto; padding:6px 12px; margin:0; font-size:11px;">Drop</button>
                             ` : ''}
@@ -2402,6 +2465,16 @@
         let current = input.value.split(',').map(t=>t.trim()).filter(t=>t);
         if(!current.includes(tag)) current.push(tag);
         input.value = current.join(', ');
+    }
+
+    window.togglePinResource = function(id) {
+        let res = getDB('resources');
+        const r = res.find(x => x.id === id);
+        if (r) {
+            r.pinned = !r.pinned;
+            setDB('resources', res);
+            loadModule('Resources', true);
+        }
     }
 
     window.editResource = function(id) {
@@ -2450,7 +2523,7 @@
             if (existing) {
                 existing.title = title; existing.type = type; existing.url = url; existing.desc = desc; existing.tags = tags;
             } else {
-                res.push({ id: generateId(), title, type, url, desc, tags }); 
+                res.push({ id: generateId(), title, type, url, desc, tags, pinned: false }); 
             }
             editingResourceId = null;
             setDB('resources', res); 
@@ -2462,20 +2535,20 @@
             
             if (fileInput.files[0]) {
                 const file = fileInput.files[0];
-                if(file.size > 250000) return customAlert("File is too large for database storage. Use Web Link instead.");
+                if(file.size > 500000) return customAlert("File is too large for database storage. Max size 500KB. Use Web Link instead.");
                 
-                document.getElementById('syncStatus').style.display = "block";
-                document.getElementById('syncStatus').innerText = "⏳ Processing file...";
+                showLoader("Processing file...");
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     if (existing) {
                         existing.title = title; existing.type = type; existing.url = e.target.result; existing.desc = desc; existing.fileName = file.name; existing.tags = tags;
                     } else {
-                        res.push({ id: generateId(), title, type, url: e.target.result, desc, fileName: file.name, tags }); 
+                        res.push({ id: generateId(), title, type, url: e.target.result, desc, fileName: file.name, tags, pinned: false }); 
                     }
                     editingResourceId = null;
                     setDB('resources', res); 
                     addNotification(`📄 New File Added: ${title}`);
+                    hideLoader();
                     loadModule('Resources');
                 };
                 reader.readAsDataURL(file);
@@ -2520,7 +2593,7 @@
 
                 <datalist id="folderOptions">${dataListHtml}</datalist>
                 <div class="flex-row">
-                    <input id="galFolder" placeholder="Folder Name" list="folderOptions" style="flex:1; margin:0;" value="${currentGalleryFolder && currentGalleryFolder !== 'ALL_PHOTOS' ? currentGalleryFolder : ''}">
+                    <input id="galFolder" placeholder="Folder Name" list="folderOptions" style="flex:1; margin:0;" value="${currentGalleryFolder && currentGalleryFolder !== 'ALL_PHOTOS' && currentGalleryFolder !== 'FEATURED_SHOWCASE' ? currentGalleryFolder : ''}">
                     <input id="galCap" placeholder="Caption (Optional)" style="flex:1; margin:0;">
                     <button onclick="addPhoto()" style="flex:1; margin:0;">Add to Gallery</button>
                 </div>
@@ -2556,6 +2629,21 @@
                         <div style="font-size: 12px; color: #fff; font-weight: bold; margin-top: 5px;">${totalImages} Items</div>
                     </div>
                 </div>`;
+
+                // FEATURED SHOWCASE VIRTUAL FOLDER
+                const featuredCount = gal.filter(g => g.featured).length;
+                if (featuredCount > 0) {
+                    const firstFeatured = gal.find(g => g.featured).url;
+                    html += `
+                    <div class="gallery-item" style="cursor:pointer; border-color: #f59e0b;" onclick="window.openGalleryFolder('FEATURED_SHOWCASE')">
+                        <img src="${firstFeatured}" alt="Featured Cover" style="opacity: 0.6;">
+                        <div class="folder-overlay" style="background: rgba(245, 158, 11, 0.2);">
+                            <div style="font-size: 40px; margin-bottom: 10px;">⭐</div>
+                            <div style="font-weight: bold; font-size: 16px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); text-align:center; padding: 0 10px; color:#fcd34d;">Featured</div>
+                            <div style="font-size: 12px; color: #fff; font-weight: bold; margin-top: 5px;">${featuredCount} Items</div>
+                        </div>
+                    </div>`;
+                }
                 
                 folderNames.forEach(fName => {
                     html += `
@@ -2572,7 +2660,8 @@
             }
         } else {
             const isAll = currentGalleryFolder === 'ALL_PHOTOS';
-            const displayTitle = isAll ? '🖼️ All Photos' : `📁 ${currentGalleryFolder}`;
+            const isFeatured = currentGalleryFolder === 'FEATURED_SHOWCASE';
+            const displayTitle = isAll ? '🖼️ All Photos' : (isFeatured ? '⭐ Featured Showcase' : `📁 ${currentGalleryFolder}`);
             
             html += `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--glass-border);">
@@ -2582,7 +2671,7 @@
                 <button class="icon-btn" onclick="window.closeGalleryFolder()" style="background: rgba(255,255,255,0.15);">🔙 Back to Folders</button>
             </div>`;
             
-            const folderItems = isAll ? gal : gal.filter(g => (g.folder || 'Uncategorized') === currentGalleryFolder);
+            const folderItems = isAll ? gal : (isFeatured ? gal.filter(g => g.featured) : gal.filter(g => (g.folder || 'Uncategorized') === currentGalleryFolder));
             
             if (folderItems.length === 0) {
                 html += `<p style="color:var(--text-muted);">Folder is empty.</p>`;
@@ -2608,7 +2697,7 @@
                             <div style="position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.8); border: 1px solid var(--secondary); color:var(--secondary); padding:2px 8px; border-radius:10px; font-size:12px; font-weight:bold; z-index:10; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">+${extraCount}</div>
                             <img src="${firstImg.url}" alt="${firstImg.caption}" onerror="this.src='https://via.placeholder.com/300x300/1E293B/ef4444?text=Broken+Link'">
                             <div class="gallery-caption">
-                                <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${firstImg.caption.replace(/\(\d+\)$/, '').trim()} ${isAll ? ` <span style="color:var(--text-muted); font-size:9px;">(${firstImg.folder||'Uncategorized'})</span>` : ''}</div>
+                                <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${firstImg.caption.replace(/\(\d+\)$/, '').trim()} ${isAll || isFeatured ? ` <span style="color:var(--text-muted); font-size:9px;">(${firstImg.folder||'Uncategorized'})</span>` : ''}</div>
                                 ${isAdmin() ? `
                                     <div style="display:flex; gap:5px;">
                                         <button class="success" style="padding: 4px; font-size: 10px; margin:0; flex:1;" onclick="event.stopPropagation(); toggleFeatured(${firstImg.id})">${firstImg.featured ? 'Unfeature' : 'Feature'}</button>
@@ -2625,7 +2714,7 @@
                             ${g.featured ? `<div class="feat-badge">⭐ Featured</div>` : ''}
                             <img src="${g.url}" alt="${g.caption}" onerror="this.src='https://via.placeholder.com/300x300/1E293B/ef4444?text=Broken+Link'">
                             <div class="gallery-caption">
-                                <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${g.caption} ${isAll ? ` <span style="color:var(--text-muted); font-size:9px;">(${g.folder||'Uncategorized'})</span>` : ''}</div>
+                                <div style="margin-bottom: ${isAdmin() ? '5px' : '0'};">${g.caption} ${isAll || isFeatured ? ` <span style="color:var(--text-muted); font-size:9px;">(${g.folder||'Uncategorized'})</span>` : ''}</div>
                                 ${isAdmin() ? `
                                     <div style="display:flex; gap:5px;">
                                         <button class="success" style="padding: 4px; font-size: 10px; margin:0; flex:1;" onclick="event.stopPropagation(); toggleFeatured(${g.id})">${g.featured ? 'Unfeature' : 'Feature'}</button>
@@ -2722,11 +2811,12 @@
         if(fileInput && fileInput.files.length > 0) {
             try {
                 const batchId = 'batch_' + Date.now();
-                document.getElementById('syncStatus').style.display = "block";
+                showLoader(`Uploading 1 of ${fileInput.files.length}...`);
                 
                 for(let i=0; i < fileInput.files.length; i++) {
                     const file = fileInput.files[i];
-                    document.getElementById('syncStatus').innerText = `⏳ Uploading (${i+1}/${fileInput.files.length})...`;
+                    updateLoader((i / fileInput.files.length) * 100);
+                    document.getElementById('loaderText').innerText = `Uploading ${i+1} of ${fileInput.files.length}...`;
                     
                     const formData = new FormData();
                     formData.append("file", file);
@@ -2743,14 +2833,16 @@
                     gal.push({ id: generateId(), url: data.secure_url, caption: finalCaption, folder: folder, featured: false, batchId: fileInput.files.length > 1 ? batchId : null });
                 }
                 
+                updateLoader(100);
+                setTimeout(() => { hideLoader(); }, 500);
+
                 currentGalleryFolder = folder;
                 setDB('gallery', gal); 
                 addNotification(`🖼️ New Photos Added to ${folder}`);
                 loadModule('Gallery');
-                document.getElementById('syncStatus').innerText = "🟢 Sync Complete";
             } catch(e) {
+                hideLoader();
                 customAlert("Cloudinary Upload Failed. Please check if 'dadevs_preset' is set to Unsigned.\n\nFallback: Upload the photo to Discord or Drive and paste the link in Option 2.");
-                document.getElementById('syncStatus').innerText = "🔴 Failed";
             }
             return;
         }
@@ -2766,7 +2858,7 @@
             // If it's part of a batch and admin clicks delete, we'll just delete the single photo (or you can modify to filter by batchId if you prefer)
             gal = gal.filter(g => g.id !== id);
             
-            if (targetFolder && currentGalleryFolder !== 'ALL_PHOTOS' && !gal.some(g => (g.folder || 'Uncategorized') === targetFolder)) {
+            if (targetFolder && currentGalleryFolder !== 'ALL_PHOTOS' && currentGalleryFolder !== 'FEATURED_SHOWCASE' && !gal.some(g => (g.folder || 'Uncategorized') === targetFolder)) {
                 currentGalleryFolder = null; 
             }
             
